@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.yourapp.controller.settingscontroller"
+            prefHeight="700.0" prefWidth="1000.0"
+            style="-fx-background-color: #f5f5f5;">
+
+    <!-- Header Section -->
+    <VBox spacing="0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-background-color: white; -fx-padding: 20;">
+            <Label text="⚙️" style="-fx-font-size: 28px;"/>
+            <VBox spacing="5">
+                <Label text="Paramètres" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+                <Label text="Gérez les utilisateurs, modèles et paramètres système"
+                       style="-fx-text-fill: #666; -fx-font-size: 13px;"/>
+            </VBox>
+        </HBox>
+        <Separator/>
+    </VBox>
+
+    <!-- Main Content with TabPane -->
+    <TabPane fx:id="settingsTabPane" tabClosingPolicy="UNAVAILABLE"
+             AnchorPane.topAnchor="85.0" AnchorPane.leftAnchor="20.0"
+             AnchorPane.rightAnchor="20.0" AnchorPane.bottomAnchor="20.0"
+             style="-fx-background-color: white; -fx-border-radius: 8; -fx-background-radius: 8;">
+
+        <!-- ========== TAB 1: SYSTEM SETTINGS ========== -->
+        <Tab text="🔧 Paramètres Système">
+            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+                <VBox spacing="25" style="-fx-padding: 30;">
+
+                    <!-- App Configuration Section -->
+                    <VBox spacing="15" style="-fx-background-color: #f9f9f9; -fx-padding: 20; -fx-background-radius: 8;">
+                        <Label text="Configuration de l'Application"
+                               style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                        <GridPane hgap="15" vgap="12">
+                            <Label text="Nom de l'application:" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                                   style="-fx-font-weight: bold;"/>
+                            <TextField fx:id="appNameField" promptText="AuditDoc AI"
+                                       GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                       prefWidth="300" style="-fx-pref-height: 35px;"/>
+
+                            <Label text="Version:" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                                   style="-fx-font-weight: bold;"/>
+                            <TextField fx:id="appVersionField" promptText="1.0.0"
+                                       GridPane.columnIndex="1" GridPane.rowIndex="1"
+                                       prefWidth="300" style="-fx-pref-height: 35px;"/>
+
+                            <Label text="Email Administrateur:" GridPane.columnIndex="0" GridPane.rowIndex="2"
+                                   style="-fx-font-weight: bold;"/>
+                            <TextField fx:id="adminEmailField" promptText="admin@audit.com"
+                                       GridPane.columnIndex="1" GridPane.rowIndex="2"
+                                       prefWidth="300" style="-fx-pref-height: 35px;"/>
+                        </GridPane>
+                    </VBox>
+
+                    <!-- Audit Settings Section -->
+                    <VBox spacing="15" style="-fx-background-color: #f9f9f9; -fx-padding: 20; -fx-background-radius: 8;">
+                        <Label text="Paramètres d'Audit"
+                               style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                        <GridPane hgap="15" vgap="12">
+                            <Label text="Durée de rétention (jours):" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                                   style="-fx-font-weight: bold;"/>
+                            <TextField fx:id="auditRetentionField" promptText="90"
+                                       GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                       prefWidth="300" style="-fx-pref-height: 35px;"/>
+                            <Label text="Nombre de jours pour conserver les audits"
+                                   GridPane.columnIndex="1" GridPane.rowIndex="1"
+                                   style="-fx-text-fill: #666; -fx-font-size: 11px;"/>
+                        </GridPane>
+                    </VBox>
+
+                    <!-- Save Button -->
+                    <HBox alignment="CENTER_LEFT">
+                        <Button fx:id="saveSystemBtn" text="💾 Sauvegarder les Paramètres"
+                                style="-fx-background-color: #4A90E2; -fx-text-fill: white;
+                                       -fx-font-size: 14px; -fx-padding: 12 25; -fx-background-radius: 6;
+                                       -fx-cursor: hand;"/>
+                    </HBox>
+                </VBox>
+            </ScrollPane>
+        </Tab>
+
+        <!-- ========== TAB 2: USER MANAGEMENT ========== -->
+        <Tab text="👥 Gestion des Utilisateurs">
+            <VBox spacing="20" style="-fx-padding: 30;">
+
+                <!-- Invite User Section -->
+                <VBox spacing="15" style="-fx-background-color: #E8F5E9; -fx-padding: 20; -fx-background-radius: 8;">
+                    <Label text="➕ Inviter un Utilisateur"
+                           style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <TextField fx:id="inviteEmailField" promptText="email@exemple.com"
+                                   prefWidth="300" style="-fx-pref-height: 38px;"/>
+
+                        <ComboBox fx:id="inviteRoleCombo" promptText="Sélectionner un rôle"
+                                  prefWidth="200" style="-fx-pref-height: 38px;"/>
+
+                        <Button fx:id="inviteUserBtn" text="Inviter"
+                                style="-fx-background-color: #4CAF50; -fx-text-fill: white;
+                                       -fx-font-size: 13px; -fx-padding: 10 20; -fx-background-radius: 6;
+                                       -fx-cursor: hand;"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Users Table -->
+                <VBox spacing="10" VBox.vgrow="ALWAYS">
+                    <Label text="Liste des Utilisateurs"
+                           style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                    <TableView fx:id="userTable" VBox.vgrow="ALWAYS"
+                               style="-fx-background-radius: 8; -fx-border-radius: 8;">
+                        <columns>
+                            <TableColumn fx:id="colUserName" text="Nom" prefWidth="250"/>
+                            <TableColumn fx:id="colUserEmail" text="Email" prefWidth="300"/>
+                            <TableColumn fx:id="colUserRole" text="Rôle" prefWidth="200"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </VBox>
+        </Tab>
+
+        <!-- ========== TAB 3: ROLE MANAGEMENT ========== -->
+        <Tab text="🔐 Gestion des Rôles">
+            <HBox spacing="20" style="-fx-padding: 30;">
+
+                <!-- Left Side: Roles List -->
+                <VBox spacing="15" prefWidth="250">
+                    <Label text="Rôles Disponibles"
+                           style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                    <ListView fx:id="roleListView" VBox.vgrow="ALWAYS"
+                              style="-fx-background-radius: 8; -fx-border-radius: 8;"/>
+                </VBox>
+
+                <!-- Right Side: Permissions -->
+                <VBox spacing="20" HBox.hgrow="ALWAYS">
+                    <Label text="Permissions"
+                           style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                    <VBox spacing="15" style="-fx-background-color: #FFF3E0; -fx-padding: 20; -fx-background-radius: 8;">
+                        <Label text="🔍 Audits" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+                        <CheckBox fx:id="permAuditCreate" text="Créer des audits"/>
+                        <CheckBox fx:id="permAuditView" text="Consulter les audits"/>
+                        <CheckBox fx:id="permAuditEdit" text="Modifier les audits"/>
+                        <CheckBox fx:id="permAuditDelete" text="Supprimer les audits"/>
+                    </VBox>
+
+                    <VBox spacing="15" style="-fx-background-color: #E3F2FD; -fx-padding: 20; -fx-background-radius: 8;">
+                        <Label text="👤 Administration" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+                        <CheckBox fx:id="permUserManage" text="Gérer les utilisateurs"/>
+                        <CheckBox fx:id="permSettings" text="Accéder aux paramètres"/>
+                    </VBox>
+
+                    <HBox alignment="CENTER_LEFT">
+                        <Button fx:id="saveRoleBtn" text="💾 Sauvegarder les Permissions"
+                                style="-fx-background-color: #FF9800; -fx-text-fill: white;
+                                       -fx-font-size: 14px; -fx-padding: 12 25; -fx-background-radius: 6;
+                                       -fx-cursor: hand;"/>
+                    </HBox>
+                </VBox>
+            </HBox>
+        </Tab>
+
+        <!-- ========== TAB 4: AUDIT MODELS (Optional) ========== -->
+        <Tab text="📋 Modèles d'Audit">
+            <VBox spacing="20" alignment="CENTER" style="-fx-padding: 50;">
+                <Label text="🚧" style="-fx-font-size: 48px;"/>
+                <Label text="Modèles d'Audit" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                <Label text="Cette section sera disponible prochainement"
+                       style="-fx-text-fill: #666; -fx-font-size: 14px;"/>
+            </VBox>
+        </Tab>
+
+    </TabPane>
+
+</AnchorPane>

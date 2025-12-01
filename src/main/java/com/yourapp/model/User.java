@@ -15,6 +15,16 @@ private ZonedDateTime createdAt;
 private ZonedDateTime lastLoginAt;
 private String phone;
 private String locale;
+    private int simpleId;
+    private String role;
+    public User(int id, String name, String email, String role) {
+        this.simpleId = id;
+        this.fullName = name;
+        this.email = email;
+        this.role = role;}
+    public User() {
+        };
+
 
 
 public UUID getId() { return id; }
@@ -52,3 +62,7 @@ public void setPhone(String phone) { this.phone = phone; }
 public String getLocale() { return locale; }
 public void setLocale(String locale) { this.locale = locale; }
 }
+    public int getSimpleId() { return simpleId; }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
+    public String getName() { return fullName; }
