@@ -5,6 +5,7 @@ com\yourapp\model\AuditFinding.class
 com\yourapp\model\UserOrganisation.class
 com\yourapp\model\AuditRequest.class
 com\yourapp\model\Permission.class
+com\yourapp\controller\ProjectFormController.class
 com\yourapp\model\ReportSection.class
 com\yourapp\model\DocumentVersion.class
 com\yourapp\model\DocumentAccessControl.class
@@ -31,3 +32,5 @@ com\yourapp\model\DocumentFolder.class
 com\yourapp\model\ChangeLog.class
 com\yourapp\model\ConfigChangeLog.class
 com\yourapp\model\AppConfig.class
+com\yourapp\controller\ProjetsController.class
+com\yourapp\model\Project.class

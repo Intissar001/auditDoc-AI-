@@ -1,63 +1,32 @@
-/*package com.yourapp; // Use your actual package name
-
-import com.yourapp.controller.AuditController; // Import the controller provided earlier
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-
-import java.io.IOException;
-
-public class Main extends Application {
-
-    @Override
-    public void start(Stage stage) throws IOException {
-        // --- MODIFIED CODE START ---
-
-        // 1. Point to the new AuditView.fxml (adjust path as necessary)
-        // Assuming AuditView.fxml is in a resource folder named 'views/fxml'
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/fxml/Audit.fxml"));
-
-        // Ensure the controller package matches the structure provided earlier
-        // fxmlLoader.setController(new AuditController()); // Only needed if controller is not specified in FXML
-
-        // 2. Load the FXML and create the scene
-        // Use a large size to fit the detailed layout (1400x900 recommended)
-        Scene scene = new Scene(fxmlLoader.load(), 1400, 900);
-
-        // 3. Link the CSS file (styles.css) to the scene
-        // Assuming styles.css is in a resource folder named 'css'
-        String cssPath = getClass().getResource("/css/styles.css").toExternalForm();
-        scene.getStylesheets().add(cssPath);
-
-        stage.setTitle("Audit Doc AI - Smart Auditing");
-        stage.setScene(scene);
-        stage.show();
-
-        // --- MODIFIED CODE END ---
-    }
-
-    public static void main(String[] args) {
-        launch();
-    }
-} */
-
 package com.yourapp;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import java.io.IOException;
+import java.net.URL; // Ajout
 
 public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(
-                Main.class.getResource("/views/fxml/Audit.fxml")  // USE AUDIT HERE
-        );
 
-        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+        // 1. Définition du chemin
+        String fxmlPath = "/views/fxml/ProjetsView.fxml";
+
+        // TEST RAPIDE : S'assurer que Java trouve la ressource
+        URL resourceUrl = getClass().getResource(fxmlPath);
+        if (resourceUrl == null) {
+            // Si le plugin Maven échoue à cause de la ressource, cette ligne te le dira
+            System.err.println("ERREUR GRAVE: Fichier FXML non trouvé au chemin: " + fxmlPath);
+            throw new IOException("Fichier FXML manquant.");
+        }
+
+        // 2. Chargement du FXML
+        FXMLLoader fxmlLoader = new FXMLLoader(resourceUrl);
+
+        Scene scene = new Scene(fxmlLoader.load(), 1200, 800);
 
         stage.setTitle("JavaFX - Audit Screen");
         stage.setScene(scene);
