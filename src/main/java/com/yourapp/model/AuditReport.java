@@ -14,6 +14,17 @@ public class AuditReport {
     private ZonedDateTime createdAt;
     private ZonedDateTime finalizedAt;
 
+    // ============================================
+    // NEW FIELDS FOR HISTORY TABLE DISPLAY
+    // ============================================
+    private String projectName;      // Nom du projet (ex: "Projet Éducation Rurale")
+    private Integer score;           // Score en pourcentage 0-100 (ex: 87)
+    private String complianceStatus; // "Conforme" ou "Non-Conforme"
+    private Integer problemsCount;   // Nombre de problèmes trouvés (ex: 3)
+
+    // ============================================
+    // EXISTING GETTERS AND SETTERS
+    // ============================================
     public UUID getId() { return id; }
     public void setId(UUID id) { this.id = id; }
 
@@ -34,4 +45,39 @@ public class AuditReport {
 
     public ZonedDateTime getFinalizedAt() { return finalizedAt; }
     public void setFinalizedAt(ZonedDateTime finalizedAt) { this.finalizedAt = finalizedAt; }
+
+    // ============================================
+    // NEW GETTERS AND SETTERS
+    // ============================================
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public String getComplianceStatus() {
+        return complianceStatus;
+    }
+
+    public void setComplianceStatus(String complianceStatus) {
+        this.complianceStatus = complianceStatus;
+    }
+
+    public Integer getProblemsCount() {
+        return problemsCount;
+    }
+
+    public void setProblemsCount(Integer problemsCount) {
+        this.problemsCount = problemsCount;
+    }
 }
