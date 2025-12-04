@@ -5,11 +5,14 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -29,6 +32,9 @@ public class HistoryController {
     @FXML private TableColumn<AuditReport, String> statusColumn;
     @FXML private TableColumn<AuditReport, String> problemsColumn;
     @FXML private TableColumn<AuditReport, Void> reportsColumn;
+
+    // Sidebar navigation
+    @FXML private HBox auditMenuItem;
 
     private ObservableList<AuditReport> auditList;
     private ObservableList<AuditReport> filteredList;
@@ -60,6 +66,13 @@ public class HistoryController {
         Label placeholderLabel = new Label("Aucun audit disponible.\nLancez un nouvel audit pour commencer.");
         placeholderLabel.setStyle("-fx-text-fill: #667085; -fx-font-size: 14px; -fx-text-alignment: center;");
         auditTable.setPlaceholder(placeholderLabel);
+
+        // Setup navigation - Go back to Audit page
+        if (auditMenuItem != null) {
+            auditMenuItem.setOnMouseClicked(event -> goBackToAudit());
+        } else {
+            System.err.println("WARNING: auditMenuItem is NULL! Check fx:id in history.fxml");
+        }
 
         // Load audits from database (if any exist)
         loadAuditsFromDatabase();
@@ -305,23 +318,48 @@ public class HistoryController {
     @FXML
     private void handleReduce() {
         System.out.println("Reduce button clicked");
-        // TODO: Collapse sidebar
+        // TODO: Collapse sidebar functionality
+    }
+
+    /**
+     * Navigate back to Audit page
+     */
+    private void goBackToAudit() {
+        try {
+            System.out.println("Navigating back to Audit page...");
+
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/views/fxml/Audit.fxml")
+            );
+            Parent root = loader.load();
+
+            // Get current stage and change scene
+            Stage stage = (Stage) auditMenuItem.getScene().getWindow();
+            stage.getScene().setRoot(root);
+
+            System.out.println("✅ Returned to Audit page successfully!");
+
+        } catch (Exception e) {
+            System.err.println("❌ Error navigating to Audit page: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     /**
      * Load audits from database
-     * Replace this with your actual database query
+     * This will be implemented later when database is configured
      */
     public void loadAuditsFromDatabase() {
-        // TODO: Connect to your database service
-        // Example:
-        // List<AuditReport> audits = auditService.findAllCompletedAudits();
+        System.out.println("Loading audits from database...");
+        System.out.println("No audits found - table is empty");
+        System.out.println("(Database not configured yet - will be added later)");
+
+        // TODO: Connect to database service when ready
+        // Example implementation:
+        // List<AuditReport> audits = auditService.getAllAudits();
         // auditList.addAll(audits);
         // filteredList.addAll(audits);
         // updateAuditCount();
-
-        System.out.println("Loading audits from database...");
-        System.out.println("No audits found - table is empty");
     }
 
     /**
@@ -332,5 +370,6 @@ public class HistoryController {
         auditList.clear();
         filteredList.clear();
         loadAuditsFromDatabase();
+        updateAuditCount();
     }
 }
