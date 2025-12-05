@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class HistoryController {
 
@@ -36,11 +37,22 @@ public class HistoryController {
     // Sidebar navigation
     @FXML private HBox auditMenuItem;
 
+    // Database service
+    private com.yourapp.service.AuditService auditService;
+
     private ObservableList<AuditReport> auditList;
     private ObservableList<AuditReport> filteredList;
 
     @FXML
     public void initialize() {
+        // Initialize service
+        try {
+            auditService = new com.yourapp.service.AuditService();
+            System.out.println("✅ AuditService initialized");
+        } catch (Exception e) {
+            System.err.println("❌ Failed to initialize AuditService: " + e.getMessage());
+            e.printStackTrace();
+        }
         // Initialize empty lists
         auditList = FXCollections.observableArrayList();
         filteredList = FXCollections.observableArrayList();
@@ -347,19 +359,40 @@ public class HistoryController {
 
     /**
      * Load audits from database
-     * This will be implemented later when database is configured
      */
     public void loadAuditsFromDatabase() {
-        System.out.println("Loading audits from database...");
-        System.out.println("No audits found - table is empty");
-        System.out.println("(Database not configured yet - will be added later)");
+        try {
+            System.out.println("📊 Loading audits from database...");
 
-        // TODO: Connect to database service when ready
-        // Example implementation:
-        // List<AuditReport> audits = auditService.getAllAudits();
-        // auditList.addAll(audits);
-        // filteredList.addAll(audits);
-        // updateAuditCount();
+            // Fetch audits from database
+            List<AuditReport> audits = auditService.getAllAudits();
+
+            // Clear existing data
+            auditList.clear();
+            filteredList.clear();
+
+            // Add to lists
+            auditList.addAll(audits);
+            filteredList.addAll(audits);
+
+            // Update count
+            updateAuditCount();
+
+            System.out.println("✅ Successfully loaded " + audits.size() + " audits");
+
+        } catch (Exception e) {
+            System.err.println("❌ Error loading audits from database: " + e.getMessage());
+            e.printStackTrace();
+
+            // Show error alert
+            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
+                    javafx.scene.control.Alert.AlertType.ERROR
+            );
+            alert.setTitle("Erreur");
+            alert.setHeaderText("Erreur de chargement");
+            alert.setContentText("Impossible de charger les audits depuis la base de données.");
+            alert.showAndWait();
+        }
     }
 
     /**

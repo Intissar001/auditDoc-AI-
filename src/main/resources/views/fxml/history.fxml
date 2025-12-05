@@ -4,135 +4,194 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.shape.Circle?>
 
 <BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.yourapp.controller.HistoryController"
             prefHeight="800" prefWidth="1200"
             stylesheets="@../css/styles.css">
 
-    <!-- Top Section: Header + Search -->
-    <top>
-        <VBox spacing="20" styleClass="header-section">
-            <padding>
-                <Insets top="30" right="40" bottom="20" left="40"/>
-            </padding>
-
-            <!-- Page Title -->
-            <VBox spacing="5">
-                <Label text="Historique" styleClass="page-title">
-                    <font>
-                        <Font name="System Bold" size="32"/>
-                    </font>
-                </Label>
-                <Label text="Consultez tous vos audits précédents et leurs résultats"
-                       styleClass="page-subtitle">
-                    <font>
-                        <Font size="14"/>
-                    </font>
-                </Label>
-            </VBox>
-
-            <!-- Search and Filter Bar -->
-            <HBox spacing="15" alignment="CENTER_LEFT">
-                <!-- Search Field -->
-                <TextField fx:id="searchField" promptText="Rechercher..."
-                           prefWidth="300" styleClass="search-field-history">
+    <!-- LEFT: Sidebar -->
+    <left>
+        <VBox styleClass="sidebar" prefWidth="250.0" BorderPane.alignment="CENTER">
+            <children>
+                <HBox alignment="CENTER_LEFT" prefHeight="80.0" spacing="10.0">
+                    <children>
+                        <Label styleClass="app-logo" text="Audit Doc AI"/>
+                    </children>
                     <padding>
-                        <Insets top="8" right="12" bottom="8" left="12"/>
+                        <Insets left="20.0" right="20.0"/>
                     </padding>
-                </TextField>
+                </HBox>
 
-                <!-- Partner Filter -->
-                <ComboBox fx:id="partnerComboBox" promptText="Tous les partenaires"
-                          prefWidth="200" styleClass="filter-combo"/>
+                <VBox styleClass="sidebar-menu" spacing="5.0" VBox.vgrow="ALWAYS">
+                    <children>
 
-                <!-- Date Filter -->
-                <ComboBox fx:id="dateComboBox" promptText="Date"
-                          prefWidth="150" styleClass="filter-combo"/>
+                        <HBox alignment="CENTER_LEFT" styleClass="menu-item" spacing="15.0">
+                            <children>
+                                <Label styleClass="menu-icon" text="☷"/>
+                                <Label styleClass="menu-label" text="Tableau de Bord"/>
+                            </children>
+                        </HBox>
 
-                <!-- Sort Filter -->
-                <ComboBox fx:id="sortComboBox" promptText="Descendant"
-                          prefWidth="150" styleClass="filter-combo"/>
+                        <HBox fx:id="auditMenuItem" alignment="CENTER_LEFT" styleClass="menu-item" spacing="15.0">
+                            <children>
+                                <Label styleClass="menu-icon" text="🔍"/>
+                                <Label styleClass="menu-label" text="Audit"/>
+                            </children>
+                        </HBox>
 
-                <Region HBox.hgrow="ALWAYS"/>
+                        <HBox alignment="CENTER_LEFT" styleClass="menu-item" spacing="15.0">
+                            <children>
+                                <Label styleClass="menu-icon" text="📂"/>
+                                <Label styleClass="menu-label" text="Projets"/>
+                            </children>
+                        </HBox>
 
-                <!-- Audit Count -->
-                <Label fx:id="auditCountLabel" text="8 audits" styleClass="audit-count">
-                    <font>
-                        <Font size="13"/>
-                    </font>
-                </Label>
-            </HBox>
+                        <!-- ACTIVE: Historique -->
+                        <HBox alignment="CENTER_LEFT" styleClass="menu-item-active" spacing="15.0">
+                            <children>
+                                <Circle radius="3.0" fill="#007bff" translateY="-10.0" translateX="5.0"/>
+                                <Label styleClass="menu-icon-active" text="⏱"/>
+                                <Label styleClass="menu-label-active" text="Historique"/>
+                            </children>
+                            <VBox.margin>
+                                <Insets right="30.0"/>
+                            </VBox.margin>
+                        </HBox>
+
+                        <HBox alignment="CENTER_LEFT" styleClass="menu-item" spacing="15.0">
+                            <children>
+                                <Label styleClass="menu-icon" text="⚙"/>
+                                <Label styleClass="menu-label" text="Paramètres"/>
+                            </children>
+                        </HBox>
+
+                    </children>
+                    <padding>
+                        <Insets left="20.0" right="20.0" top="10.0"/>
+                    </padding>
+                </VBox>
+
+
+            </children>
         </VBox>
-    </top>
+    </left>
 
-    <!-- Center: Table -->
+    <!-- CENTER: History Content -->
     <center>
-        <VBox>
-            <padding>
-                <Insets top="20" right="40" bottom="40" left="40"/>
-            </padding>
+        <VBox styleClass="main-content" BorderPane.alignment="CENTER">
+            <children>
 
-            <!-- Section Title -->
-            <HBox spacing="10" alignment="CENTER_LEFT">
-                <padding>
-                    <Insets bottom="15"/>
-                </padding>
-                <Label text="📄" style="-fx-font-size: 20px;"/>
-                <Label text="Historique des Audits" styleClass="section-title">
-                    <font>
-                        <Font name="System Bold" size="18"/>
-                    </font>
-                </Label>
-            </HBox>
+                <!-- Top Section: Header + Search -->
+                <VBox spacing="20" styleClass="header-section">
+                    <padding>
+                        <Insets top="30" right="40" bottom="20" left="40"/>
+                    </padding>
 
-            <!-- Table View -->
-            <TableView fx:id="auditTable" styleClass="audit-table" VBox.vgrow="ALWAYS">
-                <columns>
-                    <!-- Date Column -->
-                    <TableColumn fx:id="dateColumn" text="Date de l'Audit"
-                                 prefWidth="130" styleClass="table-column"/>
+                    <!-- Page Title -->
+                    <VBox spacing="5">
+                        <Label text="Historique" styleClass="page-title">
+                            <font>
+                                <Font name="System Bold" size="32"/>
+                            </font>
+                        </Label>
+                        <Label text="Consultez tous vos audits précédents et leurs résultats"
+                               styleClass="page-subtitle">
+                            <font>
+                                <Font size="14"/>
+                            </font>
+                        </Label>
+                    </VBox>
 
-                    <!-- Project Column -->
-                    <TableColumn fx:id="projectColumn" text="Projet"
-                                 prefWidth="250" styleClass="table-column"/>
+                    <!-- Search and Filter Bar -->
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <!-- Search Field -->
+                        <TextField fx:id="searchField" promptText="Rechercher..."
+                                   prefWidth="300" styleClass="search-field-history">
+                            <padding>
+                                <Insets top="8" right="12" bottom="8" left="12"/>
+                            </padding>
+                        </TextField>
 
-                    <!-- Score Column -->
-                    <TableColumn fx:id="scoreColumn" text="Score"
-                                 prefWidth="100" styleClass="table-column"/>
+                        <!-- Partner Filter -->
+                        <ComboBox fx:id="partnerComboBox" promptText="Tous les partenaires"
+                                  prefWidth="200" styleClass="filter-combo"/>
 
-                    <!-- Status Column -->
-                    <TableColumn fx:id="statusColumn" text="Statut"
-                                 prefWidth="130" styleClass="table-column"/>
+                        <!-- Date Filter -->
+                        <ComboBox fx:id="dateComboBox" promptText="Date"
+                                  prefWidth="150" styleClass="filter-combo"/>
 
-                    <!-- Problems Column -->
-                    <TableColumn fx:id="problemsColumn" text="Problèmes"
-                                 prefWidth="130" styleClass="table-column"/>
+                        <!-- Sort Filter -->
+                        <ComboBox fx:id="sortComboBox" promptText="Descendant"
+                                  prefWidth="150" styleClass="filter-combo"/>
 
-                    <!-- Reports Column -->
-                    <TableColumn fx:id="reportsColumn" text="Rapports"
-                                 prefWidth="200" styleClass="table-column"/>
-                </columns>
+                        <Region HBox.hgrow="ALWAYS"/>
 
-                <columnResizePolicy>
-                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-                </columnResizePolicy>
-            </TableView>
+                        <!-- Audit Count -->
+                        <Label fx:id="auditCountLabel" text="0 audits" styleClass="audit-count">
+                            <font>
+                                <Font size="13"/>
+                            </font>
+                        </Label>
+                    </HBox>
+                </VBox>
+
+                <!-- Table Section -->
+                <VBox VBox.vgrow="ALWAYS">
+                    <padding>
+                        <Insets top="20" right="40" bottom="40" left="40"/>
+                    </padding>
+
+                    <!-- Section Title -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <padding>
+                            <Insets bottom="15"/>
+                        </padding>
+                        <Label text="📄" style="-fx-font-size: 20px;"/>
+                        <Label text="Historique des Audits" styleClass="section-title">
+                            <font>
+                                <Font name="System Bold" size="18"/>
+                            </font>
+                        </Label>
+                    </HBox>
+
+                    <!-- Table View -->
+                    <TableView fx:id="auditTable" styleClass="audit-table" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <!-- Date Column -->
+                            <TableColumn fx:id="dateColumn" text="Date de l'Audit"
+                                         prefWidth="130" styleClass="table-column"/>
+
+                            <!-- Project Column -->
+                            <TableColumn fx:id="projectColumn" text="Projet"
+                                         prefWidth="250" styleClass="table-column"/>
+
+                            <!-- Score Column -->
+                            <TableColumn fx:id="scoreColumn" text="Score"
+                                         prefWidth="100" styleClass="table-column"/>
+
+                            <!-- Status Column -->
+                            <TableColumn fx:id="statusColumn" text="Statut"
+                                         prefWidth="130" styleClass="table-column"/>
+
+                            <!-- Problems Column -->
+                            <TableColumn fx:id="problemsColumn" text="Problèmes"
+                                         prefWidth="130" styleClass="table-column"/>
+
+                            <!-- Reports Column -->
+                            <TableColumn fx:id="reportsColumn" text="Rapports"
+                                         prefWidth="200" styleClass="table-column"/>
+                        </columns>
+
+                        <columnResizePolicy>
+                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                        </columnResizePolicy>
+                    </TableView>
+                </VBox>
+
+            </children>
         </VBox>
     </center>
-
-    <!-- Bottom: Reduce Button (optional) -->
-    <bottom>
-        <HBox alignment="CENTER_LEFT">
-            <padding>
-                <Insets top="10" right="40" bottom="20" left="40"/>
-            </padding>
-            <Button text="◀ Réduire" styleClass="reduce-button" onAction="#handleReduce">
-                <font>
-                    <Font size="12"/>
-                </font>
-            </Button>
-        </HBox>
-    </bottom>
 
 </BorderPane>
