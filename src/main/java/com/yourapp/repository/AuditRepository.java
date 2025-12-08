@@ -82,4 +82,46 @@ public class AuditRepository {
             em.close();
         }
     }
+
+    /**
+     * Get all unique project names (for partner filter in History)
+     */
+    public List<String> findAllProjectNames() {
+        EntityManager em = dbManager.getEntityManager();
+        try {
+            TypedQuery<String> query = em.createQuery(
+                    "SELECT DISTINCT a.projectName FROM AuditReport a WHERE a.projectName IS NOT NULL AND a.status = 'FINAL' ORDER BY a.projectName",
+                    String.class
+            );
+            List<String> projectNames = query.getResultList();
+            System.out.println("✅ Found " + projectNames.size() + " unique project names");
+            return projectNames;
+        } catch (Exception e) {
+            System.err.println("❌ Error fetching project names: " + e.getMessage());
+            return new ArrayList<>();
+        } finally {
+            em.close();
+        }
+    }
+
+    /**
+     * Get all unique partner names (for partner filter in History)
+     */
+    public List<String> findAllPartnerNames() {
+        EntityManager em = dbManager.getEntityManager();
+        try {
+            TypedQuery<String> query = em.createQuery(
+                    "SELECT DISTINCT a.partnerName FROM AuditReport a WHERE a.partnerName IS NOT NULL AND a.status = 'FINAL' ORDER BY a.partnerName",
+                    String.class
+            );
+            List<String> partnerNames = query.getResultList();
+            System.out.println("✅ Found " + partnerNames.size() + " unique partner names");
+            return partnerNames;
+        } catch (Exception e) {
+            System.err.println("❌ Error fetching partner names: " + e.getMessage());
+            return new ArrayList<>();
+        } finally {
+            em.close();
+        }
+    }
 }

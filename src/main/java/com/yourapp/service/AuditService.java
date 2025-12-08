@@ -51,4 +51,28 @@ public class AuditService {
             return 0;
         }
     }
+
+    /**
+     * Get all unique project names (for filter dropdown)
+     */
+    public List<String> getAllProjectNames() {
+        try {
+            return auditRepository.findAllProjectNames();
+        } catch (Exception e) {
+            System.err.println("Error fetching project names: " + e.getMessage());
+            return List.of();
+        }
+    }
+
+    /**
+     * Get all unique partner names (for partner filter dropdown)
+     */
+    public List<String> getAllPartnerNames() {
+        try {
+            return auditRepository.findAllPartnerNames();
+        } catch (Exception e) {
+            System.err.println("Error fetching partner names: " + e.getMessage());
+            return List.of();
+        }
+    }
 }

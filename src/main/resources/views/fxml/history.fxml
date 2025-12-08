@@ -118,12 +118,12 @@
                         <ComboBox fx:id="partnerComboBox" promptText="Tous les partenaires"
                                   prefWidth="200" styleClass="filter-combo"/>
 
-                        <!-- Date Filter -->
-                        <ComboBox fx:id="dateComboBox" promptText="Date"
-                                  prefWidth="150" styleClass="filter-combo"/>
+                        <!-- Sort By Filter (MODIFIED) -->
+                        <ComboBox fx:id="sortByComboBox" promptText="Trier par"
+                                  prefWidth="180" styleClass="filter-combo"/>
 
-                        <!-- Sort Filter -->
-                        <ComboBox fx:id="sortComboBox" promptText="Descendant"
+                        <!-- Sort Order Filter -->
+                        <ComboBox fx:id="sortComboBox" promptText="Ordre"
                                   prefWidth="150" styleClass="filter-combo"/>
 
                         <Region HBox.hgrow="ALWAYS"/>

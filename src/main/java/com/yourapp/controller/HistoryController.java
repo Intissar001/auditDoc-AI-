@@ -22,8 +22,8 @@ public class HistoryController {
 
     @FXML private TextField searchField;
     @FXML private ComboBox<String> partnerComboBox;
-    @FXML private ComboBox<String> dateComboBox;
-    @FXML private ComboBox<String> sortComboBox;
+    @FXML private ComboBox<String> sortByComboBox;  // NEW: Trier par
+    @FXML private ComboBox<String> sortComboBox;     // Ordre (Ascendant/Descendant)
     @FXML private Label auditCountLabel;
 
     @FXML private TableView<AuditReport> auditTable;
@@ -242,28 +242,56 @@ public class HistoryController {
     }
 
     private void setupFilters() {
-        // Partner filter
-        partnerComboBox.getItems().addAll(
-                "Tous les partenaires",
-                "Projet Éducation Rurale",
-                "Initiative Santé Communautaire",
-                "Développement Économique Local",
-                "Projet Eau Potable"
+        // Partner filter - Load from database (DYNAMIC)
+        loadPartnerFilter();
+
+        // Sort By filter
+        sortByComboBox.getItems().addAll(
+                "Date",
+                "Nom du projet",
+                "Statut"
         );
-        partnerComboBox.setValue("Tous les partenaires");
+        sortByComboBox.setValue("Date");
 
-        // Date filter
-        dateComboBox.getItems().addAll("Date", "Cette semaine", "Ce mois", "Cette année");
-        dateComboBox.setValue("Date");
-
-        // Sort filter
-        sortComboBox.getItems().addAll("Descendant", "Ascendant");
+        // Sort Order filter
+        sortComboBox.getItems().addAll("Ascendant", "Descendant");
         sortComboBox.setValue("Descendant");
 
         // Add listeners
         partnerComboBox.setOnAction(e -> filterAudits());
-        dateComboBox.setOnAction(e -> filterAudits());
+        sortByComboBox.setOnAction(e -> filterAudits());
         sortComboBox.setOnAction(e -> filterAudits());
+    }
+
+    /**
+     * Load partner filter dynamically from database
+     */
+    private void loadPartnerFilter() {
+        try {
+            // Clear existing items
+            partnerComboBox.getItems().clear();
+
+            // Add default option
+            partnerComboBox.getItems().add("Tous les partenaires");
+
+            // Load unique PARTNER names from database (not project names!)
+            List<String> partnerNames = auditService.getAllPartnerNames();
+
+            // Add to dropdown
+            partnerComboBox.getItems().addAll(partnerNames);
+
+            // Set default value
+            partnerComboBox.setValue("Tous les partenaires");
+
+            System.out.println("✅ Loaded " + partnerNames.size() + " partners in filter");
+
+        } catch (Exception e) {
+            System.err.println("❌ Error loading partner filter: " + e.getMessage());
+            // Fallback: just show "Tous les partenaires"
+            partnerComboBox.getItems().clear();
+            partnerComboBox.getItems().add("Tous les partenaires");
+            partnerComboBox.setValue("Tous les partenaires");
+        }
     }
 
     private void filterAudits() {
@@ -272,6 +300,7 @@ public class HistoryController {
         String searchText = searchField.getText().toLowerCase();
         String selectedPartner = partnerComboBox.getValue();
 
+        // Filter by search and partner
         for (AuditReport audit : auditList) {
             boolean matchesSearch = searchText.isEmpty() ||
                     (audit.getProjectName() != null && audit.getProjectName().toLowerCase().contains(searchText)) ||
@@ -279,29 +308,56 @@ public class HistoryController {
 
             boolean matchesPartner = selectedPartner == null ||
                     selectedPartner.equals("Tous les partenaires") ||
-                    (audit.getProjectName() != null && audit.getProjectName().equals(selectedPartner));
+                    (audit.getPartnerName() != null && audit.getPartnerName().equals(selectedPartner));
 
             if (matchesSearch && matchesPartner) {
                 filteredList.add(audit);
             }
         }
 
-        // Sort
+        // Sort based on sortByComboBox and sortComboBox
+        String sortBy = sortByComboBox.getValue();
         String sortOrder = sortComboBox.getValue();
-        if (sortOrder != null && sortOrder.equals("Ascendant")) {
-            filteredList.sort((a1, a2) -> {
-                if (a1.getCreatedAt() != null && a2.getCreatedAt() != null) {
-                    return a1.getCreatedAt().compareTo(a2.getCreatedAt());
-                }
-                return 0;
-            });
-        } else {
-            filteredList.sort((a1, a2) -> {
-                if (a1.getCreatedAt() != null && a2.getCreatedAt() != null) {
-                    return a2.getCreatedAt().compareTo(a1.getCreatedAt());
-                }
-                return 0;
-            });
+        boolean ascending = sortOrder != null && sortOrder.equals("Ascendant");
+
+        if (sortBy != null) {
+            switch (sortBy) {
+                case "Date":
+                    // Trier par date
+                    filteredList.sort((a1, a2) -> {
+                        if (a1.getCreatedAt() != null && a2.getCreatedAt() != null) {
+                            return ascending ?
+                                    a1.getCreatedAt().compareTo(a2.getCreatedAt()) :
+                                    a2.getCreatedAt().compareTo(a1.getCreatedAt());
+                        }
+                        return 0;
+                    });
+                    break;
+
+                case "Nom du projet":
+                    // Trier par nom de projet (A→Z ou Z→A)
+                    filteredList.sort((a1, a2) -> {
+                        String name1 = a1.getProjectName() != null ? a1.getProjectName() : "";
+                        String name2 = a2.getProjectName() != null ? a2.getProjectName() : "";
+                        return ascending ?
+                                name1.compareToIgnoreCase(name2) :
+                                name2.compareToIgnoreCase(name1);
+                    });
+                    break;
+
+                case "Statut":
+                    // Trier par statut (Non-Conforme d'abord si Descendant)
+                    filteredList.sort((a1, a2) -> {
+                        String status1 = a1.getComplianceStatus() != null ? a1.getComplianceStatus() : "";
+                        String status2 = a2.getComplianceStatus() != null ? a2.getComplianceStatus() : "";
+
+                        // "Non-Conforme" vient avant "Conforme" en ordre descendant
+                        int comparison = status1.compareToIgnoreCase(status2);
+                        // Inverse car "Non-Conforme" > "Conforme" alphabétiquement mais on veut l'inverse
+                        return ascending ? comparison : -comparison;
+                    });
+                    break;
+            }
         }
 
         updateAuditCount();

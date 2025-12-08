@@ -34,6 +34,9 @@ public class AuditReport {
     @Column(name = "project_name", length = 255)
     private String projectName;
 
+    @Column(name = "partner_name", length = 255)
+    private String partnerName;  // NEW: Partner name
+
     @Column(name = "score")
     private Integer score;
 
@@ -86,6 +89,9 @@ public class AuditReport {
 
     public String getProjectName() { return projectName; }
     public void setProjectName(String projectName) { this.projectName = projectName; }
+
+    public String getPartnerName() { return partnerName; }
+    public void setPartnerName(String partnerName) { this.partnerName = partnerName; }
 
     public Integer getScore() { return score; }
     public void setScore(Integer score) { this.score = score; }
