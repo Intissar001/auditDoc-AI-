@@ -1,26 +1,17 @@
+/* ===== ROOT STYLES ===== */
 .root {
     -fx-background-color: #ffffff;
     -fx-font-family: "System";
     -fx-font-size: 14px;
 }
 
-/* Base text colors */
-.page-title, .card-title, .user-name, .search-icon, .app-logo {
-    -fx-fill: #344054;
-    -fx-text-fill: #344054;
-}
-
-.page-subtitle, .dropdown-label, .dropzone-text-primary, .dropzone-file-info {
-    -fx-fill: #667085;
-    -fx-text-fill: #667085;
-}
-
-/* --- Sidebar Styles (Restauration des tailles fixes) --- */
+/* ===== SIDEBAR STYLES ===== */
 .sidebar {
     -fx-background-color: #ffffff;
     -fx-padding: 0;
     -fx-border-color: #e4e8ee;
     -fx-border-width: 0 1px 0 0;
+    -fx-pref-width: 250px;
 }
 
 /* App Logo/Title */
@@ -30,33 +21,46 @@
     -fx-text-fill: #007bff;
 }
 
+/* Sidebar Menu */
+.sidebar-menu {
+    -fx-background-color: transparent;
+}
+
 /* Menu Items */
-.menu-item, .menu-item-active {
+.menu-item {
     -fx-padding: 12px 15px;
     -fx-spacing: 15px;
     -fx-cursor: hand;
     -fx-background-radius: 12px;
+    -fx-background-color: transparent;
 }
 
 .menu-item:hover {
     -fx-background-color: #f0f0f0;
 }
 
-.menu-item-active {
+.menu-item.active {
     -fx-background-color: #f0f8ff;
     -fx-background-radius: 12px 0 0 12px;
 }
 
 /* Menu Icons and Labels */
-.menu-icon, .menu-label {
+.menu-icon {
     -fx-text-fill: #344054;
     -fx-font-size: 16px;
     -fx-font-weight: 500;
+    -fx-min-width: 20px;
 }
 
-.menu-icon-active, .menu-label-active {
+.menu-label {
+    -fx-text-fill: #344054;
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+}
+
+.menu-item.active .menu-icon,
+.menu-item.active .menu-label {
     -fx-text-fill: #007bff;
-    -fx-font-size: 16px;
     -fx-font-weight: 600;
 }
 
@@ -66,15 +70,32 @@
     -fx-background-color: #f7f7f7;
     -fx-border-color: #e4e8ee;
     -fx-border-width: 1px 0 0 0;
+    -fx-cursor: hand;
 }
 
-.sidebar-footer-icon, .sidebar-footer-label {
+.sidebar-footer:hover {
+    -fx-background-color: #f0f0f0;
+}
+
+.sidebar-footer-icon {
+    -fx-text-fill: #344054;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-min-width: 20px;
+}
+
+.sidebar-footer-label {
     -fx-text-fill: #344054;
     -fx-font-weight: 500;
     -fx-font-size: 14px;
 }
 
-/* --- Top Bar Styles (Restauration des tailles fixes) --- */
+/* ===== MAIN CONTENT STYLES ===== */
+.main-content {
+    -fx-background-color: #f5f7fa;
+}
+
+/* Top Bar */
 .topbar {
     -fx-background-color: #ffffff;
     -fx-border-color: #e4e8ee;
@@ -93,10 +114,6 @@
     -fx-border-width: 0;
     -fx-prompt-text-fill: #667085;
     -fx-text-fill: #344054;
-}
-
-.search-field:focused {
-    -fx-background-color: transparent;
 }
 
 .search-icon {
@@ -125,6 +142,7 @@
 
 .user-name {
     -fx-font-weight: bold;
+    -fx-text-fill: #344054;
 }
 
 .user-role {
@@ -132,12 +150,7 @@
     -fx-font-size: 12px;
 }
 
-/* --- Main Content Styles & ScrollPane (Ajout du Scroll) --- */
-.main-content {
-    -fx-background-color: #f5f7fa;
-}
-
-/* ScrollPane */
+/* ===== PAGE CONTENT STYLES ===== */
 .page-scroll-pane {
     -fx-background-color: transparent;
     -fx-hbar-policy: never;
@@ -148,12 +161,6 @@
     -fx-background-color: transparent;
 }
 
-.page-scroll-pane > .scroll-bar:vertical {
-    -fx-unit-increment: 15;
-    -fx-block-increment: 50;
-    -fx-padding: 0 5 0 0;
-}
-
 .page-content {
     -fx-background-color: transparent;
 }
@@ -162,10 +169,12 @@
 .page-title {
     -fx-font-size: 28px;
     -fx-font-weight: bold;
+    -fx-text-fill: #344054;
 }
 
 .page-subtitle {
     -fx-font-size: 16px;
+    -fx-text-fill: #667085;
 }
 
 /* Cards */
@@ -177,18 +186,18 @@
     -fx-border-width: 1px;
     -fx-border-radius: 16px;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 5);
-    -fx-pref-width: 100%;
-    -fx-max-width: infinity;
 }
 
 .card-title {
     -fx-font-size: 20px;
     -fx-font-weight: bold;
+    -fx-text-fill: #344054;
 }
 
 .dropdown-label {
     -fx-font-size: 14px;
     -fx-font-weight: 500;
+    -fx-text-fill: #667085;
 }
 
 /* Modern Dropdown */
@@ -212,7 +221,7 @@
     -fx-text-fill: #344054;
 }
 
-/* --- Dropzone Styles --- */
+/* Dropzone */
 .dropzone {
     -fx-background-color: #ffffff;
     -fx-background-radius: 16px;
@@ -231,6 +240,7 @@
 .dropzone-text-primary {
     -fx-font-size: 16px;
     -fx-font-weight: 600;
+    -fx-text-fill: #667085;
 }
 
 .dropzone-text-separator {
@@ -243,7 +253,7 @@
     -fx-text-fill: #999;
 }
 
-/* --- Button Styles --- */
+/* ===== BUTTON STYLES ===== */
 .btn-primary {
     -fx-background-color: #007bff;
     -fx-text-fill: white;

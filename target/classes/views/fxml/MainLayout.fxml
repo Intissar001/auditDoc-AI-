@@ -1,33 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.fxml.FXMLLoader?>
-<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="900.0" prefWidth="1200.0" stylesheets="@../css/styles.css"
-            xmlns="http://javafx.com/javafx/17.0.12"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.yourapp.controller.MainLayoutController">
-
+<BorderPane prefHeight="900.0" prefWidth="1173.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yourapp.controller.MainLayoutController">
+    <top>
+        <fx:include source="Topbar.fxml" />
+    </top>
+    <!-- Left: Sidebar -->
     <left>
-        <fx:include fx:id="navbar" source="Navbar.fxml"/>
+        <fx:include source="Sidebar.fxml" />
     </left>
 
+    <!-- Center: Dynamic content area -->
     <center>
-        <VBox styleClass="main-content" BorderPane.alignment="CENTER">
-
-            <fx:include source="Topbar.fxml"/>
-
-            <ScrollPane fx:id="pageScrollPane" fitToWidth="true" styleClass="page-scroll-pane" VBox.vgrow="ALWAYS">
-                <content>
-                    <VBox fx:id="pageContainer" styleClass="page-container">
-                    </VBox>
-                </content>
-            </ScrollPane>
-
-        </VBox>
+        <StackPane fx:id="contentArea" prefHeight="897.0" prefWidth="882.0">
+         <children>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+         </children></StackPane>
     </center>
 
 </BorderPane>

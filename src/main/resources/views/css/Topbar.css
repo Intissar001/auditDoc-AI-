@@ -1,54 +1,97 @@
-<?xml version="1.0" encoding="UTF-8"?>
+/* ---------------------- */
+/*        TOPBAR          */
+/* ---------------------- */
+.topbar {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #eaecee;
+    -fx-border-width: 0 0 1px 0;
+}
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.Circle?>
+/* ---------------------- */
+/*   LOGO + APP NAME      */
+/* ---------------------- */
+.top-app-name {
+    -fx-font-size: 22px;
+    -fx-font-family: "Poppins Semibold", "Inter SemiBold", "Segoe UI Semibold";
+    -fx-text-fill: #111827;
+    -fx-font-weight: 600;
+}
 
-<HBox alignment="CENTER_LEFT" prefHeight="80.0" styleClass="topbar"
-      stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/17.0.12"
-      xmlns:fx="http://javafx.com/fxml/1">
+/* Smooth logo */
+#topLogo {
+    -fx-smooth: true;
+}
 
-    <HBox alignment="CENTER_LEFT" maxWidth="500.0" prefWidth="500.0" styleClass="search-bar">
-        <children>
-            <Label styleClass="search-icon" text="🔍"/>
-            <TextField prefHeight="14.0" promptText="Search audit, document, or dossier..."
-                       styleClass="search-field" HBox.hgrow="ALWAYS"/>
-        </children>
-        <HBox.margin>
-            <Insets left="30.0"/>
-        </HBox.margin>
-    </HBox>
+/* ---------------------- */
+/*     SEARCH BAR         */
+/* ---------------------- */
+.search-bar {
+    -fx-background-color: #f4f4f4;
+    -fx-background-radius: 10px;
+    -fx-padding: 5 10;
+    -fx-pref-height: 32px;
+}
 
-    <HBox alignment="CENTER_RIGHT" spacing="20.0" HBox.hgrow="ALWAYS">
-        
-        <Button styleClass="btn-primary" text="+ Lancer un Nouvel Audit"/>
+.search-icon {
+    -fx-font-size: 16px;
+    -fx-text-fill: #6b7280;
+    -fx-padding: 0 8 0 0;
+}
 
-        <StackPane>
-            <Button styleClass="icon-btn" text="🔔"/>
-            <Circle fill="#f44336" radius="4.0" StackPane.alignment="TOP_RIGHT" 
-                    translateX="-5.0" translateY="5.0"/> 
-        </StackPane>
-        
-        <Button styleClass="icon-btn" text="🌐"/>
-        
-        <Button styleClass="icon-btn" text="☀"/>
+.search-field {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-font-size: 14px;
+    -fx-prompt-text-fill: #9ca3af;
+    -fx-text-fill: #374151;
+}
 
-        <HBox alignment="CENTER" spacing="10.0" styleClass="user-menu">
-            <children>
-                <Circle fill="#007bff" radius="15.0"/>
-                <VBox alignment="CENTER_LEFT">
-                    <children>
-                        <Label styleClass="user-name" text="Utilisateur Test"/>
-                        <Label styleClass="user-role" text="Administrateur"/>
-                    </children>
-                </VBox>
-            </children>
-        </HBox>
+/* ---------------------- */
+/*      ICON BUTTONS      */
+/* ---------------------- */
+.icon-btn {
+    -fx-background-color: transparent;
+    -fx-background-radius: 8px;
+    -fx-padding: 5;
+    -fx-font-size: 18px;
+    -fx-cursor: hand;
+}
 
-        <padding>
-            <Insets right="30.0"/>
-        </padding>
-    </HBox>
+.icon-btn:hover {
+    -fx-background-color: #f0f0f0;
+}
 
-</HBox>
+/* ---------------------- */
+/*     PRIMARY BUTTON     */
+/* ---------------------- */
+.btn-primary {
+    -fx-background-color: #0b76ff;
+    -fx-text-fill: white;
+    -fx-font-weight: 600;
+    -fx-font-size: 14px;
+    -fx-padding: 6 14;
+    -fx-background-radius: 20px;
+    -fx-cursor: hand;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #056be6;
+}
+
+/* ---------------------- */
+/*       USER MENU        */
+/* ---------------------- */
+.user-menu {
+    -fx-padding: 4 10;
+}
+
+.user-name {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #1f2937;
+}
+
+.user-role {
+    -fx-font-size: 11px;
+    -fx-text-fill: #6b7280;
+}

@@ -1,77 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.Node?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
 
-<VBox fx:id="sidebarVBox" prefWidth="250.0" styleClass="sidebar" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yourapp.controller.SidebarController">
-    <children>
-        <HBox alignment="CENTER_LEFT" prefHeight="80.0" spacing="10.0">
-            <children>
-                <Label styleClass="app-logo" text="Audit Doc AI" />
-            </children>
-            <padding>
-                <Insets left="20.0" right="20.0" />
-            </padding>
-        </HBox>
+<VBox xmlns="http://javafx.com/javafx/17.0.12"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.yourapp.controller.SidebarController"
+      fx:id="sidebar"
+      prefWidth="250"
+      minWidth="60"
+      maxWidth="250"
+      styleClass="sidebar"
+      stylesheets="@../css/Sidebar.css">
 
-        <VBox prefHeight="769.0" prefWidth="271.0" spacing="5.0" styleClass="sidebar-menu" VBox.vgrow="ALWAYS">
-            <children>
-                <HBox fx:id="dashboardItem" alignment="CENTER_LEFT" onMouseClicked="#handleMenuItemClick" spacing="15.0" styleClass="menu-item">
-                    <children>
-                        <Label styleClass="menu-icon" text="☷" />
-                        <Label styleClass="menu-label" text="Tableau de Bord" />
-                    </children>
-                </HBox>
+    <!--  ************************* -->
+    <!--       MENU PRINCIPAL       -->
+    <!--  ************************* -->
 
-                <HBox fx:id="auditItem" alignment="CENTER_LEFT" onMouseClicked="#handleMenuItemClick" spacing="15.0" styleClass="menu-item-active">
-                    <children>
-                        <Circle fx:id="auditDot" fill="#00c6ff" radius="3.0" translateX="5.0" translateY="-10.0" />
-                        <Label fx:id="auditIcon" styleClass="menu-icon-active" text="🔍" />
-                        <Label fx:id="auditLabel" styleClass="menu-label-active" text="Audit" />
-                    </children>
-                    <VBox.margin>
-                        <Insets right="30.0" />
-                    </VBox.margin>
-                </HBox>
+    <VBox fx:id="menuContainer"
+          spacing="6"
+          VBox.vgrow="ALWAYS"
+          styleClass="menu-container">
+        <padding>
+            <Insets left="8" right="8"/>
+        </padding>
 
-                <HBox fx:id="projectsItem" alignment="CENTER_LEFT" onMouseClicked="#handleMenuItemClick" spacing="15.0" styleClass="menu-item">
-                    <children>
-                        <Label styleClass="menu-icon" text="📂" />
-                        <Label styleClass="menu-label" text="Projets" />
-                    </children>
-                </HBox>
+        <children>
 
-                <HBox fx:id="historyItem" alignment="CENTER_LEFT" onMouseClicked="#handleMenuItemClick" spacing="15.0" styleClass="menu-item">
-                    <children>
-                        <Label styleClass="menu-icon" text="⏱" />
-                        <Label styleClass="menu-label" text="Historique" />
-                    </children>
-                </HBox>
+            <HBox fx:id="dashboardBtn" alignment="CENTER_LEFT" spacing="10" styleClass="menu-item">
+                <children>
+                    <Label text="☷" styleClass="menu-icon"/>
+                    <Label text="Tableau de bord" styleClass="menu-label"/>
+                </children>
+            </HBox>
 
-                <HBox fx:id="settingsItem" alignment="CENTER_LEFT" onMouseClicked="#handleMenuItemClick" spacing="15.0" styleClass="menu-item">
-                    <children>
-                        <Label styleClass="menu-icon" text="⚙" />
-                        <Label styleClass="menu-label" text="Paramètres" />
-                    </children>
-                </HBox>
+            <HBox fx:id="auditBtn" alignment="CENTER_LEFT" spacing="10" styleClass="menu-item">
+                <children>
+                    <Label text="🔍" styleClass="menu-icon"/>
+                    <Label text="Audit" styleClass="menu-label"/>
+                </children>
+            </HBox>
 
-            </children>
-            <padding>
-                <Insets left="20.0" right="20.0" top="10.0" />
-            </padding>
-        </VBox>
+            <HBox fx:id="projetsBtn" alignment="CENTER_LEFT" spacing="10" styleClass="menu-item">
+                <children>
+                    <Label text="📂" styleClass="menu-icon"/>
+                    <Label text="Projets" styleClass="menu-label"/>
+                </children>
+            </HBox>
 
-        <HBox fx:id="footerToggle" alignment="CENTER_LEFT" onMouseClicked="#handleToggleSidebar" prefHeight="50.0" styleClass="sidebar-footer">
-            <children>
-                <Label fx:id="toggleIcon" styleClass="sidebar-footer-icon" text="&lt;" />
-                <Label fx:id="toggleLabel" styleClass="sidebar-footer-label" text="Réduire" />
-            </children>
-            <padding>
-                <Insets left="20.0" />
-            </padding>
-        </HBox>
-    </children>
+            <HBox fx:id="historiqueBtn" alignment="CENTER_LEFT" spacing="10" styleClass="menu-item">
+                <children>
+                    <Label text="⏱" styleClass="menu-icon"/>
+                    <Label text="Historique" styleClass="menu-label"/>
+                </children>
+            </HBox>
+
+            <HBox fx:id="settingsBtn" alignment="CENTER_LEFT" spacing="10" styleClass="menu-item">
+                <children>
+                    <Label text="⚙" styleClass="menu-icon"/>
+                    <Label text="Paramètres" styleClass="menu-label"/>
+                </children>
+            </HBox>
+
+        </children>
+    </VBox>
+
+    <!-- *********************** -->
+    <!--        FOOTER          -->
+    <!-- *********************** -->
+    <HBox fx:id="footer" alignment="CENTER_LEFT" styleClass="footer">
+        <padding>
+            <Insets left="0" top="10" bottom="10" right="0"/>
+        </padding>
+        <children>
+            <Button fx:id="toggleSidebarBtn" text="⮜" styleClass="toggle-btn"/>
+        </children>
+    </HBox>
+
 </VBox>
