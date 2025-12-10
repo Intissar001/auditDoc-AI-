@@ -1,0 +1,24 @@
+/* styles.css */
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: transparent;
+}
+
+.tab-pane .tab {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: #757575;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: #EBF5FF; /* Bleu clair */
+    -fx-background-radius: 20;
+    -fx-text-fill: #007bff; /* Bleu primaire */
+    -fx-font-weight: bold;
+}
+
+.toggle-button:selected {
+    -fx-background-color: #007bff;
+    -fx-text-fill: white;
+}
