@@ -18,22 +18,14 @@ public class Main extends Application {
         // Initialize database
         initializeDatabase();
 
-        // Load settings FXML file
+        // Load Audit FXML file (default startup page)
         FXMLLoader fxmlLoader = new FXMLLoader(
-                getClass().getResource("/views/fxml/settings.fxml")
+                getClass().getResource("/views/fxml/Audit.fxml")
         );
 
-        Scene scene = new Scene(fxmlLoader.load(), 1000, 700);
+        Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
 
-        // Load Settings CSS styles
-        try {
-            String settingsCss = getClass().getResource("/views/css/settings.css").toExternalForm();
-            scene.getStylesheets().add(settingsCss);
-        } catch (Exception e) {
-            System.out.println("Settings CSS file not found: " + e.getMessage());
-        }
-        
-        // Optional: Load general CSS styles
+        // Load general CSS styles
         try {
             String generalCss = getClass().getResource("/views/css/styles.css").toExternalForm();
             scene.getStylesheets().add(generalCss);
@@ -41,7 +33,7 @@ public class Main extends Application {
             System.out.println("General CSS file not found, using default styles.");
         }
 
-        stage.setTitle("Audit Doc AI - Paramètres");
+        stage.setTitle("Audit Doc AI");
         stage.setScene(scene);
         stage.show();
     }

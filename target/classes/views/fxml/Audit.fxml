@@ -12,7 +12,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="700.0" prefWidth="1200.0"
             stylesheets="@styles.css"
             xmlns="http://javafx.com/javafx/21"
@@ -41,7 +41,7 @@
                             </children>
                         </HBox>
 
-                        <HBox alignment="CENTER_LEFT" styleClass="menu-item-active" spacing="15.0">
+                        <HBox fx:id="auditMenuItem" alignment="CENTER_LEFT" styleClass="menu-item-active" spacing="15.0" onMouseClicked="#handleAuditClick">
                             <children>
                                 <Circle radius="3.0" fill="#00c6ff" translateY="-10.0" translateX="5.0"/>
                                 <Label styleClass="menu-icon-active" text="🔍"/>
@@ -66,7 +66,7 @@
                             </children>
                         </HBox>
 
-                        <HBox alignment="CENTER_LEFT" styleClass="menu-item" spacing="15.0">
+                        <HBox fx:id="settingsMenuItem" alignment="CENTER_LEFT" styleClass="menu-item" spacing="15.0" onMouseClicked="#handleSettingsClick">
                             <children>
                                 <Label styleClass="menu-icon" text="⚙"/>
                                 <Label styleClass="menu-label" text="Paramètres"/>
