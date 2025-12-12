@@ -54,8 +54,8 @@ public class TopbarController {
         // Charger utilisateur
         User u = userService.getCurrentUser();
         if (u != null) {
-            userName.setText(u.getFullName());
-            userRole.setText(u.getRole());
+            userName.setText(u.getName() != null ? u.getName() : "Utilisateur");
+            userRole.setText(u.getRole() != null ? u.getRole() : "");
         }
 
         // Notifications

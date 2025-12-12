@@ -1,4 +1,227 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.shape.Circle?>
+
+<AnchorPane prefHeight="800.0" prefWidth="1200.0" styleClass="settings-root" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yourapp.controller.SettingsController">
+    <children>
+        <VBox spacing="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <!-- Header Section -->
+            <VBox spacing="8.0" styleClass="settings-header">
+                <padding>
+                    <Insets bottom="24.0" left="40.0" right="40.0" top="32.0" />
+                </padding>
+                <children>
+                    <Label text="Paramètres" styleClass="settings-title" />
+                    <Label text="Gérez les utilisateurs, modèles et paramètres système" styleClass="settings-subtitle" />
+                </children>
+            </VBox>
+
+            <!-- TabPane Section -->
+            <TabPane tabClosingPolicy="UNAVAILABLE" styleClass="settings-tabpane" VBox.vgrow="ALWAYS">
+                <tabs>
+                    <!-- Tab 1: User Management -->
+                    <Tab text="Gestion des Utilisateurs" styleClass="settings-tab">
+                        <content>
+                            <ScrollPane fitToWidth="true" styleClass="settings-scrollpane">
+                                <content>
+                                    <VBox spacing="24.0" styleClass="settings-content">
+                                        <padding>
+                                            <Insets bottom="32.0" left="40.0" right="40.0" top="32.0" />
+                                        </padding>
+                                        <children>
+                                            <VBox spacing="8.0">
+                                                <Label text="Gestion des Utilisateurs" styleClass="section-title" />
+                                                <Label text="Gérez les utilisateurs et leurs accès." styleClass="section-subtitle" />
+                                            </VBox>
+
+                                            <!-- Current User Card -->
+                                            <VBox spacing="0.0" styleClass="user-card">
+                                                <padding>
+                                                    <Insets bottom="16.0" left="20.0" right="20.0" top="16.0" />
+                                                </padding>
+                                                <children>
+                                                    <HBox alignment="CENTER_LEFT" spacing="16.0">
+                                                        <children>
+                                                            <!-- User Avatar -->
+                                                            <StackPane>
+                                                                <Circle radius="24.0" fill="#1a1a1a" />
+                                                                <Label fx:id="userNameLabel" alignment="CENTER" styleClass="user-avatar-text" text="H" />
+                                                            </StackPane>
+
+                                                            <!-- User Info -->
+                                                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                                                <Label fx:id="userNameDisplayLabel" text="Utilisateur Connecté" styleClass="user-label-title" />
+                                                                <Label fx:id="userEmailLabel" styleClass="user-label-email" text="email@example.com" />
+                                                            </VBox>
+
+                                                            <!-- User Role Badge -->
+                                                            <Label fx:id="userRoleLabel" styleClass="user-role-badge" text="Admin" />
+                                                        </children>
+                                                    </HBox>
+                                                </children>
+                                            </VBox>
+
+                                            <!-- Invite User Button -->
+                                            <Button onAction="#handleInviteUser" styleClass="btn-invite-user" text="+ Inviter un Utilisateur" />
+                                        </children>
+                                    </VBox>
+                                </content>
+                            </ScrollPane>
+                        </content>
+                    </Tab>
+
+                    <!-- Tab 2: Audit Templates -->
+                    <Tab text="Modèles d'Audit" styleClass="settings-tab">
+                        <content>
+                            <ScrollPane fitToWidth="true" styleClass="settings-scrollpane">
+                                <content>
+                                    <VBox spacing="24.0" styleClass="settings-content">
+                                        <padding>
+                                            <Insets bottom="32.0" left="40.0" right="40.0" top="32.0" />
+                                        </padding>
+                                        <children>
+                                            <HBox alignment="CENTER_LEFT" spacing="16.0">
+                                                <Label text="Modèles d'Audit" styleClass="section-title" HBox.hgrow="ALWAYS" />
+                                                <Button onAction="#handleCreateModel" styleClass="btn-create-model" text="+ Créer un Modèle" />
+                                            </HBox>
+
+                                            <!-- Template Cards Container -->
+                                            <VBox fx:id="templatesContainer" spacing="16.0" />
+                                        </children>
+                                    </VBox>
+                                </content>
+                            </ScrollPane>
+                        </content>
+                    </Tab>
+
+                    <!-- Tab 3: System Settings -->
+                    <Tab text="Paramètres du Système" styleClass="settings-tab">
+                        <content>
+                            <ScrollPane fitToWidth="true" styleClass="settings-scrollpane">
+                                <content>
+                                    <VBox spacing="24.0" styleClass="settings-content">
+                                        <padding>
+                                            <Insets bottom="32.0" left="40.0" right="40.0" top="32.0" />
+                                        </padding>
+                                        <children>
+                                            <!-- Storage Section -->
+                                            <VBox spacing="16.0">
+                                                <Label text="Stockage des Documents" styleClass="section-title" />
+                                                
+                                                <!-- Local Storage Toggle -->
+                                                <VBox spacing="0.0" styleClass="setting-card">
+                                                    <padding>
+                                                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                                    </padding>
+                                                    <children>
+                                                        <HBox alignment="CENTER_LEFT" spacing="20.0">
+                                                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                                                <Label text="Stockage Local" styleClass="setting-title" />
+                                                                <Label text="Documents stockés localement" styleClass="setting-description" />
+                                                            </VBox>
+                                                            <ToggleButton fx:id="localStoreToggle" onAction="#saveSettings" styleClass="toggle-button" />
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+
+                                                <!-- Cloud Backup Toggle -->
+                                                <VBox spacing="0.0" styleClass="setting-card">
+                                                    <padding>
+                                                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                                    </padding>
+                                                    <children>
+                                                        <HBox alignment="CENTER_LEFT" spacing="20.0">
+                                                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                                                <Label text="Sauvegarde Cloud" styleClass="setting-title" />
+                                                                <Label text="Synchronisation automatique" styleClass="setting-description" />
+                                                            </VBox>
+                                                            <ToggleButton fx:id="cloudBackupToggle" onAction="#saveSettings" styleClass="toggle-button" />
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+                                            </VBox>
+
+                                            <!-- Separator -->
+                                            <Separator styleClass="settings-separator" />
+
+                                            <!-- Notifications Section -->
+                                            <VBox spacing="16.0">
+                                                <Label text="Notifications" styleClass="section-title" />
+                                                
+                                                <!-- Email Alerts Toggle -->
+                                                <VBox spacing="0.0" styleClass="setting-card">
+                                                    <padding>
+                                                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                                    </padding>
+                                                    <children>
+                                                        <HBox alignment="CENTER_LEFT" spacing="20.0">
+                                                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                                                <Label text="Alertes Email" styleClass="setting-title" />
+                                                                <Label text="Recevoir les alertes par email" styleClass="setting-description" />
+                                                            </VBox>
+                                                            <ToggleButton fx:id="emailAlertToggle" onAction="#saveSettings" styleClass="toggle-button" />
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+
+                                                <!-- Audit Reminders Toggle -->
+                                                <VBox spacing="0.0" styleClass="setting-card">
+                                                    <padding>
+                                                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                                    </padding>
+                                                    <children>
+                                                        <HBox alignment="CENTER_LEFT" spacing="20.0">
+                                                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                                                <Label text="Rappels d'Audit" styleClass="setting-title" />
+                                                                <Label text="Notifications avant les audits" styleClass="setting-description" />
+                                                            </VBox>
+                                                            <ToggleButton fx:id="auditReminderToggle" onAction="#saveSettings" styleClass="toggle-button" />
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+                                            </VBox>
+
+                                            <!-- Separator -->
+                                            <Separator styleClass="settings-separator" />
+
+                                            <!-- AI and OCR Section -->
+                                            <VBox spacing="16.0">
+                                                <VBox spacing="4.0">
+                                                    <Label text="IA et OCR" styleClass="section-title" />
+                                                    <Label text="Configuration des services d'intelligence artificielle" styleClass="section-subtitle" />
+                                                </VBox>
+                                                
+                                                <!-- OCR Provider Display -->
+                                                <VBox spacing="0.0" styleClass="setting-card">
+                                                    <padding>
+                                                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                                    </padding>
+                                                    <children>
+                                                        <HBox alignment="CENTER_LEFT" spacing="20.0">
+                                                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                                                <Label text="Fournisseur OCR" styleClass="setting-title" />
+                                                            </VBox>
+                                                            <Label fx:id="ocrProviderLabel" text="Intégré" styleClass="setting-value" />
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+                                            </VBox>
+                                        </children>
+                                    </VBox>
+                                </content>
+                            </ScrollPane>
+                        </content>
+                    </Tab>
+                </tabs>
+            </TabPane>
+        </VBox>
+    </children>
+</AnchorPane>
+=======
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 
@@ -44,3 +267,4 @@
 
     <Button text="Enregistrer" style="-fx-background-color: #28a745; -fx-text-fill: white;"/>
 </VBox>
+>>>>>>> origin/main
