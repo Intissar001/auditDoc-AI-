@@ -15,9 +15,7 @@ import java.io.IOException;
  */
 public class AuditController {
 
-    @FXML
-    private VBox dropzone; // Used to handle drag & drop events (not implemented here)
-
+    // Used to handle drag & drop events (not implemented here)
     @FXML
     private ComboBox<String> projetDropdown;
 
@@ -38,17 +36,20 @@ public class AuditController {
     @FXML
     public void initialize() {
         // Store the original center content so we can restore it later
-        originalCenterContent = rootPane.getCenter();
+        if (rootPane != null) {
+            originalCenterContent = rootPane.getCenter();
+        }
 
         // Initialization logic goes here
         // e.g., Populating ComboBoxes, setting up event handlers
 
         // Example: Populate dropdowns
-        projetDropdown.getItems().addAll("Projet A", "Projet B", "Projet C");
-        partenaireDropdown.getItems().addAll("Partenaire X", "Partenaire Y", "Partenaire Z");
-
-        // Example: Add drag and drop handlers to the dropzone (requires more detailed implementation)
-        // dropzone.setOnDragOver(...)
+        if (projetDropdown != null) {
+            projetDropdown.getItems().addAll("Projet A", "Projet B", "Projet C");
+        }
+        if (partenaireDropdown != null) {
+            partenaireDropdown.getItems().addAll("Partenaire X", "Partenaire Y", "Partenaire Z");
+        }
     }
 
     // Example methods for button actions

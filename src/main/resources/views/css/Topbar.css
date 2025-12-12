@@ -1,0 +1,97 @@
+/* ---------------------- */
+/*        TOPBAR          */
+/* ---------------------- */
+.topbar {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #eaecee;
+    -fx-border-width: 0 0 1px 0;
+}
+
+/* ---------------------- */
+/*   LOGO + APP NAME      */
+/* ---------------------- */
+.top-app-name {
+    -fx-font-size: 22px;
+    -fx-font-family: "Poppins Semibold", "Inter SemiBold", "Segoe UI Semibold";
+    -fx-text-fill: #111827;
+    -fx-font-weight: 600;
+}
+
+/* Smooth logo */
+#topLogo {
+    -fx-smooth: true;
+}
+
+/* ---------------------- */
+/*     SEARCH BAR         */
+/* ---------------------- */
+.search-bar {
+    -fx-background-color: #f4f4f4;
+    -fx-background-radius: 10px;
+    -fx-padding: 5 10;
+    -fx-pref-height: 32px;
+}
+
+.search-icon {
+    -fx-font-size: 16px;
+    -fx-text-fill: #6b7280;
+    -fx-padding: 0 8 0 0;
+}
+
+.search-field {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-font-size: 14px;
+    -fx-prompt-text-fill: #9ca3af;
+    -fx-text-fill: #374151;
+}
+
+/* ---------------------- */
+/*      ICON BUTTONS      */
+/* ---------------------- */
+.icon-btn {
+    -fx-background-color: transparent;
+    -fx-background-radius: 8px;
+    -fx-padding: 5;
+    -fx-font-size: 18px;
+    -fx-cursor: hand;
+}
+
+.icon-btn:hover {
+    -fx-background-color: #f0f0f0;
+}
+
+/* ---------------------- */
+/*     PRIMARY BUTTON     */
+/* ---------------------- */
+.btn-primary {
+    -fx-background-color: #0b76ff;
+    -fx-text-fill: white;
+    -fx-font-weight: 600;
+    -fx-font-size: 14px;
+    -fx-padding: 6 14;
+    -fx-background-radius: 20px;
+    -fx-cursor: hand;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #056be6;
+}
+
+/* ---------------------- */
+/*       USER MENU        */
+/* ---------------------- */
+.user-menu {
+    -fx-padding: 4 10;
+}
+
+.user-name {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #1f2937;
+}
+
+.user-role {
+    -fx-font-size: 11px;
+    -fx-text-fill: #6b7280;
+}

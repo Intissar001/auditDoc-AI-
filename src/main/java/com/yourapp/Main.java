@@ -25,12 +25,19 @@ public class Main extends Application {
 
         Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
 
-        // Load general CSS styles
+        // Load general CSS styles and settings CSS
         try {
             String generalCss = getClass().getResource("/views/css/styles.css").toExternalForm();
             scene.getStylesheets().add(generalCss);
         } catch (Exception e) {
             System.out.println("General CSS file not found, using default styles.");
+        }
+        
+        try {
+            String settingsCss = getClass().getResource("/views/css/settings.css").toExternalForm();
+            scene.getStylesheets().add(settingsCss);
+        } catch (Exception e) {
+            System.out.println("Settings CSS file not found: " + e.getMessage());
         }
 
         stage.setTitle("Audit Doc AI");

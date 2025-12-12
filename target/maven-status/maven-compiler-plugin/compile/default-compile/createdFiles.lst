@@ -1,4 +1,5 @@
 com\yourapp\model\Team.class
+com\yourapp\services\NotificationService.class
 com\yourapp\model\AuditTask.class
 com\yourapp\controller\LoginController.class
 com\yourapp\model\AuditFinding.class
@@ -12,6 +13,7 @@ com\yourapp\model\ProjetMember.class
 com\yourapp\model\ComplianceScore.class
 com\yourapp\model\DocumentMetadata.class
 com\yourapp\model\AuditReport.class
+com\yourapp\model\Notification.class
 com\yourapp\model\User.class
 com\yourapp\model\Organisation.class
 com\yourapp\controller\AuditController.class
@@ -27,6 +29,7 @@ com\yourapp\model\UserInvitation.class
 com\yourapp\model\AuditRunMetadata.class
 com\yourapp\model\Projet.class
 com\yourapp\model\EntityHistory.class
+com\yourapp\services\UserService.class
 com\yourapp\model\DocumentFolder.class
 com\yourapp\model\ChangeLog.class
 com\yourapp\model\ConfigChangeLog.class

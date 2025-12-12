@@ -1,0 +1,55 @@
+/* Styles Spécifiques à la Navbar (extraits du styles.css original) */
+
+.sidebar {
+    -fx-background-color: #ffffff;
+    -fx-padding: 0;
+    -fx-border-color: #e4e8ee;
+    -fx-border-width: 0 1px 0 0;
+}
+
+/* App Logo/Title */
+.app-logo {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #007bff; /* Couleur conservée */
+}
+
+/* Menu Items */
+.menu-item, .menu-item-active {
+    -fx-padding: 12px 15px;
+    -fx-spacing: 15px;
+    -fx-cursor: hand;
+    -fx-background-radius: 12px;
+}
+.menu-item:hover {
+    -fx-background-color: #f0f0f0;
+}
+.menu-item-active {
+    -fx-background-color: #f0f8ff; /* Couleur de fond bleue conservée */
+    -fx-background-radius: 12px 0 0 12px;
+}
+
+/* Menu Icons and Labels */
+.menu-icon, .menu-label {
+    -fx-text-fill: #344054;
+    -fx-font-size: 16px;
+    -fx-font-weight: 500;
+}
+.menu-icon-active, .menu-label-active {
+    -fx-text-fill: #007bff; /* Couleur du texte bleu conservée */
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+}
+
+/* Sidebar Footer */
+.sidebar-footer {
+    -fx-padding: 15px 0;
+    -fx-background-color: #f7f7f7;
+    -fx-border-color: #e4e8ee;
+    -fx-border-width: 1px 0 0 0;
+}
+.sidebar-footer-icon, .sidebar-footer-label {
+    -fx-text-fill: #344054;
+    -fx-font-weight: 500;
+    -fx-font-size: 14px;
+}
