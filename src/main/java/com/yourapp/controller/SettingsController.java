@@ -46,41 +46,63 @@ public class SettingsController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Load current user from session
-        currentUser = UserService.getCurrentUser();
-        
-        // If no user in session, try to load default user (for testing)
-        if (currentUser == null) {
-            currentUser = UserService.getUserByEmail("boudifatima450@gmail.com");
-            if (currentUser != null) {
-                UserService.setCurrentUser(currentUser);
-            } else {
-                // Fallback for testing
-                currentUser = new User("Admin", "boudifatima450@gmail.com", "Administrateur");
+        try {
+            // Load current user from session
+            currentUser = UserService.getCurrentUser();
+            
+            // If no user in session, try to load default user (for testing)
+            if (currentUser == null) {
+                currentUser = UserService.getUserByEmail("boudifatima450@gmail.com");
+                if (currentUser != null) {
+                    UserService.setCurrentUser(currentUser);
+                } else {
+                    // Fallback for testing
+                    currentUser = new User("Admin", "boudifatima450@gmail.com", "Administrateur");
+                }
+            }
+
+            setupUserProfile();
+            setupSystemSettings();
+            setupTemplates();
+            setupToggleButtons();
+        } catch (Exception e) {
+            System.err.println("Error initializing SettingsController: " + e.getMessage());
+            e.printStackTrace();
+            // Continue with default values to prevent complete failure
+            if (currentUser == null) {
+                currentUser = new User("Admin", "admin@example.com", "Administrateur");
             }
         }
-
-        setupUserProfile();
-        setupSystemSettings();
-        setupTemplates();
-        setupToggleButtons();
     }
 
     /**
      * Sets up the user profile section with current user data.
      */
     private void setupUserProfile() {
-        if (currentUser != null) {
-            // Set user initial (first letter of name)
-            String initial = currentUser.getName() != null && !currentUser.getName().isEmpty() 
-                ? currentUser.getName().substring(0, 1).toUpperCase() 
-                : "U";
-            userNameLabel.setText(initial);
-            
-            // Set user name display
-            userNameDisplayLabel.setText(currentUser.getName() != null ? currentUser.getName() : "Utilisateur");
-            userEmailLabel.setText(currentUser.getEmail() != null ? currentUser.getEmail() : "");
-            userRoleLabel.setText(currentUser.getRole() != null ? currentUser.getRole() : "");
+        try {
+            if (currentUser != null) {
+                // Set user initial (first letter of name)
+                String initial = currentUser.getName() != null && !currentUser.getName().isEmpty() 
+                    ? currentUser.getName().substring(0, 1).toUpperCase() 
+                    : "U";
+                if (userNameLabel != null) {
+                    userNameLabel.setText(initial);
+                }
+                
+                // Set user name display
+                if (userNameDisplayLabel != null) {
+                    userNameDisplayLabel.setText(currentUser.getName() != null ? currentUser.getName() : "Utilisateur");
+                }
+                if (userEmailLabel != null) {
+                    userEmailLabel.setText(currentUser.getEmail() != null ? currentUser.getEmail() : "");
+                }
+                if (userRoleLabel != null) {
+                    userRoleLabel.setText(currentUser.getRole() != null ? currentUser.getRole() : "");
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error setting up user profile: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -88,12 +110,21 @@ public class SettingsController implements Initializable {
      * Loads and displays audit templates from database.
      */
     private void setupTemplates() {
-        templatesContainer.getChildren().clear();
-        List<AuditTemplateService.AuditTemplate> templates = AuditTemplateService.getAllTemplates();
-        
-        for (AuditTemplateService.AuditTemplate template : templates) {
-            VBox templateCard = createTemplateCard(template);
-            templatesContainer.getChildren().add(templateCard);
+        try {
+            if (templatesContainer == null) {
+                System.err.println("Warning: templatesContainer is null");
+                return;
+            }
+            templatesContainer.getChildren().clear();
+            List<AuditTemplateService.AuditTemplate> templates = AuditTemplateService.getAllTemplates();
+            
+            for (AuditTemplateService.AuditTemplate template : templates) {
+                VBox templateCard = createTemplateCard(template);
+                templatesContainer.getChildren().add(templateCard);
+            }
+        } catch (Exception e) {
+            System.err.println("Error setting up templates: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
