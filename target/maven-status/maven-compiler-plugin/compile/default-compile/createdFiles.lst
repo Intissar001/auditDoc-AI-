@@ -7,10 +7,13 @@ com\yourapp\model\UserOrganisation.class
 com\yourapp\model\AuditRequest.class
 com\yourapp\model\Permission.class
 com\yourapp\model\ReportSection.class
+com\yourapp\controller\DashboardController.class
+com\yourapp\controller\HelpController.class
 com\yourapp\model\DocumentVersion.class
 com\yourapp\model\DocumentAccessControl.class
 com\yourapp\model\ProjetMember.class
 com\yourapp\model\ComplianceScore.class
+com\yourapp\controller\ProfileController.class
 com\yourapp\model\DocumentMetadata.class
 com\yourapp\model\AuditReport.class
 com\yourapp\model\Notification.class
