@@ -1,86 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.shape.Circle?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.geometry.Insets?>
 
-<HBox fx:id="topbar"
-      xmlns="http://javafx.com/javafx/17"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.yourapp.controller.TopbarController"
-      prefHeight="60"
-      spacing="18"
-      alignment="CENTER_LEFT"
-      stylesheets="@../css/Topbar.css"
-      styleClass="topbar">
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<HBox fx:id="topbar" alignment="CENTER_LEFT" prefHeight="50" spacing="18" styleClass="topbar" stylesheets="@../css/Topbar.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yourapp.controller.TopbarController">
 
     <padding>
-        <Insets left="22" right="22"/>
+        <Insets left="22" right="22" />
     </padding>
 
     <!-- LOGO + APP NAME -->
-    <HBox alignment="CENTER_LEFT" spacing="12">
+    <HBox alignment="CENTER_LEFT" spacing="8">
         <children>
-            <ImageView fx:id="topLogo"
-                       fitWidth="48"
-                       fitHeight="48"
-                       preserveRatio="true"/>
-            <Label fx:id="topAppName"
-                   text="AuditDoc AI"
-                   styleClass="top-app-name"/>
+            <ImageView fx:id="topLogo" fitHeight="32.0" fitWidth="32.0" preserveRatio="true" />
+            <Label fx:id="topAppName" styleClass="top-app-name" text="AuditDoc AI" />
         </children>
     </HBox>
 
-    <Region HBox.hgrow="ALWAYS"/>
+    <Region HBox.hgrow="ALWAYS" />
 
     <!-- SEARCH BAR -->
-    <HBox alignment="CENTER_LEFT" prefWidth="400" styleClass="search-bar">
+    <HBox alignment="CENTER" prefWidth="400.0" maxHeight="38" styleClass="search-bar">
         <children>
-            <Label styleClass="search-icon" text="🔍"/>
-            <TextField fx:id="searchField"
-                       promptText="Search audit, document, or dossier..."
-                       styleClass="search-field"
-                       HBox.hgrow="ALWAYS"/>
+            <Label styleClass="search-icon" text="🔍" />
+            <TextField fx:id="searchField" prefWidth="360.0" promptText="Search audit, document, or dossier..." styleClass="search-field" HBox.hgrow="ALWAYS" />
         </children>
     </HBox>
 
     <!-- RIGHT SECTION -->
-    <HBox alignment="CENTER_RIGHT" spacing="16">
+    <HBox alignment="CENTER_RIGHT" spacing="14">
 
-        <Button text="+ Lancer un Nouvel Audit"
-                fx:id="btnNewAudit"
-                styleClass="btn-primary"
-                prefHeight="36"/>
+        <Button fx:id="btnNewAudit" prefHeight="38" styleClass="btn-primary" text="+ Lancer un Nouvel Audit" />
 
         <!-- NOTIFICATION -->
-        <StackPane fx:id="notificationWrapper">
-            <Button fx:id="btnNotifications"
-                    text="🔔"
-                    styleClass="icon-btn"
-                    prefWidth="36"
-                    prefHeight="36"/>
-
-            <!-- BADGE -->
-            <Circle fx:id="notificationBadge"
-                    radius="5"
-                    fill="#ff4d4d"
-                    translateX="10"
-                    translateY="-10"
-                    visible="false"/>
+        <StackPane fx:id="notificationWrapper" alignment="CENTER">
+            <Button fx:id="btnNotifications" prefHeight="38" prefWidth="38" styleClass="icon-btn" text="🔔" />
+            <!-- BADGE - positioned at top right -->
+            <Circle fx:id="notificationBadge" fill="#ff4d4d" radius="4" StackPane.alignment="TOP_RIGHT" translateX="-6" translateY="6" visible="true" />
         </StackPane>
 
-        <Button text="🌐" styleClass="icon-btn" prefWidth="36" prefHeight="36"/>
-        <Button text="☀" styleClass="icon-btn" prefWidth="36" prefHeight="36"/>
+        <Button fx:id="btnLanguage" prefHeight="38" prefWidth="38" styleClass="icon-btn" text="🌐" />
+        <Button fx:id="btnTheme" prefHeight="38" prefWidth="38" styleClass="icon-btn" text="☀" />
 
         <!-- USER MENU -->
-        <HBox fx:id="userMenu" alignment="CENTER" spacing="10" styleClass="user-menu">
+        <HBox fx:id="userMenu" alignment="CENTER" spacing="8" styleClass="user-menu">
             <children>
-                <Circle fx:id="avatarCircle" radius="12" fill="#007bff"/>
-                <VBox alignment="CENTER_LEFT">
+                <Circle fx:id="avatarCircle" fill="#007bff" radius="12" />
+                <VBox alignment="CENTER_LEFT" spacing="1">
                     <children>
-                        <Label fx:id="userName" styleClass="user-name" text="Utilisateur Test"/>
-                        <Label fx:id="userRole" styleClass="user-role" text="Administrateur"/>
+                        <Label fx:id="userName" styleClass="user-name" text="Mohamed El Idrissi" />
+                        <Label fx:id="userRole" styleClass="user-role" text="Administrateur" />
                     </children>
                 </VBox>
             </children>
