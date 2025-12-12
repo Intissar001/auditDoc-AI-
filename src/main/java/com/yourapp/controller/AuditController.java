@@ -2,15 +2,19 @@ package com.yourapp.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.TransferMode;
+import javafx.scene.input.Dragboard;
+import java.io.File;
+import java.util.List;
 
 /**
  * Controller for the AuditView.fxml
  */
 public class AuditController {
 
-    // Used to handle drag & drop events (not implemented here)
     @FXML
     private ComboBox<String> projetDropdown;
 
@@ -22,26 +26,79 @@ public class AuditController {
 
     @FXML
     public void initialize() {
-        // Initialization logic goes here
-        // e.g., Populating ComboBoxes, setting up event handlers
-
-        // Example: Populate dropdowns
+        // Populate dropdowns
         projetDropdown.getItems().addAll("Projet A", "Projet B", "Projet C");
         partenaireDropdown.getItems().addAll("Partenaire X", "Partenaire Y", "Partenaire Z");
 
-        // Example: Add drag and drop handlers to the dropzone
-        // (requires more detailed implementation)
-        // dropzone.setOnDragOver(...)
+        // Setup drag and drop handlers
+        setupDragAndDrop();
     }
 
-    // Example methods for button actions
-    @FXML
-    private void handleNewAudit() {
-        System.out.println("Lancer un Nouvel Audit button clicked.");
+    /**
+     * Setup drag and drop functionality for the dropzone
+     */
+    private void setupDragAndDrop() {
+        dropzone.setOnDragOver(event -> {
+            if (event.getGestureSource() != dropzone && event.getDragboard().hasFiles()) {
+                event.acceptTransferModes(TransferMode.COPY);
+            }
+            event.consume();
+        });
+
+        dropzone.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            boolean success = false;
+            if (db.hasFiles()) {
+                success = true;
+                List<File> files = db.getFiles();
+                handleFileUpload(files);
+            }
+            event.setDropCompleted(success);
+            event.consume();
+        });
     }
 
+    /**
+     * Handle file browsing button click
+     */
     @FXML
     private void handleBrowseFiles() {
-        System.out.println("Parcourir les fichiers button clicked.");
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Sélectionner des fichiers");
+
+        // Set file filters
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Tous les fichiers supportés", "*.pdf", "*.xlsx", "*.xls", "*.doc", "*.docx"),
+                new FileChooser.ExtensionFilter("PDF", "*.pdf"),
+                new FileChooser.ExtensionFilter("Excel", "*.xlsx", "*.xls"),
+                new FileChooser.ExtensionFilter("Word", "*.doc", "*.docx")
+        );
+
+        // Show open file dialog
+        List<File> selectedFiles = fileChooser.showOpenMultipleDialog(dropzone.getScene().getWindow());
+
+        if (selectedFiles != null && !selectedFiles.isEmpty()) {
+            handleFileUpload(selectedFiles);
+        }
+    }
+
+    /**
+     * Handle file upload logic
+     */
+    private void handleFileUpload(List<File> files) {
+        System.out.println("Fichiers sélectionnés:");
+        for (File file : files) {
+            System.out.println("  - " + file.getName() + " (" + file.length() / 1024 + " KB)");
+
+            // Verify file size (Max 10MB)
+            if (file.length() > 10 * 1024 * 1024) {
+                System.out.println("    ERREUR: Fichier trop volumineux (> 10MB)");
+            }
+        }
+
+        // TODO: Implement actual file processing logic here
+        // - Upload files to server
+        // - Display uploaded files in UI
+        // - Start audit process
     }
 }

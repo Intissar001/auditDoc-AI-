@@ -30,35 +30,35 @@
 
         <children>
 
-            <HBox fx:id="dashboardBtn" alignment="CENTER_LEFT" spacing="10" styleClass="menu-item">
+            <HBox fx:id="dashboardBtn" alignment="CENTER_LEFT" spacing="10" styleClass="menu-item" onMouseClicked="#handleDashboard">
                 <children>
                     <Label text="☷" styleClass="menu-icon"/>
                     <Label text="Tableau de bord" styleClass="menu-label"/>
                 </children>
             </HBox>
 
-            <HBox fx:id="auditBtn" alignment="CENTER_LEFT" spacing="10" styleClass="menu-item">
+            <HBox fx:id="auditBtn" alignment="CENTER_LEFT" spacing="10" styleClass="menu-item" onMouseClicked="#handleAudit">
                 <children>
                     <Label text="🔍" styleClass="menu-icon"/>
                     <Label text="Audit" styleClass="menu-label"/>
                 </children>
             </HBox>
 
-            <HBox fx:id="projetsBtn" alignment="CENTER_LEFT" spacing="10" styleClass="menu-item">
+            <HBox fx:id="projetsBtn" alignment="CENTER_LEFT" spacing="10" styleClass="menu-item" onMouseClicked="#handleProjets">
                 <children>
                     <Label text="📂" styleClass="menu-icon"/>
                     <Label text="Projets" styleClass="menu-label"/>
                 </children>
             </HBox>
 
-            <HBox fx:id="historiqueBtn" alignment="CENTER_LEFT" spacing="10" styleClass="menu-item">
+            <HBox fx:id="historiqueBtn" alignment="CENTER_LEFT" spacing="10" styleClass="menu-item" onMouseClicked="#handleHistorique">
                 <children>
                     <Label text="⏱" styleClass="menu-icon"/>
                     <Label text="Historique" styleClass="menu-label"/>
                 </children>
             </HBox>
 
-            <HBox fx:id="settingsBtn" alignment="CENTER_LEFT" spacing="10" styleClass="menu-item">
+            <HBox fx:id="settingsBtn" alignment="CENTER_LEFT" spacing="10" styleClass="menu-item" onMouseClicked="#handleSettings">
                 <children>
                     <Label text="⚙" styleClass="menu-icon"/>
                     <Label text="Paramètres" styleClass="menu-label"/>

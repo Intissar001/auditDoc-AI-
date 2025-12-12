@@ -28,27 +28,27 @@ public class TopbarController {
     @FXML private Button btnNotifications;
     @FXML private StackPane notificationWrapper;
     @FXML private Button btnNewAudit;
+    @FXML private Circle avatarCircle;
+    @FXML private Button btnLanguage;
+    @FXML private Button btnTheme;
 
     private final NotificationService notificationService = new NotificationService();
     private final UserService userService = new UserService();
 
     @FXML
     public void initialize() {
-        // Charger logo (même source que Sidebar)
+        // Charger logo avec taille ajustée
         try {
             Image img = new Image(getClass().getResource("/views/icons/logo-audit.png").toExternalForm());
             if (topLogo != null) {
                 topLogo.setImage(img);
-                topLogo.setFitWidth(78);
-                topLogo.setFitHeight(78);
+                topLogo.setFitWidth(98);
+                topLogo.setFitHeight(98);
+                topLogo.setPreserveRatio(true);
+                topLogo.setSmooth(true);
             }
         } catch (Exception ex) {
             System.err.println("TopbarController: logo introuvable -> " + ex.getMessage());
-        }
-
-        // Charger nom (optionnel, on peut le remplacer dynamiquement)
-        if (topAppName != null) {
-            // topAppName.setText("AuditDoc AI"); // deja défini en FXML
         }
 
         // Charger utilisateur
@@ -58,15 +58,19 @@ public class TopbarController {
             userRole.setText(u.getRole());
         }
 
-        // notifications
+        // Notifications
         updateNotificationBadge();
 
-        // actions
+        // Actions
         btnNotifications.setOnAction(e -> showNotificationPopup());
         btnNewAudit.setOnAction(e -> loadInCenter("/fxml/Audit.fxml"));
+        btnLanguage.setOnAction(e -> showLanguageMenu());
+        btnTheme.setOnAction(e -> toggleTheme());
 
-        // menu utilisateur
+        // Menu utilisateur - clickable sur tout le HBox
         userName.setOnMouseClicked(e -> showUserMenu());
+        userRole.setOnMouseClicked(e -> showUserMenu());
+        avatarCircle.setOnMouseClicked(e -> showUserMenu());
     }
 
     private void updateNotificationBadge() {
@@ -79,10 +83,15 @@ public class TopbarController {
         List<Notification> all = notificationService.getAll();
 
         if (all.isEmpty()) {
-            menu.getItems().add(new MenuItem("Aucune notification"));
+            MenuItem noNotif = new MenuItem("Aucune notification");
+            noNotif.setDisable(true);
+            menu.getItems().add(noNotif);
         } else {
             for (Notification n : all) {
                 MenuItem item = new MenuItem(n.getMessage());
+                if (!n.isRead()) {
+                    item.setStyle("-fx-font-weight: bold;");
+                }
                 menu.getItems().add(item);
                 item.setOnAction(ev -> {
                     n.markAsRead();
@@ -92,6 +101,36 @@ public class TopbarController {
         }
 
         menu.show(btnNotifications, javafx.geometry.Side.BOTTOM, 0, 10);
+    }
+
+    private void showLanguageMenu() {
+        ContextMenu menu = new ContextMenu();
+
+        MenuItem french = new MenuItem("Français");
+        MenuItem english = new MenuItem("English");
+        MenuItem arabic = new MenuItem("العربية");
+
+        french.setOnAction(e -> changeLanguage("fr"));
+        english.setOnAction(e -> changeLanguage("en"));
+        arabic.setOnAction(e -> changeLanguage("ar"));
+
+        menu.getItems().addAll(french, english, arabic);
+        menu.show(btnLanguage, javafx.geometry.Side.BOTTOM, 0, 10);
+    }
+
+    private void changeLanguage(String lang) {
+        System.out.println("Changement de langue: " + lang);
+        // Ajouter logique de changement de langue
+    }
+
+    private void toggleTheme() {
+        System.out.println("Toggle theme (light/dark)");
+        // Ajouter logique de changement de thème
+        if (btnTheme.getText().equals("☀")) {
+            btnTheme.setText("🌙");
+        } else {
+            btnTheme.setText("☀");
+        }
     }
 
     private void showUserMenu() {
@@ -105,7 +144,7 @@ public class TopbarController {
         help.setOnAction(e -> loadInCenter("/fxml/HelpView.fxml"));
         logout.setOnAction(e -> {
             System.out.println("Logout clicked");
-            // ajouter logique de session / navigation vers login
+            // Ajouter logique de session / navigation vers login
         });
 
         menu.getItems().addAll(profile, help, logout);
@@ -136,7 +175,7 @@ public class TopbarController {
     }
 
     private void setCenterOfBorderPane(Node node) {
-        // remonte depuis un noeud connu (btnNewAudit) jusqu'au BorderPane racine
+        // Remonte depuis un noeud connu (btnNewAudit) jusqu'au BorderPane racine
         Node current = btnNewAudit;
         while (current != null) {
             if (current instanceof BorderPane) {
@@ -146,7 +185,7 @@ public class TopbarController {
             current = current.getParent();
         }
 
-        // fallback: essayer la racine de la scene
+        // Fallback: essayer la racine de la scène
         try {
             Node root = btnNewAudit.getScene().getRoot();
             if (root instanceof BorderPane) {

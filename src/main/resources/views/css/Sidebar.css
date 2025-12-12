@@ -11,6 +11,10 @@
     -fx-min-width: 250;
     -fx-max-width: 250;
 }
+.menu-item.active {
+    background-color: #007bff;
+    border-radius: 6px;
+}
 
 /* MENU NORMAL */
 .menu-container {
