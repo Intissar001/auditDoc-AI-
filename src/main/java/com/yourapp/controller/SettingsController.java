@@ -213,21 +213,46 @@ public class SettingsController implements Initializable {
      * Loads and displays system settings from database.
      */
     private void setupSystemSettings() {
-        systemSettings = SettingsService.loadSettings();
-        
-        if (systemSettings != null) {
-            localStoreToggle.setSelected(systemSettings.isLocalStorage());
-            cloudBackupToggle.setSelected(systemSettings.isCloudBackup());
-            emailAlertToggle.setSelected(systemSettings.isEmailAlerts());
-            auditReminderToggle.setSelected(systemSettings.isAuditReminders());
-            ocrProviderLabel.setText(systemSettings.getOcrProvider() != null ? systemSettings.getOcrProvider() : "Intégré");
-        } else {
-            // Default values if loading fails
-            localStoreToggle.setSelected(true);
-            cloudBackupToggle.setSelected(false);
-            emailAlertToggle.setSelected(true);
-            auditReminderToggle.setSelected(true);
-            ocrProviderLabel.setText("Intégré");
+        try {
+            systemSettings = SettingsService.loadSettings();
+            
+            if (systemSettings != null) {
+                if (localStoreToggle != null) {
+                    localStoreToggle.setSelected(systemSettings.isLocalStorage());
+                }
+                if (cloudBackupToggle != null) {
+                    cloudBackupToggle.setSelected(systemSettings.isCloudBackup());
+                }
+                if (emailAlertToggle != null) {
+                    emailAlertToggle.setSelected(systemSettings.isEmailAlerts());
+                }
+                if (auditReminderToggle != null) {
+                    auditReminderToggle.setSelected(systemSettings.isAuditReminders());
+                }
+                if (ocrProviderLabel != null) {
+                    ocrProviderLabel.setText(systemSettings.getOcrProvider() != null ? systemSettings.getOcrProvider() : "Intégré");
+                }
+            } else {
+                // Default values if loading fails
+                if (localStoreToggle != null) {
+                    localStoreToggle.setSelected(true);
+                }
+                if (cloudBackupToggle != null) {
+                    cloudBackupToggle.setSelected(false);
+                }
+                if (emailAlertToggle != null) {
+                    emailAlertToggle.setSelected(true);
+                }
+                if (auditReminderToggle != null) {
+                    auditReminderToggle.setSelected(true);
+                }
+                if (ocrProviderLabel != null) {
+                    ocrProviderLabel.setText("Intégré");
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error setting up system settings: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
