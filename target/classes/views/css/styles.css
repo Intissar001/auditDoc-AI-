@@ -1,85 +1,101 @@
-/* --- Global Styles & Colors --- */
-
+/* ===== ROOT STYLES ===== */
 .root {
-    -fx-background-color: #ffffff; /* pure white background */
-    -fx-font-family: "System"; /* Using system font for modern, clean look */
+    -fx-background-color: #ffffff;
+    -fx-font-family: "System";
     -fx-font-size: 14px;
 }
 
-/* Base text colors */
-.page-title, .card-title, .user-name, .search-icon, .app-logo {
-    -fx-fill: #344054;
-    -fx-text-fill: #344054;
-}
-
-.page-subtitle, .dropdown-label, .dropzone-text-primary, .dropzone-file-info {
-    -fx-fill: #667085;
-    -fx-text-fill: #667085;
-}
-
-/* --- Sidebar Styles (MODIFIED) --- */
-
+/* ===== SIDEBAR STYLES ===== */
 .sidebar {
-    -fx-background-color: #ffffff; /* Changed to WHITE */
+    -fx-background-color: #ffffff;
     -fx-padding: 0;
     -fx-border-color: #e4e8ee;
-    -fx-border-width: 0 1px 0 0; /* Added a subtle right border */
+    -fx-border-width: 0 1px 0 0;
+    -fx-pref-width: 250px;
 }
 
 /* App Logo/Title */
 .app-logo {
     -fx-font-size: 20px;
     -fx-font-weight: bold;
-    -fx-text-fill: #007bff; /* Changed to Blue for brand visibility */
+    -fx-text-fill: #007bff;
+}
+
+/* Sidebar Menu */
+.sidebar-menu {
+    -fx-background-color: transparent;
 }
 
 /* Menu Items */
-.menu-item, .menu-item-active {
+.menu-item {
     -fx-padding: 12px 15px;
     -fx-spacing: 15px;
     -fx-cursor: hand;
     -fx-background-radius: 12px;
+    -fx-background-color: transparent;
 }
 
 .menu-item:hover {
-    -fx-background-color: #f0f0f0; /* Light hover effect on white background */
+    -fx-background-color: #f0f0f0;
 }
 
-.menu-item-active {
-    -fx-background-color: #f0f8ff; /* Very light blue background for active */
+.menu-item.active {
+    -fx-background-color: #f0f8ff;
     -fx-background-radius: 12px 0 0 12px;
-    /* The active blue bar is managed in FXML with a Circle */
 }
 
-/* Menu Icons and Labels (MODIFIED) */
-.menu-icon, .menu-label {
-    -fx-text-fill: #344054; /* Darker text color on white background */
+/* Menu Icons and Labels */
+.menu-icon {
+    -fx-text-fill: #344054;
     -fx-font-size: 16px;
+    -fx-font-weight: 500;
+    -fx-min-width: 20px;
+}
+
+.menu-label {
+    -fx-text-fill: #344054;
+    -fx-font-size: 14px;
     -fx-font-weight: 500;
 }
 
-.menu-icon-active, .menu-label-active {
-    -fx-text-fill: #007bff; /* Blue text color for active item */
-    -fx-font-size: 16px;
-    -fx-font-weight: 600; /* Slightly bolder for active */
+.menu-item.active .menu-icon,
+.menu-item.active .menu-label {
+    -fx-text-fill: #007bff;
+    -fx-font-weight: 600;
 }
 
 /* Sidebar Footer */
 .sidebar-footer {
     -fx-padding: 15px 0;
-    -fx-background-color: #f7f7f7; /* Light grey footer */
+    -fx-background-color: #f7f7f7;
     -fx-border-color: #e4e8ee;
     -fx-border-width: 1px 0 0 0;
+    -fx-cursor: hand;
 }
 
-.sidebar-footer-icon, .sidebar-footer-label {
-    -fx-text-fill: #344054; /* Darker text */
+.sidebar-footer:hover {
+    -fx-background-color: #f0f0f0;
+}
+
+.sidebar-footer-icon {
+    -fx-text-fill: #344054;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-min-width: 20px;
+}
+
+.sidebar-footer-label {
+    -fx-text-fill: #344054;
     -fx-font-weight: 500;
     -fx-font-size: 14px;
 }
 
-/* --- Top Bar Styles --- */
+/* ===== MAIN CONTENT STYLES ===== */
+.main-content {
+    -fx-background-color: #f5f7fa;
+}
 
+/* Top Bar */
 .topbar {
     -fx-background-color: #ffffff;
     -fx-border-color: #e4e8ee;
@@ -91,8 +107,6 @@
     -fx-background-color: #f7f7f7;
     -fx-background-radius: 12px;
     -fx-padding: 8px 15px;
-    /* Added to improve responsiveness */
-    -fx-max-width: 500px;
 }
 
 .search-field {
@@ -100,10 +114,6 @@
     -fx-border-width: 0;
     -fx-prompt-text-fill: #667085;
     -fx-text-fill: #344054;
-}
-
-.search-field:focused {
-    -fx-background-color: transparent;
 }
 
 .search-icon {
@@ -132,6 +142,7 @@
 
 .user-name {
     -fx-font-weight: bold;
+    -fx-text-fill: #344054;
 }
 
 .user-role {
@@ -139,27 +150,34 @@
     -fx-font-size: 12px;
 }
 
-/* --- Main Content Styles --- */
+/* ===== PAGE CONTENT STYLES ===== */
+.page-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-hbar-policy: never;
+    -fx-padding: 0;
+}
 
-.main-content {
-    -fx-background-color: #f5f7fa; /* Slightly off-white background */
+.page-scroll-pane > .viewport {
+    -fx-background-color: transparent;
 }
 
 .page-content {
-    -fx-background-color: transparent; /* Changed to transparent to use main-content background */
-    -fx-padding: 30px;
+    -fx-background-color: transparent;
 }
 
+/* Page Titles */
 .page-title {
     -fx-font-size: 28px;
     -fx-font-weight: bold;
+    -fx-text-fill: #344054;
 }
 
 .page-subtitle {
     -fx-font-size: 16px;
+    -fx-text-fill: #667085;
 }
 
-/* Cards (Audit Intelligent, Importer les Documents) */
+/* Cards */
 .card {
     -fx-background-color: #ffffff;
     -fx-background-radius: 16px;
@@ -167,22 +185,22 @@
     -fx-border-color: #e4e8ee;
     -fx-border-width: 1px;
     -fx-border-radius: 16px;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 5); /* Soft shadow */
-    /* Added VBox.vgrow to make cards fill space vertically (if applicable) */
-    -fx-max-width: infinity;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 5);
 }
 
 .card-title {
     -fx-font-size: 20px;
     -fx-font-weight: bold;
+    -fx-text-fill: #344054;
 }
 
 .dropdown-label {
     -fx-font-size: 14px;
     -fx-font-weight: 500;
+    -fx-text-fill: #667085;
 }
 
-/* Modern Dropdown (ComboBox) */
+/* Modern Dropdown */
 .modern-dropdown {
     -fx-background-color: #f7f7f7;
     -fx-background-radius: 8px;
@@ -191,7 +209,6 @@
     -fx-border-radius: 8px;
     -fx-font-size: 14px;
     -fx-padding: 5px;
-    /* Added to ensure ComboBox fills its allocated space */
     -fx-pref-width: 100%;
 }
 
@@ -204,18 +221,15 @@
     -fx-text-fill: #344054;
 }
 
-/* --- Dropzone Styles --- */
-
+/* Dropzone */
 .dropzone {
     -fx-background-color: #ffffff;
     -fx-background-radius: 16px;
-    -fx-border-color: #007bff; /* Changed border color to blue for focus */
+    -fx-border-color: #007bff;
     -fx-border-width: 2px;
-    -fx-border-style: dashed; /* Dashed border */
+    -fx-border-style: dashed;
     -fx-border-radius: 16px;
     -fx-padding: 30px;
-    /* Added to ensure dropzone fills the available height in the VBox */
-    -fx-max-height: infinity;
 }
 
 .upload-icon-placeholder {
@@ -226,6 +240,7 @@
 .dropzone-text-primary {
     -fx-font-size: 16px;
     -fx-font-weight: 600;
+    -fx-text-fill: #667085;
 }
 
 .dropzone-text-separator {
@@ -238,11 +253,9 @@
     -fx-text-fill: #999;
 }
 
-/* --- Button Styles --- */
-
-/* Primary Button (Lancer un Nouvel Audit) */
+/* ===== BUTTON STYLES ===== */
 .btn-primary {
-    -fx-background-color: #007bff; /* Solid Blue */
+    -fx-background-color: #007bff;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
@@ -255,7 +268,6 @@
     -fx-background-color: #0056b3;
 }
 
-/* Secondary Button (Parcourir les fichiers) */
 .btn-secondary {
     -fx-background-color: #ffffff;
     -fx-border-color: #d0d7e3;

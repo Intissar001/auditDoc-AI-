@@ -1,0 +1,91 @@
+/* ---------------------- */
+/* SIDEBAR NORMAL         */
+/* ---------------------- */
+
+.sidebar {
+    -fx-background-color: white;
+    -fx-border-color: #d0d5dd;
+    -fx-border-width: 0 1 0 0;
+
+    -fx-pref-width: 250;
+    -fx-min-width: 250;
+    -fx-max-width: 250;
+}
+
+/* MENU NORMAL */
+.menu-container {
+    -fx-padding: 10 12 0 12;
+}
+
+.menu-item {
+    -fx-padding: 10 8;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-min-height: 38;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.menu-item:hover {
+    -fx-background-color: #f3f4f6;
+}
+
+.menu-icon {
+    -fx-font-size: 20px;
+    -fx-min-width: 28;
+    -fx-alignment: center;
+}
+
+.menu-label {
+    -fx-font-size: 14px;
+    -fx-font-family: "Segoe UI";
+}
+
+/* FOOTER NORMAL */
+.footer {
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #d0d5dd;
+    -fx-border-width: 1 0 0 0;
+    -fx-padding: 10 14;
+}
+
+.toggle-btn {
+    -fx-background-color: transparent;
+    -fx-font-size: 18px;
+}
+
+/* ---------------------- */
+/* SIDEBAR REDUCED        */
+/* ---------------------- */
+
+.sidebar.reduced {
+    -fx-pref-width: 72;
+    -fx-min-width: 72;
+    -fx-max-width: 72;
+}
+
+/* menu reduced : icons centered */
+.sidebar.reduced .menu-item {
+    -fx-alignment: CENTER;
+    -fx-padding: 8 0;
+}
+
+.sidebar.reduced .menu-icon {
+    -fx-font-size: 22;
+    -fx-min-width: 0;
+}
+
+.sidebar.reduced .menu-label {
+    -fx-opacity: 0;
+    -fx-max-width: 0;
+}
+
+/* footer reduced */
+.sidebar.reduced .footer {
+    -fx-alignment: CENTER;
+    -fx-padding: 6 0;
+}
+
+.sidebar.reduced .toggle-btn {
+    -fx-font-size: 22;
+    -fx-padding: 0;
+}

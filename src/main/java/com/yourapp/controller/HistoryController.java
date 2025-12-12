@@ -10,6 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -22,8 +23,8 @@ public class HistoryController {
 
     @FXML private TextField searchField;
     @FXML private ComboBox<String> partnerComboBox;
-    @FXML private ComboBox<String> sortByComboBox;  // NEW: Trier par
-    @FXML private ComboBox<String> sortComboBox;     // Ordre (Ascendant/Descendant)
+    @FXML private ComboBox<String> sortByComboBox;
+    @FXML private ComboBox<String> sortComboBox;
     @FXML private Label auditCountLabel;
 
     @FXML private TableView<AuditReport> auditTable;
@@ -34,9 +35,6 @@ public class HistoryController {
     @FXML private TableColumn<AuditReport, String> problemsColumn;
     @FXML private TableColumn<AuditReport, Void> reportsColumn;
 
-    // Sidebar navigation
-    @FXML private HBox auditMenuItem;
-
     // Database service
     private com.yourapp.service.AuditService auditService;
 
@@ -45,6 +43,8 @@ public class HistoryController {
 
     @FXML
     public void initialize() {
+        System.out.println("✅ HistoryController initialized");
+
         // Initialize service
         try {
             auditService = new com.yourapp.service.AuditService();
@@ -53,6 +53,7 @@ public class HistoryController {
             System.err.println("❌ Failed to initialize AuditService: " + e.getMessage());
             e.printStackTrace();
         }
+
         // Initialize empty lists
         auditList = FXCollections.observableArrayList();
         filteredList = FXCollections.observableArrayList();
@@ -60,13 +61,13 @@ public class HistoryController {
         // Setup table columns
         setupTableColumns();
 
-        // Load data into table (will be empty initially)
+        // Load data into table
         auditTable.setItems(filteredList);
 
         // Setup filters
         setupFilters();
 
-        // Update count (will show "0 audits")
+        // Update count
         updateAuditCount();
 
         // Search functionality
@@ -79,14 +80,7 @@ public class HistoryController {
         placeholderLabel.setStyle("-fx-text-fill: #667085; -fx-font-size: 14px; -fx-text-alignment: center;");
         auditTable.setPlaceholder(placeholderLabel);
 
-        // Setup navigation - Go back to Audit page
-        if (auditMenuItem != null) {
-            auditMenuItem.setOnMouseClicked(event -> goBackToAudit());
-        } else {
-            System.err.println("WARNING: auditMenuItem is NULL! Check fx:id in history.fxml");
-        }
-
-        // Load audits from database (if any exist)
+        // Load audits from database
         loadAuditsFromDatabase();
     }
 
@@ -242,7 +236,7 @@ public class HistoryController {
     }
 
     private void setupFilters() {
-        // Partner filter - Load from database (DYNAMIC)
+        // Partner filter - Load from database
         loadPartnerFilter();
 
         // Sort By filter
@@ -263,31 +257,19 @@ public class HistoryController {
         sortComboBox.setOnAction(e -> filterAudits());
     }
 
-    /**
-     * Load partner filter dynamically from database
-     */
     private void loadPartnerFilter() {
         try {
-            // Clear existing items
             partnerComboBox.getItems().clear();
-
-            // Add default option
             partnerComboBox.getItems().add("Tous les partenaires");
 
-            // Load unique PARTNER names from database (not project names!)
             List<String> partnerNames = auditService.getAllPartnerNames();
-
-            // Add to dropdown
             partnerComboBox.getItems().addAll(partnerNames);
-
-            // Set default value
             partnerComboBox.setValue("Tous les partenaires");
 
             System.out.println("✅ Loaded " + partnerNames.size() + " partners in filter");
 
         } catch (Exception e) {
             System.err.println("❌ Error loading partner filter: " + e.getMessage());
-            // Fallback: just show "Tous les partenaires"
             partnerComboBox.getItems().clear();
             partnerComboBox.getItems().add("Tous les partenaires");
             partnerComboBox.setValue("Tous les partenaires");
@@ -300,7 +282,6 @@ public class HistoryController {
         String searchText = searchField.getText().toLowerCase();
         String selectedPartner = partnerComboBox.getValue();
 
-        // Filter by search and partner
         for (AuditReport audit : auditList) {
             boolean matchesSearch = searchText.isEmpty() ||
                     (audit.getProjectName() != null && audit.getProjectName().toLowerCase().contains(searchText)) ||
@@ -315,7 +296,6 @@ public class HistoryController {
             }
         }
 
-        // Sort based on sortByComboBox and sortComboBox
         String sortBy = sortByComboBox.getValue();
         String sortOrder = sortComboBox.getValue();
         boolean ascending = sortOrder != null && sortOrder.equals("Ascendant");
@@ -323,7 +303,6 @@ public class HistoryController {
         if (sortBy != null) {
             switch (sortBy) {
                 case "Date":
-                    // Trier par date
                     filteredList.sort((a1, a2) -> {
                         if (a1.getCreatedAt() != null && a2.getCreatedAt() != null) {
                             return ascending ?
@@ -335,7 +314,6 @@ public class HistoryController {
                     break;
 
                 case "Nom du projet":
-                    // Trier par nom de projet (A→Z ou Z→A)
                     filteredList.sort((a1, a2) -> {
                         String name1 = a1.getProjectName() != null ? a1.getProjectName() : "";
                         String name2 = a2.getProjectName() != null ? a2.getProjectName() : "";
@@ -346,14 +324,10 @@ public class HistoryController {
                     break;
 
                 case "Statut":
-                    // Trier par statut (Non-Conforme d'abord si Descendant)
                     filteredList.sort((a1, a2) -> {
                         String status1 = a1.getComplianceStatus() != null ? a1.getComplianceStatus() : "";
                         String status2 = a2.getComplianceStatus() != null ? a2.getComplianceStatus() : "";
-
-                        // "Non-Conforme" vient avant "Conforme" en ordre descendant
                         int comparison = status1.compareToIgnoreCase(status2);
-                        // Inverse car "Non-Conforme" > "Conforme" alphabétiquement mais on veut l'inverse
                         return ascending ? comparison : -comparison;
                     });
                     break;
@@ -383,55 +357,18 @@ public class HistoryController {
         }
     }
 
-    @FXML
-    private void handleReduce() {
-        System.out.println("Reduce button clicked");
-        // TODO: Collapse sidebar functionality
-    }
-
-    /**
-     * Navigate back to Audit page
-     */
-    private void goBackToAudit() {
-        try {
-            System.out.println("Navigating back to Audit page...");
-
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/views/fxml/Audit.fxml")
-            );
-            Parent root = loader.load();
-
-            // Get current stage and change scene
-            Stage stage = (Stage) auditMenuItem.getScene().getWindow();
-            stage.getScene().setRoot(root);
-
-            System.out.println("✅ Returned to Audit page successfully!");
-
-        } catch (Exception e) {
-            System.err.println("❌ Error navigating to Audit page: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Load audits from database
-     */
     public void loadAuditsFromDatabase() {
         try {
             System.out.println("📊 Loading audits from database...");
 
-            // Fetch audits from database
             List<AuditReport> audits = auditService.getAllAudits();
 
-            // Clear existing data
             auditList.clear();
             filteredList.clear();
 
-            // Add to lists
             auditList.addAll(audits);
             filteredList.addAll(audits);
 
-            // Update count
             updateAuditCount();
 
             System.out.println("✅ Successfully loaded " + audits.size() + " audits");
@@ -440,7 +377,6 @@ public class HistoryController {
             System.err.println("❌ Error loading audits from database: " + e.getMessage());
             e.printStackTrace();
 
-            // Show error alert
             javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
                     javafx.scene.control.Alert.AlertType.ERROR
             );
@@ -451,10 +387,6 @@ public class HistoryController {
         }
     }
 
-    /**
-     * Refresh the audit list
-     * Call this when returning to History page after creating new audit
-     */
     public void refreshAudits() {
         auditList.clear();
         filteredList.clear();

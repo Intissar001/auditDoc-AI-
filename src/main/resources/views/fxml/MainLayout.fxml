@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+<!--
+    ════════════════════════════════════════════════════════════
+    MAIN LAYOUT - Application Container
+    ════════════════════════════════════════════════════════════
+    Contains:
+    - Topbar.fxml (top)
+    - Navbar.fxml (left) ← FIXED: Changed from Sidebar.fxml
+    - ContentArea (center) - Dynamic content loaded by NavbarController
+    ════════════════════════════════════════════════════════════
+-->
+<BorderPane prefHeight="900.0"
+            prefWidth="1173.0"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.yourapp.controller.MainLayoutController">
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!--              TOP: TOPBAR                        -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <top>
+        <fx:include source="Topbar.fxml" />
+    </top>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!--         LEFT: NAVBAR (SIDEBAR)                  -->
+    <!--   ⚠️ CRITICAL: Must be Navbar.fxml NOT Sidebar  -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <left>
+        <fx:include source="Navbar.fxml" />
+    </left>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!--      CENTER: DYNAMIC CONTENT AREA               -->
+    <!--   Views loaded here: Audit.fxml, history.fxml   -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <center>
+        <StackPane fx:id="contentArea"
+                   prefHeight="897.0"
+                   prefWidth="882.0">
+            <!-- Empty - NavbarController will dynamically load content here -->
+            <!-- DO NOT add any children here! -->
+        </StackPane>
+    </center>
+
+</BorderPane>

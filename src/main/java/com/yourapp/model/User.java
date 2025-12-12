@@ -1,4 +1,4 @@
-package com.yourapp.model;
+/*package com.yourapp.model;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -51,4 +51,19 @@ public void setPhone(String phone) { this.phone = phone; }
 
 public String getLocale() { return locale; }
 public void setLocale(String locale) { this.locale = locale; }
+}*/
+package com.yourapp.model;
+
+public class User {
+
+    private String fullName;
+    private String role;
+
+    public User(String fullName, String role) {
+        this.fullName = fullName;
+        this.role = role;
+    }
+
+    public String getFullName() { return fullName; }
+    public String getRole() { return role; }
 }

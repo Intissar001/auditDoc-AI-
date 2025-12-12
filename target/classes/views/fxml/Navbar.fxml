@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<VBox fx:id="navbarContainer" minWidth="60.0" prefWidth="250.0" styleClass="sidebar"
+      stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/17.0.12"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yourapp.controller.NavbarController">
+
+    <HBox fx:id="logoContainer" alignment="CENTER_LEFT" prefHeight="80.0" spacing="10.0">
+        <children>
+            <Label fx:id="appLogoLabel" styleClass="app-logo" text="Audit Doc AI"/>
+        </children>
+        <padding>
+            <Insets left="20.0" right="20.0"/>
+        </padding>
+    </HBox>
+
+    <VBox fx:id="menuContainer" prefHeight="769.0" prefWidth="271.0" spacing="5.0"
+          styleClass="sidebar-menu" VBox.vgrow="ALWAYS">
+        <children>
+
+            <HBox fx:id="dashboardBtn" alignment="CENTER_LEFT" spacing="15.0" styleClass="menu-item"
+                  onMouseClicked="#handleNavigation">
+                <children>
+                    <Label fx:id="dashboardIcon" styleClass="menu-icon" text="☷"/>
+                    <Label fx:id="dashboardLabel" styleClass="menu-label" text="Tableau de Bord"/>
+                </children>
+            </HBox>
+
+            <HBox fx:id="auditBtn" alignment="CENTER_LEFT" spacing="15.0" styleClass="menu-item-active"
+                  onMouseClicked="#handleNavigation">
+                <children>
+                    <Circle fx:id="auditActiveCircle" fill="#00c6ff" radius="3.0" translateX="5.0" translateY="-10.0"/>
+                    <Label fx:id="auditIcon" styleClass="menu-icon-active" text="🔍"/>
+                    <Label fx:id="auditLabel" styleClass="menu-label-active" text="Audit"/>
+                </children>
+                <VBox.margin>
+                    <Insets right="30.0"/>
+                </VBox.margin>
+            </HBox>
+
+            <HBox fx:id="projectsBtn" alignment="CENTER_LEFT" spacing="15.0" styleClass="menu-item"
+                  onMouseClicked="#handleNavigation">
+                <children>
+                    <Label fx:id="projectsIcon" styleClass="menu-icon" text="📂"/>
+                    <Label fx:id="projectsLabel" styleClass="menu-label" text="Projets"/>
+                </children>
+            </HBox>
+
+            <HBox fx:id="historyBtn" alignment="CENTER_LEFT" spacing="15.0" styleClass="menu-item"
+                  onMouseClicked="#handleNavigation">
+                <children>
+                    <Label fx:id="historyIcon" styleClass="menu-icon" text="⏱"/>
+                    <Label fx:id="historyLabel" styleClass="menu-label" text="Historique"/>
+                </children>
+            </HBox>
+
+            <HBox fx:id="settingsBtn" alignment="CENTER_LEFT" spacing="15.0" styleClass="menu-item"
+                  onMouseClicked="#handleNavigation">
+                <children>
+                    <Label fx:id="settingsIcon" styleClass="menu-icon" text="⚙"/>
+                    <Label fx:id="settingsLabel" styleClass="menu-label" text="Paramètres"/>
+                </children>
+            </HBox>
+
+        </children>
+        <padding>
+            <Insets left="20.0" right="20.0" top="10.0"/>
+        </padding>
+    </VBox>
+
+    <HBox fx:id="footerContainer" alignment="CENTER_LEFT" prefHeight="50.0" styleClass="sidebar-footer"
+          onMouseClicked="#toggleSidebar">
+        <children>
+            <Label fx:id="collapseIcon" styleClass="sidebar-footer-icon" text="&lt;"/>
+            <Label fx:id="collapseLabel" styleClass="sidebar-footer-label" text="Réduire"/>
+        </children>
+        <padding>
+            <Insets left="20.0"/>
+        </padding>
+    </HBox>
+
+</VBox>
