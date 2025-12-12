@@ -138,16 +138,32 @@ public class AuditController {
     @FXML
     private void handleSettingsClick() {
         try {
+            // Check if rootPane is available
+            if (rootPane == null) {
+                System.err.println("Error: rootPane is null. Cannot load Settings page.");
+                return;
+            }
+
             // Load settings.fxml
-            FXMLLoader settingsLoader = new FXMLLoader(
-                    getClass().getResource("/views/fxml/settings.fxml")
-            );
+            java.net.URL settingsUrl = getClass().getResource("/views/fxml/settings.fxml");
+            if (settingsUrl == null) {
+                System.err.println("Error: Cannot find settings.fxml at /views/fxml/settings.fxml");
+                System.err.println("Current class location: " + getClass().getResource("."));
+                return;
+            }
+
+            FXMLLoader settingsLoader = new FXMLLoader(settingsUrl);
             javafx.scene.layout.AnchorPane settingsContent = settingsLoader.load();
 
             // Load settings CSS
             try {
-                String settingsCss = getClass().getResource("/views/css/settings.css").toExternalForm();
-                settingsContent.getStylesheets().add(settingsCss);
+                java.net.URL cssUrl = getClass().getResource("/views/css/settings.css");
+                if (cssUrl != null) {
+                    String settingsCss = cssUrl.toExternalForm();
+                    settingsContent.getStylesheets().add(settingsCss);
+                } else {
+                    System.out.println("Settings CSS file not found at /views/css/settings.css");
+                }
             } catch (Exception e) {
                 System.out.println("Settings CSS file not found: " + e.getMessage());
             }
@@ -156,15 +172,30 @@ public class AuditController {
             rootPane.setCenter(settingsContent);
 
             // Update menu item styling to show Settings is active
-            settingsMenuItem.getStyleClass().remove("menu-item");
-            settingsMenuItem.getStyleClass().add("menu-item-active");
+            if (settingsMenuItem != null) {
+                settingsMenuItem.getStyleClass().remove("menu-item");
+                settingsMenuItem.getStyleClass().add("menu-item-active");
+            }
             
             // Update Audit menu item styling to show it's inactive
-            auditMenuItem.getStyleClass().remove("menu-item-active");
-            auditMenuItem.getStyleClass().add("menu-item");
+            if (auditMenuItem != null) {
+                auditMenuItem.getStyleClass().remove("menu-item-active");
+                auditMenuItem.getStyleClass().add("menu-item");
+            }
 
         } catch (IOException e) {
             System.err.println("Error loading Settings page: " + e.getMessage());
+            System.err.println("Path attempted: /views/fxml/settings.fxml");
+            e.printStackTrace();
+            
+            // Show user-friendly error message
+            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
+            alert.setTitle("Erreur de chargement");
+            alert.setHeaderText("Impossible de charger la page Settings");
+            alert.setContentText("Erreur: " + e.getMessage() + "\nChemin: /views/fxml/settings.fxml");
+            alert.showAndWait();
+        } catch (Exception e) {
+            System.err.println("Unexpected error loading Settings page: " + e.getMessage());
             e.printStackTrace();
         }
     }
