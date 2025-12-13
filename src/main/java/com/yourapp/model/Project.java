@@ -7,15 +7,17 @@ public class Project {
     private String description;
     private LocalDate startDate;
     private LocalDate endDate;
+    private LocalDate prochainAuditDate;
     private String partner;
     private String status; // "Actif", "Clôturé"
     private int progress; // ex: 87
 
-    public Project(String name, String description, LocalDate startDate, LocalDate endDate, String partner, String status, int progress) {
+    public Project(String name, String description, LocalDate startDate, LocalDate endDate, String partner, String status, int progress , LocalDate prochainAuditDate) {
         this.name = name;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.prochainAuditDate = prochainAuditDate;
         this.partner = partner;
         this.status = status;
         this.progress = progress;
@@ -33,6 +35,9 @@ public class Project {
 
     public LocalDate getEndDate() { return endDate; }
     public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
+
+    public LocalDate getProchainAuditDate() { return prochainAuditDate; }
+    public void setProchainAuditDate(LocalDate prochainAuditDate) { this.prochainAuditDate = prochainAuditDate; }
 
     public String getPartner() { return partner; }
     public void setPartner(String partner) { this.partner = partner; }

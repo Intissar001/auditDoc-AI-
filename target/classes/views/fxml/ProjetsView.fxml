@@ -8,8 +8,13 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import java.net.URL?>
 
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yourapp.controller.ProjetsController">
+    <stylesheets>
+        <URL value="@../css/styles.css" />
+    </stylesheets>
+
     <top>
         <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="header-section">
             <children>
@@ -33,7 +38,7 @@
     <center>
         <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
             <content>
-                <FlowPane fx:id="projectsContainer" hgap="20.0" vgap="20.0" style="-fx-padding: 20;" />
+                <FlowPane fx:id="projectsContainer" hgap="30.0" vgap="30.0" style="-fx-padding: 20;" />
             </content>
         </ScrollPane>
     </center>

@@ -27,8 +27,8 @@ public class ProjetsController {
     @FXML
     public void initialize() {
         // 1. Simuler des données (Normalement ça vient d'une BDD)
-        projectList.add(new Project("Projet Éducation Rurale", "Programme d'alphabétisation...", LocalDate.of(2024, 1, 15), LocalDate.of(2025, 12, 31), "Agence Française", "Actif", 87));
-        projectList.add(new Project("Santé Communautaire", "Accès aux soins...", LocalDate.of(2024, 3, 1), LocalDate.of(2026, 2, 28), "USAID", "Actif", 92));
+        projectList.add(new Project("Projet Éducation Rurale", "Programme d'alphabétisation...", LocalDate.of(2024, 1, 15), LocalDate.of(2025, 12, 31), "Agence Française", "Actif", 87 , LocalDate.of(2024, 12, 15)));
+        projectList.add(new Project("Santé Communautaire", "Accès aux soins...", LocalDate.of(2024, 3, 1), LocalDate.of(2026, 2, 28), "USAID", "Actif", 92 , LocalDate.of(2024, 12, 15)));
 
         // 2. Afficher les cartes
         refreshView();
@@ -40,14 +40,18 @@ public class ProjetsController {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/fxml/ProjectCard.fxml"));
                 Node cardNode = loader.load();
+                ProjectCardController cardController = loader.getController();
 
-                // --- Remplissage MANUEL de la carte (car pas de ProjectCardController) ---
+                // --- Remplissage MANUEL de la carte ---
                 // On utilise lookup("#id") pour trouver les éléments dans la carte chargée
                 ((Label) cardNode.lookup("#lblName")).setText(p.getName());
                 ((Label) cardNode.lookup("#lblPartner")).setText(p.getPartner());
                 ((Label) cardNode.lookup("#lblDesc")).setText(p.getDescription());
-                ((Label) cardNode.lookup("#lblDates")).setText("Début: " + p.getStartDate() + "\nFin: " + p.getEndDate());
+                ((Label) cardNode.lookup("#lblStartDate")).setText(p.getStartDate().toString());
+                ((Label) cardNode.lookup("#lblEndDate")).setText(p.getEndDate().toString());
+                ((Label) cardNode.lookup("#lblAudit")).setText(p.getProchainAuditDate().toString());
                 ((Label) cardNode.lookup("#lblStatus")).setText(p.getStatus());
+                ((Label) cardNode.lookup("#lblProgress")).setText(p.getProgress() + "%");
 
                 // --- Gestion des Boutons de la carte ---
 
@@ -58,6 +62,7 @@ public class ProjetsController {
                 // Bouton Dossier
                 Button btnFolder = (Button) cardNode.lookup("#btnFolder");
                 btnFolder.setOnAction(e -> showFolderAlert(p.getName()));
+                cardController.setProject(p, this);
 
                 projectsContainer.getChildren().add(cardNode);
 
@@ -72,7 +77,7 @@ public class ProjetsController {
         openProjectForm(null); // null veut dire "Création"
     }
 
-    private void openProjectForm(Project projectToEdit) {
+    void openProjectForm(Project projectToEdit) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/fxml/ProjectForm.fxml"));
             Parent root = loader.load();
@@ -98,7 +103,7 @@ public class ProjetsController {
         }
     }
 
-    private void showFolderAlert(String projectName) {
+    void showFolderAlert(String projectName) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Dossier du projet");
         alert.setHeaderText("Ouverture du dossier : " + projectName);
