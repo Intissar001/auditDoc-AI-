@@ -2,7 +2,7 @@ package com.yourapp.model;
 
 import java.time.LocalDate;
 
-public class project {
+public class Project {
     private String name;
     private String description;
     private LocalDate startDate;
@@ -12,7 +12,7 @@ public class project {
     private String status; // "Actif", "Clôturé"
     private int progress; // ex: 87
 
-    /*public Project(String name, String description, LocalDate startDate, LocalDate endDate, String partner, String status, int progress , LocalDate prochainAuditDate) {
+    public Project(String name, String description, LocalDate startDate, LocalDate endDate, String partner, String status, int progress , LocalDate prochainAuditDate) {
         this.name = name;
         this.description = description;
         this.startDate = startDate;
@@ -21,7 +21,7 @@ public class project {
         this.partner = partner;
         this.status = status;
         this.progress = progress;
-    }*/
+    }
 
     // Getters et Setters (Essentiels pour que le controleur y accède)
     public String getName() { return name; }
