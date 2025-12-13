@@ -1,10 +1,10 @@
 package com.yourapp.controller;
 
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -15,17 +15,80 @@ public class SidebarController {
     @FXML private Button toggleSidebarBtn;
     @FXML private HBox footer;
 
+    @FXML private HBox dashboardBtn;
+    @FXML private HBox auditBtn;
+    @FXML private HBox projetsBtn;
+    @FXML private HBox historiqueBtn;
+    @FXML private HBox settingsBtn;
+
     private boolean collapsed = false;
+    private MainLayoutController mainController;
 
     private static final double EXPANDED = 250;
     private static final double COLLAPSED = 72;
 
     @FXML
     public void initialize() {
-
         toggleSidebarBtn.setOnAction(e -> toggle());
-
         if (footer != null) footer.setAlignment(Pos.CENTER_LEFT);
+    }
+
+    public void setMainController(MainLayoutController controller) {
+        this.mainController = controller;
+    }
+
+    @FXML
+    private void handleDashboard(MouseEvent event) {
+        setActiveMenuItem(dashboardBtn);
+        if (mainController != null) {
+            mainController.loadView("Dashboard.fxml");
+        }
+    }
+
+    @FXML
+    private void handleAudit(MouseEvent event) {
+        setActiveMenuItem(auditBtn);
+        if (mainController != null) {
+            mainController.loadView("Audit.fxml");
+        }
+    }
+
+    @FXML
+    private void handleProjets(MouseEvent event) {
+        setActiveMenuItem(projetsBtn);
+        if (mainController != null) {
+            mainController.loadView("Projects.fxml");
+        }
+    }
+
+    @FXML
+    private void handleHistorique(MouseEvent event) {
+        setActiveMenuItem(historiqueBtn);
+        if (mainController != null) {
+            mainController.loadView("history.fxml");
+        }
+    }
+
+    @FXML
+    private void handleSettings(MouseEvent event) {
+        setActiveMenuItem(settingsBtn);
+        if (mainController != null) {
+            mainController.loadView("settings.fxml");
+        }
+    }
+
+    private void setActiveMenuItem(HBox selectedItem) {
+        // Remove active class from all menu items
+        menuContainer.getChildren().forEach(item -> {
+            if (item instanceof HBox) {
+                item.getStyleClass().remove("active");
+            }
+        });
+
+        // Add active class to selected item
+        if (!selectedItem.getStyleClass().contains("active")) {
+            selectedItem.getStyleClass().add("active");
+        }
     }
 
     private void toggle() {
@@ -45,7 +108,6 @@ public class SidebarController {
         // Menu icon & label alignment
         menuContainer.getChildren().forEach(item -> {
             if (item instanceof HBox h) {
-
                 // hide/show labels
                 if (h.getChildren().size() > 1) {
                     Label label = (Label) h.getChildren().get(1);

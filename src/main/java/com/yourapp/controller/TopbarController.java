@@ -7,7 +7,6 @@ import com.yourapp.services.UserService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -30,64 +29,81 @@ public class TopbarController {
     @FXML private Button btnNotifications;
     @FXML private StackPane notificationWrapper;
     @FXML private Button btnNewAudit;
+    @FXML private Circle avatarCircle;
+    @FXML private Button btnLanguage;
+    @FXML private Button btnTheme;
 
     private final NotificationService notificationService = new NotificationService();
     private final UserService userService = new UserService();
 
+    // ================== INITIALIZE ==================
     @FXML
     public void initialize() {
         System.out.println("✅ TopbarController initialized");
 
-        // Load logo
+        loadLogo();
+        loadUserInfo();
+        updateNotificationBadge();
+        initActions();
+    }
+
+    // ================== UI SETUP ==================
+    private void loadLogo() {
         try {
-            Image img = new Image(getClass().getResource("/views/icons/logo-audit.png").toExternalForm());
+            Image img = new Image(
+                    getClass().getResource("/views/icons/logo-audit.png").toExternalForm()
+            );
             if (topLogo != null) {
                 topLogo.setImage(img);
-                topLogo.setFitWidth(48);
-                topLogo.setFitHeight(48);
+                topLogo.setFitWidth(98);
+                topLogo.setFitHeight(98);
                 topLogo.setPreserveRatio(true);
+                topLogo.setSmooth(true);
             }
-        } catch (Exception ex) {
-            System.err.println("⚠️ Logo not found: " + ex.getMessage());
+        } catch (Exception e) {
+            System.err.println("⚠️ Logo not found");
         }
 
-        // Set app name
         if (topAppName != null) {
             topAppName.setText("AuditDoc AI");
         }
+    }
 
-        // Load user info
+    private void loadUserInfo() {
         User u = userService.getCurrentUser();
         if (u != null) {
             userName.setText(u.getFullName());
             userRole.setText(u.getRole());
         } else {
-            // Default user
             userName.setText("Utilisateur Test");
             userRole.setText("Administrateur");
         }
+    }
 
-        // Update notification badge
-        updateNotificationBadge();
-
-        // Setup button actions
+    private void initActions() {
         if (btnNotifications != null) {
             btnNotifications.setOnAction(e -> showNotificationPopup());
         }
 
         if (btnNewAudit != null) {
-            btnNewAudit.setOnAction(e -> loadAuditPage());
+            btnNewAudit.setOnAction(e -> loadInCenter("/views/fxml/Audit.fxml"));
         }
 
-        // User menu click
-        if (userName != null) {
-            userName.setOnMouseClicked(e -> showUserMenu());
+        if (btnLanguage != null) {
+            btnLanguage.setOnAction(e -> showLanguageMenu());
         }
+
+        if (btnTheme != null) {
+            btnTheme.setOnAction(e -> toggleTheme());
+        }
+
+        // menu utilisateur
+        userName.setOnMouseClicked(e -> showUserMenu());
+        userRole.setOnMouseClicked(e -> showUserMenu());
+        avatarCircle.setOnMouseClicked(e -> showUserMenu());
     }
 
-    /**
-     * Update notification badge visibility
-     */
+    // ================== NOTIFICATIONS ==================
     private void updateNotificationBadge() {
         int unread = notificationService.countUnread();
         if (notificationBadge != null) {
@@ -95,34 +111,47 @@ public class TopbarController {
         }
     }
 
-    /**
-     * Show notification popup menu
-     */
     private void showNotificationPopup() {
         ContextMenu menu = new ContextMenu();
-        List<Notification> all = notificationService.getAll();
+        List<Notification> notifications = notificationService.getAll();
 
-        if (all.isEmpty()) {
-            MenuItem noNotif = new MenuItem("Aucune notification");
-            noNotif.setDisable(true);
-            menu.getItems().add(noNotif);
+        if (notifications.isEmpty()) {
+            MenuItem empty = new MenuItem("Aucune notification");
+            empty.setDisable(true);
+            menu.getItems().add(empty);
         } else {
-            for (Notification n : all) {
+            for (Notification n : notifications) {
                 MenuItem item = new MenuItem(n.getMessage());
-                menu.getItems().add(item);
-                item.setOnAction(ev -> {
+                if (!n.isRead()) {
+                    item.setStyle("-fx-font-weight: bold;");
+                }
+                item.setOnAction(e -> {
                     n.markAsRead();
                     updateNotificationBadge();
                 });
+                menu.getItems().add(item);
             }
         }
 
         menu.show(btnNotifications, javafx.geometry.Side.BOTTOM, 0, 10);
     }
 
-    /**
-     * Show user menu
-     */
+    // ================== MENUS ==================
+    private void showLanguageMenu() {
+        ContextMenu menu = new ContextMenu();
+
+        MenuItem fr = new MenuItem("Français");
+        MenuItem en = new MenuItem("English");
+        MenuItem ar = new MenuItem("العربية");
+
+        fr.setOnAction(e -> changeLanguage("fr"));
+        en.setOnAction(e -> changeLanguage("en"));
+        ar.setOnAction(e -> changeLanguage("ar"));
+
+        menu.getItems().addAll(fr, en, ar);
+        menu.show(btnLanguage, javafx.geometry.Side.BOTTOM, 0, 10);
+    }
+
     private void showUserMenu() {
         ContextMenu menu = new ContextMenu();
 
@@ -132,62 +161,56 @@ public class TopbarController {
 
         profile.setOnAction(e -> loadInCenter("/views/fxml/ProfileView.fxml"));
         help.setOnAction(e -> loadInCenter("/views/fxml/HelpView.fxml"));
-        logout.setOnAction(e -> {
-            System.out.println("🚪 Logout clicked");
-            // TODO: Add logout logic
-        });
+        logout.setOnAction(e -> System.out.println("🚪 Logout clicked"));
 
         menu.getItems().addAll(profile, help, logout);
         menu.show(userName, javafx.geometry.Side.BOTTOM, 0, 10);
     }
 
-    /**
-     * Load Audit page (when "Lancer un Nouvel Audit" is clicked)
-     */
-    private void loadAuditPage() {
-        System.out.println("➕ New Audit button clicked!");
-        loadInCenter("/views/fxml/Audit.fxml");
+    // ================== ACTIONS ==================
+    private void changeLanguage(String lang) {
+        System.out.println("🌍 Changement de langue : " + lang);
     }
 
-    /**
-     * Load FXML in MainLayout's center area
-     */
+    private void toggleTheme() {
+        System.out.println("🎨 Toggle theme");
+        if ("☀".equals(btnTheme.getText())) {
+            btnTheme.setText("🌙");
+        } else {
+            btnTheme.setText("☀");
+        }
+    }
+
+    // ================== NAVIGATION ==================
     private void loadInCenter(String path) {
         try {
-            System.out.println("🔄 Loading: " + path);
-
-            Node loaded = loadFXML(path);
-            if (loaded != null) {
-                setCenterOfBorderPane(loaded);
-                System.out.println("✅ View loaded!");
+            Node view = loadFXML(path);
+            if (view != null) {
+                setCenterOfBorderPane(view);
             }
         } catch (Exception e) {
-            System.err.println("❌ Error loading view: " + e.getMessage());
+            System.err.println("❌ Error loading view: " + path);
             e.printStackTrace();
         }
     }
 
-    /**
-     * Load FXML file
-     */
-    private Node loadFXML(String resourcePath) {
+    private Node loadFXML(String path) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(resourcePath));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
             return loader.load();
         } catch (IOException | NullPointerException e) {
-            System.err.println("❌ Error loading FXML: " + resourcePath);
-            e.printStackTrace();
+            System.err.println("❌ Error loading FXML: " + path);
             return null;
         }
     }
 
     /**
-     * Set content in BorderPane center
+     * Set content in BorderPane center (VERSION FIXED)
      */
     private void setCenterOfBorderPane(Node node) {
         try {
-            // Navigate up from btnNewAudit to find BorderPane
             Node current = btnNewAudit;
+
             while (current != null) {
                 if (current instanceof BorderPane) {
                     ((BorderPane) current).setCenter(node);
@@ -196,13 +219,14 @@ public class TopbarController {
                 current = current.getParent();
             }
 
-            // Fallback: try from scene root
+            // fallback
             Node root = btnNewAudit.getScene().getRoot();
             if (root instanceof BorderPane) {
                 ((BorderPane) root).setCenter(node);
             }
         } catch (Exception e) {
-            System.err.println("❌ Error setting center: " + e.getMessage());
+            System.err.println("❌ Error setting center");
+            e.printStackTrace();
         }
     }
 }
