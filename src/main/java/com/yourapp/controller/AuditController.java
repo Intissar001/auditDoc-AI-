@@ -101,7 +101,6 @@ public class AuditController {
         // - Display uploaded files in UI
         // - Start audit process
     }
-<<<<<<< HEAD
 
     /**
      * Handles the Settings menu item click.
