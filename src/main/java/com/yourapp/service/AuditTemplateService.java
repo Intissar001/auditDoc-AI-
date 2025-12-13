@@ -16,12 +16,22 @@ public class AuditTemplateService {
         private String name;
         private String description;
         private String organization;
+        private int ruleCount;
         
         public AuditTemplate(int id, String name, String description, String organization) {
             this.id = id;
             this.name = name;
             this.description = description;
             this.organization = organization;
+            this.ruleCount = 0; // Default value
+        }
+        
+        public AuditTemplate(int id, String name, String description, String organization, int ruleCount) {
+            this.id = id;
+            this.name = name;
+            this.description = description;
+            this.organization = organization;
+            this.ruleCount = ruleCount;
         }
         
         // Getters
@@ -29,6 +39,10 @@ public class AuditTemplateService {
         public String getName() { return name; }
         public String getDescription() { return description; }
         public String getOrganization() { return organization; }
+        public int getRuleCount() { return ruleCount; }
+        
+        // Setters
+        public void setRuleCount(int ruleCount) { this.ruleCount = ruleCount; }
     }
     
     /**
@@ -40,7 +54,7 @@ public class AuditTemplateService {
         // TODO: Load from database when database is available
         List<AuditTemplate> templates = new ArrayList<>();
         // Add sample template for testing
-        templates.add(new AuditTemplate(1, "Modèle Standard", "Modèle d'audit standard", "Organisation"));
+        templates.add(new AuditTemplate(1, "Modèle Standard", "Modèle d'audit standard", "Organisation", 0));
         return templates;
     }
     
