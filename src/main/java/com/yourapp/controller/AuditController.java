@@ -1,10 +1,7 @@
 package com.yourapp.controller;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ComboBox;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.scene.input.DragEvent;
@@ -12,8 +9,6 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.input.Dragboard;
 import java.io.File;
 import java.util.List;
-
-import java.io.IOException;
 
 /**
  * Controller for the AuditView.fxml
@@ -30,35 +25,13 @@ public class AuditController {
     private VBox dropzone;
 
     @FXML
-    private HBox settingsMenuItem;
-
-    @FXML
-    private HBox auditMenuItem;
-
-    @FXML
-    private BorderPane rootPane; // Root BorderPane to access center area
-
-    private javafx.scene.Node originalCenterContent; // Store original center content
-
-    @FXML
     public void initialize() {
-        // Store the original center content so we can restore it later
-        if (rootPane != null) {
-            originalCenterContent = rootPane.getCenter();
-        }
-
         // Populate dropdowns
-        if (projetDropdown != null) {
-            projetDropdown.getItems().addAll("Projet A", "Projet B", "Projet C");
-        }
-        if (partenaireDropdown != null) {
-            partenaireDropdown.getItems().addAll("Partenaire X", "Partenaire Y", "Partenaire Z");
-        }
+        projetDropdown.getItems().addAll("Projet A", "Projet B", "Projet C");
+        partenaireDropdown.getItems().addAll("Partenaire X", "Partenaire Y", "Partenaire Z");
 
         // Setup drag and drop handlers
-        if (dropzone != null) {
-            setupDragAndDrop();
-        }
+        setupDragAndDrop();
     }
 
     /**
@@ -102,12 +75,10 @@ public class AuditController {
         );
 
         // Show open file dialog
-        if (dropzone != null && dropzone.getScene() != null) {
-            List<File> selectedFiles = fileChooser.showOpenMultipleDialog(dropzone.getScene().getWindow());
+        List<File> selectedFiles = fileChooser.showOpenMultipleDialog(dropzone.getScene().getWindow());
 
-            if (selectedFiles != null && !selectedFiles.isEmpty()) {
-                handleFileUpload(selectedFiles);
-            }
+        if (selectedFiles != null && !selectedFiles.isEmpty()) {
+            handleFileUpload(selectedFiles);
         }
     }
 
@@ -130,6 +101,7 @@ public class AuditController {
         // - Display uploaded files in UI
         // - Start audit process
     }
+<<<<<<< HEAD
 
     /**
      * Handles the Settings menu item click.
