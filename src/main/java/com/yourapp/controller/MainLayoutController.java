@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 
 import java.io.IOException;
 
@@ -24,8 +25,8 @@ public class MainLayoutController {
             sidebarController.setMainController(this);
         }
 
-        // Load default view (Dashboard)
-        loadView("Dashboard.fxml");
+        // Load default view (Audit)
+        loadView("AuditContent.fxml");
     }
 
     public void loadView(String fxmlFile) {
@@ -46,6 +47,18 @@ public class MainLayoutController {
             }
 
             Parent view = loader.load();
+
+            // Load CSS for settings page if needed
+            if (fxmlFile.equals("settings.fxml")) {
+                try {
+                    String settingsCss = getClass().getResource("/views/css/settings.css").toExternalForm();
+                    if (settingsCss != null) {
+                        view.getStylesheets().add(settingsCss);
+                    }
+                } catch (Exception e) {
+                    System.out.println("Settings CSS file not found: " + e.getMessage());
+                }
+            }
 
             // Add to content area
             contentArea.getChildren().add(view);
