@@ -1,261 +1,248 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 
-<VBox spacing="25.0" styleClass="page-content" stylesheets="@../css/Dashboard.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yourapp.controller.DashboardController">
+<ScrollPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yourapp.controller.DashboardController"
+            fitToWidth="true" styleClass="page-scroll-pane" stylesheets="@../css/Dashboard.css">
+    <content>
+        <VBox spacing="25.0" styleClass="page-content">
 
-    <padding>
-        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
-    </padding>
+            <padding>
+                <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+            </padding>
 
-    <!-- Page Header -->
-    <VBox spacing="5.0">
-        <Label styleClass="page-title" text="Tableau de Bord" />
-        <Label styleClass="page-subtitle" text="Vue d'ensemble de vos audits et projets" />
-    </VBox>
-
-    <!-- Stats Cards Row -->
-    <HBox prefHeight="120.0" spacing="20.0">
-
-        <!-- Total Audits Card -->
-        <VBox spacing="15.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
-            <HBox alignment="CENTER_LEFT" spacing="15.0">
-                <StackPane styleClass="stat-icon-container, stat-icon-blue">
-                    <Label styleClass="stat-icon" text="📊" />
-                </StackPane>
-                <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                    <Label styleClass="stat-label" text="Total Audits" />
-                    <Label fx:id="totalAuditsLabel" styleClass="stat-value" text="24" />
-                </VBox>
-                <Label styleClass="stat-change, stat-change-positive" text="+12%" />
-            </HBox>
-            <Label styleClass="stat-period" text="Ce mois" />
-        </VBox>
-
-        <!-- En Cours Card -->
-        <VBox spacing="15.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
-            <HBox alignment="CENTER_LEFT" spacing="15.0">
-                <StackPane styleClass="stat-icon-container, stat-icon-orange">
-                    <Label styleClass="stat-icon" text="⏱" />
-                </StackPane>
-                <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                    <Label styleClass="stat-label" text="En Cours" />
-                    <Label fx:id="inProgressLabel" styleClass="stat-value" text="8" />
-                </VBox>
-                <Label styleClass="stat-change, stat-change-neutral" text="33%" />
-            </HBox>
-            <Label styleClass="stat-period" text="Audits actifs" />
-        </VBox>
-
-        <!-- Terminés Card -->
-        <VBox spacing="15.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
-            <HBox alignment="CENTER_LEFT" spacing="15.0">
-                <StackPane styleClass="stat-icon-container, stat-icon-green">
-                    <Label styleClass="stat-icon" text="✓" />
-                </StackPane>
-                <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                    <Label styleClass="stat-label" text="Terminés" />
-                    <Label fx:id="completedLabel" styleClass="stat-value" text="16" />
-                </VBox>
-                <Label styleClass="stat-change, stat-change-positive" text="+8%" />
-            </HBox>
-            <Label styleClass="stat-period" text="Ce mois" />
-        </VBox>
-
-        <!-- Projets Card -->
-        <VBox spacing="15.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
-            <HBox alignment="CENTER_LEFT" spacing="15.0">
-                <StackPane styleClass="stat-icon-container, stat-icon-purple">
-                    <Label styleClass="stat-icon" text="📂" />
-                </StackPane>
-                <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                    <Label styleClass="stat-label" text="Projets" />
-                    <Label fx:id="projectsLabel" styleClass="stat-value" text="12" />
-                </VBox>
-                <Label styleClass="stat-change, stat-change-positive" text="+2" />
-            </HBox>
-            <Label styleClass="stat-period" text="Actifs" />
-        </VBox>
-    </HBox>
-
-    <!-- Charts Row -->
-    <HBox prefHeight="350.0" spacing="20.0">
-
-        <!-- Audit Trends Chart -->
-        <VBox spacing="20.0" styleClass="card" HBox.hgrow="ALWAYS">
-            <HBox alignment="CENTER_LEFT">
-                <Label styleClass="card-title" text="Tendance des Audits" HBox.hgrow="ALWAYS" />
-                <ComboBox prefWidth="126.0" promptText="30 derniers jours" styleClass="period-selector" />
-            </HBox>
-
-            <!-- Chart placeholder -->
-            <VBox fx:id="chartContainer" alignment="CENTER" styleClass="chart-placeholder" VBox.vgrow="ALWAYS">
-                <Label styleClass="chart-icon" text="📈" />
-                <Label styleClass="chart-placeholder-text" text="Graphique des tendances" />
-            </VBox>
-        </VBox>
-
-        <!-- Audit Status Distribution -->
-        <VBox prefWidth="350.0" spacing="20.0" styleClass="card">
-            <Label styleClass="card-title" text="Distribution des Statuts" />
-
-            <!-- Status items -->
-            <VBox spacing="15.0" VBox.vgrow="ALWAYS">
-
-                <HBox alignment="CENTER_LEFT" spacing="12.0">
-                    <Circle radius="5.0" styleClass="status-dot, status-dot-success" />
-                    <Label styleClass="status-label" text="Terminés" HBox.hgrow="ALWAYS" />
-                    <Label styleClass="status-percentage" text="67%" />
-                </HBox>
-                <ProgressBar maxWidth="Infinity" progress="0.67" styleClass="status-progress, status-progress-success" />
-
-                <HBox alignment="CENTER_LEFT" spacing="12.0">
-                    <Circle radius="5.0" styleClass="status-dot, status-dot-warning" />
-                    <Label styleClass="status-label" text="En cours" HBox.hgrow="ALWAYS" />
-                    <Label styleClass="status-percentage" text="25%" />
-                </HBox>
-                <ProgressBar maxWidth="Infinity" progress="0.25" styleClass="status-progress, status-progress-warning" />
-
-                <HBox alignment="CENTER_LEFT" spacing="12.0">
-                    <Circle radius="5.0" styleClass="status-dot, status-dot-pending" />
-                    <Label styleClass="status-label" text="En attente" HBox.hgrow="ALWAYS" />
-                    <Label styleClass="status-percentage" text="8%" />
-                </HBox>
-                <ProgressBar maxWidth="Infinity" progress="0.08" styleClass="status-progress, status-progress-pending" />
-
-            </VBox>
-        </VBox>
-    </HBox>
-
-    <!-- Recent Activities and Quick Actions -->
-    <HBox prefHeight="400.0" spacing="20.0">
-
-        <!-- Recent Audits -->
-        <VBox spacing="20.0" styleClass="card" HBox.hgrow="ALWAYS">
-            <HBox alignment="CENTER_LEFT">
-                <Label styleClass="card-title" text="Audits Récents" HBox.hgrow="ALWAYS" />
-                <Hyperlink styleClass="view-all-link" text="Voir tout" />
-            </HBox>
-
-            <ScrollPane fitToWidth="true" styleClass="activities-scroll" VBox.vgrow="ALWAYS">
-                <VBox fx:id="recentAuditsContainer" spacing="12.0">
-
-                    <!-- Audit Item 1 -->
-                    <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="activity-item">
-                        <StackPane styleClass="activity-icon-container, activity-icon-blue">
-                            <Label styleClass="activity-icon" text="📄" />
-                        </StackPane>
-                        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                            <Label styleClass="activity-title" text="Audit Financier Q4" />
-                            <Label styleClass="activity-subtitle" text="Projet Alpha - Il y a 2 heures" />
-                        </VBox>
-                        <Label styleClass="activity-status, activity-status-progress" text="En cours" />
-                    </HBox>
-
-                    <!-- Audit Item 2 -->
-                    <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="activity-item">
-                        <StackPane styleClass="activity-icon-container, activity-icon-green">
-                            <Label styleClass="activity-icon" text="✓" />
-                        </StackPane>
-                        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                            <Label styleClass="activity-title" text="Conformité RGPD" />
-                            <Label styleClass="activity-subtitle" text="Projet Beta - Il y a 5 heures" />
-                        </VBox>
-                        <Label styleClass="activity-status, activity-status-completed" text="Terminé" />
-                    </HBox>
-
-                    <!-- Audit Item 3 -->
-                    <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="activity-item">
-                        <StackPane styleClass="activity-icon-container, activity-icon-orange">
-                            <Label styleClass="activity-icon" text="⚠" />
-                        </StackPane>
-                        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                            <Label styleClass="activity-title" text="Audit de Sécurité" />
-                            <Label styleClass="activity-subtitle" text="Projet Gamma - Hier" />
-                        </VBox>
-                        <Label styleClass="activity-status, activity-status-warning" text="Attention" />
-                    </HBox>
-
-                    <!-- Audit Item 4 -->
-                    <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="activity-item">
-                        <StackPane styleClass="activity-icon-container, activity-icon-blue">
-                            <Label styleClass="activity-icon" text="📄" />
-                        </StackPane>
-                        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                            <Label styleClass="activity-title" text="Rapport Qualité ISO" />
-                            <Label styleClass="activity-subtitle" text="Projet Delta - Il y a 2 jours" />
-                        </VBox>
-                        <Label styleClass="activity-status, activity-status-progress" text="En cours" />
-                    </HBox>
-
-                </VBox>
-            </ScrollPane>
-        </VBox>
-
-        <!-- Quick Actions -->
-        <VBox prefWidth="320.0" spacing="20.0" styleClass="card">
-            <Label styleClass="card-title" text="Actions Rapides" />
-
-            <VBox spacing="12.0" VBox.vgrow="ALWAYS">
-
-                <Button maxWidth="Infinity" onAction="#handleNewAudit" styleClass="quick-action-btn, quick-action-primary">
-                    <graphic>
-                        <HBox alignment="CENTER_LEFT" spacing="12.0">
-                            <Label styleClass="quick-action-icon" text="+" />
-                            <VBox spacing="3.0" HBox.hgrow="ALWAYS">
-                                <Label styleClass="quick-action-title" text="Nouvel Audit" />
-                                <Label styleClass="quick-action-subtitle" text="Lancer une analyse" />
-                            </VBox>
-                        </HBox>
-                    </graphic>
-                </Button>
-
-                <Button maxWidth="Infinity" onAction="#handleNewProject" styleClass="quick-action-btn">
-                    <graphic>
-                        <HBox alignment="CENTER_LEFT" spacing="12.0">
-                            <Label styleClass="quick-action-icon" text="📂" />
-                            <VBox spacing="3.0" HBox.hgrow="ALWAYS">
-                                <Label styleClass="quick-action-title" text="Nouveau Projet" />
-                                <Label styleClass="quick-action-subtitle" text="Créer un projet" />
-                            </VBox>
-                        </HBox>
-                    </graphic>
-                </Button>
-
-                <Button maxWidth="Infinity" onAction="#handleUploadDocuments" styleClass="quick-action-btn">
-                    <graphic>
-                        <HBox alignment="CENTER_LEFT" spacing="12.0">
-                            <Label styleClass="quick-action-icon" text="⬆" />
-                            <VBox spacing="3.0" HBox.hgrow="ALWAYS">
-                                <Label styleClass="quick-action-title" text="Importer Documents" />
-                                <Label styleClass="quick-action-subtitle" text="Ajouter des fichiers" />
-                            </VBox>
-                        </HBox>
-                    </graphic>
-                </Button>
-
-                <Button maxWidth="Infinity" onAction="#handleViewReports" styleClass="quick-action-btn">
-                    <graphic>
-                        <HBox alignment="CENTER_LEFT" spacing="12.0">
-                            <Label styleClass="quick-action-icon" text="📊" />
-                            <VBox spacing="3.0" HBox.hgrow="ALWAYS">
-                                <Label styleClass="quick-action-title" text="Voir Rapports" />
-                                <Label styleClass="quick-action-subtitle" text="Consulter les analyses" />
-                            </VBox>
-                        </HBox>
-                    </graphic>
-                </Button>
+            <VBox spacing="5.0">
+                <Label styleClass="page-title" text="Tableau de Bord" />
+                <Label styleClass="page-subtitle" text="Vue d'ensemble de vos audits et projets" />
             </VBox>
 
-            <!-- Help Section -->
-            <VBox spacing="10.0" styleClass="help-section">
-                <Label styleClass="help-title" text="💡 Besoin d'aide?" />
-                <Label styleClass="help-text" text="Consultez notre guide ou contactez le support" wrapText="true" />
-                <Hyperlink styleClass="help-link" text="Accéder au guide →" />
-            </VBox>
-        </VBox>
-    </HBox>
+            <HBox prefHeight="120.0" spacing="20.0">
 
-</VBox>
+                <VBox spacing="15.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <HBox alignment="CENTER_LEFT" spacing="15.0">
+                        <StackPane styleClass="stat-icon-container, stat-icon-blue">
+                            <Label styleClass="stat-icon" text="📊" />
+                        </StackPane>
+                        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                            <Label styleClass="stat-label" text="Total Audits" />
+                            <Label fx:id="totalAuditsLabel" styleClass="stat-value" text="24" />
+                        </VBox>
+                        <Label styleClass="stat-change, stat-change-positive" text="+12%" />
+                    </HBox>
+                    <Label styleClass="stat-period" text="Ce mois" />
+                </VBox>
+
+                <VBox spacing="15.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <HBox alignment="CENTER_LEFT" spacing="15.0">
+                        <StackPane styleClass="stat-icon-container, stat-icon-orange">
+                            <Label styleClass="stat-icon" text="⏱" />
+                        </StackPane>
+                        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                            <Label styleClass="stat-label" text="En Cours" />
+                            <Label fx:id="inProgressLabel" styleClass="stat-value" text="8" />
+                        </VBox>
+                        <Label styleClass="stat-change, stat-change-neutral" text="33%" />
+                    </HBox>
+                    <Label styleClass="stat-period" text="Audits actifs" />
+                </VBox>
+
+                <VBox spacing="15.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <HBox alignment="CENTER_LEFT" spacing="15.0">
+                        <StackPane styleClass="stat-icon-container, stat-icon-green">
+                            <Label styleClass="stat-icon" text="✓" />
+                        </StackPane>
+                        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                            <Label styleClass="stat-label" text="Terminés" />
+                            <Label fx:id="completedLabel" styleClass="stat-value" text="16" />
+                        </VBox>
+                        <Label styleClass="stat-change, stat-change-positive" text="+8%" />
+                    </HBox>
+                    <Label styleClass="stat-period" text="Ce mois" />
+                </VBox>
+
+                <VBox spacing="15.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <HBox alignment="CENTER_LEFT" spacing="15.0">
+                        <StackPane styleClass="stat-icon-container, stat-icon-purple">
+                            <Label styleClass="stat-icon" text="📂" />
+                        </StackPane>
+                        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                            <Label styleClass="stat-label" text="Projets" />
+                            <Label fx:id="projectsLabel" styleClass="stat-value" text="12" />
+                        </VBox>
+                        <Label styleClass="stat-change, stat-change-positive" text="+2" />
+                    </HBox>
+                    <Label styleClass="stat-period" text="Actifs" />
+                </VBox>
+            </HBox>
+
+            <HBox prefHeight="350.0" spacing="20.0">
+
+                <VBox spacing="20.0" styleClass="card" HBox.hgrow="ALWAYS">
+                    <HBox alignment="CENTER_LEFT">
+                        <Label styleClass="card-title" text="Tendance des Audits" HBox.hgrow="ALWAYS" />
+                        <ComboBox prefWidth="126.0" promptText="30 derniers jours" styleClass="period-selector" />
+                    </HBox>
+
+                    <VBox fx:id="chartContainer" alignment="CENTER" styleClass="chart-placeholder" VBox.vgrow="ALWAYS">
+                        <Label styleClass="chart-icon" text="📈" />
+                        <Label styleClass="chart-placeholder-text" text="Graphique des tendances" />
+                    </VBox>
+                </VBox>
+
+                <VBox prefWidth="350.0" spacing="20.0" styleClass="card">
+                    <Label styleClass="card-title" text="Distribution des Statuts" />
+
+                    <VBox spacing="15.0" VBox.vgrow="ALWAYS">
+
+                        <HBox alignment="CENTER_LEFT" spacing="12.0">
+                            <Circle radius="5.0" styleClass="status-dot, status-dot-success" />
+                            <Label styleClass="status-label" text="Terminés" HBox.hgrow="ALWAYS" />
+                            <Label styleClass="status-percentage" text="67%" />
+                        </HBox>
+                        <ProgressBar maxWidth="Infinity" progress="0.67" styleClass="status-progress, status-progress-success" />
+
+                        <HBox alignment="CENTER_LEFT" spacing="12.0">
+                            <Circle radius="5.0" styleClass="status-dot, status-dot-warning" />
+                            <Label styleClass="status-label" text="En cours" HBox.hgrow="ALWAYS" />
+                            <Label styleClass="status-percentage" text="25%" />
+                        </HBox>
+                        <ProgressBar maxWidth="Infinity" progress="0.25" styleClass="status-progress, status-progress-warning" />
+
+                        <HBox alignment="CENTER_LEFT" spacing="12.0">
+                            <Circle radius="5.0" styleClass="status-dot, status-dot-pending" />
+                            <Label styleClass="status-label" text="En attente" HBox.hgrow="ALWAYS" />
+                            <Label styleClass="status-percentage" text="8%" />
+                        </HBox>
+                        <ProgressBar maxWidth="Infinity" progress="0.08" styleClass="status-progress, status-progress-pending" />
+
+                    </VBox>
+                </VBox>
+            </HBox>
+
+            <HBox prefHeight="400.0" spacing="20.0">
+
+                <VBox spacing="20.0" styleClass="card" HBox.hgrow="ALWAYS">
+                    <HBox alignment="CENTER_LEFT">
+                        <Label styleClass="card-title" text="Audits Récents" HBox.hgrow="ALWAYS" />
+                        <Hyperlink styleClass="view-all-link" text="Voir tout" />
+                    </HBox>
+
+                    <ScrollPane fitToWidth="true" styleClass="activities-scroll" VBox.vgrow="ALWAYS">
+                        <VBox fx:id="recentAuditsContainer" spacing="12.0">
+
+                            <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="activity-item">
+                                <StackPane styleClass="activity-icon-container, activity-icon-blue">
+                                    <Label styleClass="activity-icon" text="📄" />
+                                </StackPane>
+                                <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                                    <Label styleClass="activity-title" text="Audit Financier Q4" />
+                                    <Label styleClass="activity-subtitle" text="Projet Alpha - Il y a 2 heures" />
+                                </VBox>
+                                <Label styleClass="activity-status, activity-status-progress" text="En cours" />
+                            </HBox>
+
+                            <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="activity-item">
+                                <StackPane styleClass="activity-icon-container, activity-icon-green">
+                                    <Label styleClass="activity-icon" text="✓" />
+                                </StackPane>
+                                <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                                    <Label styleClass="activity-title" text="Conformité RGPD" />
+                                    <Label styleClass="activity-subtitle" text="Projet Beta - Il y a 5 heures" />
+                                </VBox>
+                                <Label styleClass="activity-status, activity-status-completed" text="Terminé" />
+                            </HBox>
+
+                            <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="activity-item">
+                                <StackPane styleClass="activity-icon-container, activity-icon-orange">
+                                    <Label styleClass="activity-icon" text="⚠" />
+                                </StackPane>
+                                <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                                    <Label styleClass="activity-title" text="Audit de Sécurité" />
+                                    <Label styleClass="activity-subtitle" text="Projet Gamma - Hier" />
+                                </VBox>
+                                <Label styleClass="activity-status, activity-status-warning" text="Attention" />
+                            </HBox>
+
+                            <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="activity-item">
+                                <StackPane styleClass="activity-icon-container, activity-icon-blue">
+                                    <Label styleClass="activity-icon" text="📄" />
+                                </StackPane>
+                                <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                                    <Label styleClass="activity-title" text="Rapport Qualité ISO" />
+                                    <Label styleClass="activity-subtitle" text="Projet Delta - Il y a 2 jours" />
+                                </VBox>
+                                <Label styleClass="activity-status, activity-status-progress" text="En cours" />
+                            </HBox>
+
+                        </VBox>
+                    </ScrollPane>
+                </VBox>
+
+                <VBox prefWidth="320.0" spacing="20.0" styleClass="card">
+                    <Label styleClass="card-title" text="Actions Rapides" />
+
+                    <VBox spacing="12.0" VBox.vgrow="ALWAYS">
+
+                        <Button maxWidth="Infinity" onAction="#handleNewAudit" styleClass="quick-action-btn, quick-action-primary">
+                            <graphic>
+                                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                    <Label styleClass="quick-action-icon" text="+" />
+                                    <VBox spacing="3.0" HBox.hgrow="ALWAYS">
+                                        <Label styleClass="quick-action-title" text="Nouvel Audit" />
+                                        <Label styleClass="quick-action-subtitle" text="Lancer une analyse" />
+                                    </VBox>
+                                </HBox>
+                            </graphic>
+                        </Button>
+
+                        <Button maxWidth="Infinity" onAction="#handleNewProject" styleClass="quick-action-btn">
+                            <graphic>
+                                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                    <Label styleClass="quick-action-icon" text="📂" />
+                                    <VBox spacing="3.0" HBox.hgrow="ALWAYS">
+                                        <Label styleClass="quick-action-title" text="Nouveau Projet" />
+                                        <Label styleClass="quick-action-subtitle" text="Créer un projet" />
+                                    </VBox>
+                                </HBox>
+                            </graphic>
+                        </Button>
+
+                        <Button maxWidth="Infinity" onAction="#handleUploadDocuments" styleClass="quick-action-btn">
+                            <graphic>
+                                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                    <Label styleClass="quick-action-icon" text="⬆" />
+                                    <VBox spacing="3.0" HBox.hgrow="ALWAYS">
+                                        <Label styleClass="quick-action-title" text="Importer Documents" />
+                                        <Label styleClass="quick-action-subtitle" text="Ajouter des fichiers" />
+                                    </VBox>
+                                </HBox>
+                            </graphic>
+                        </Button>
+
+                        <Button maxWidth="Infinity" onAction="#handleViewReports" styleClass="quick-action-btn">
+                            <graphic>
+                                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                    <Label styleClass="quick-action-icon" text="📊" />
+                                    <VBox spacing="3.0" HBox.hgrow="ALWAYS">
+                                        <Label styleClass="quick-action-title" text="Voir Rapports" />
+                                        <Label styleClass="quick-action-subtitle" text="Consulter les analyses" />
+                                    </VBox>
+                                </HBox>
+                            </graphic>
+                        </Button>
+                    </VBox>
+
+                    <VBox spacing="10.0" styleClass="help-section">
+                        <Label styleClass="help-title" text="💡 Besoin d'aide?" />
+                        <Label styleClass="help-text" text="Consultez notre guide ou contactez le support" wrapText="true" />
+                        <Hyperlink styleClass="help-link" text="Accéder au guide →" />
+                    </VBox>
+                </VBox>
+            </HBox>
+
+        </VBox>
+    </content>
+</ScrollPane>
