@@ -97,7 +97,9 @@ public class SettingsController implements Initializable {
                     userEmailLabel.setText(currentUser.getEmail() != null ? currentUser.getEmail() : "");
                 }
                 if (userRoleLabel != null) {
-                    userRoleLabel.setText(currentUser.getRole() != null ? currentUser.getRole() : "");
+                    String role = currentUser.getRole() != null ? currentUser.getRole() : "";
+                    // Display role in uppercase to match screenshot design
+                    userRoleLabel.setText(role.toUpperCase());
                 }
             }
         } catch (Exception e) {
