@@ -9,45 +9,15 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        // Initialize database
-        initializeDatabase();
-
-        // Load Audit.fxml directly (it has its own sidebar)
         FXMLLoader fxmlLoader = new FXMLLoader(
-                Main.class.getResource("/views/fxml/Audit.fxml")
+                Main.class.getResource("/views/fxml/MainLayout.fxml")  // USE AUDIT HERE
         );
 
-        Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
+        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
 
-        // Load CSS
-        try {
-            String generalCss = getClass().getResource("/views/css/styles.css").toExternalForm();
-            scene.getStylesheets().add(generalCss);
-        } catch (Exception e) {
-            System.out.println("General CSS file not found, using default styles.");
-        }
-        
-        try {
-            String settingsCss = getClass().getResource("/views/css/settings.css").toExternalForm();
-            scene.getStylesheets().add(settingsCss);
-        } catch (Exception e) {
-            System.out.println("Settings CSS file not found: " + e.getMessage());
-        }
-
-        stage.setTitle("Audit Doc AI");
+        stage.setTitle("JavaFX - Audit Screen");
         stage.setScene(scene);
         stage.show();
-    }
-
-    /**
-     * Initializes the database connection and sets up tables.
-     */
-    private void initializeDatabase() {
-        if (com.yourapp.database.DatabaseConnection.testConnection()) {
-            com.yourapp.database.DatabaseSetup.setupDatabase();
-        } else {
-            System.err.println("Warning: Database connection failed. Some features may not work.");
-        }
     }
 
     public static void main(String[] args) {
