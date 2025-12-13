@@ -196,4 +196,7 @@
 
                     </content>
                 </ScrollPane>
-
+            </children>
+        </VBox>
+    </center>
+</BorderPane>
