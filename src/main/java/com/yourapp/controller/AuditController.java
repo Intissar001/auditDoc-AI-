@@ -29,7 +29,22 @@ public class AuditController {
     private VBox dropzone;
 
     @FXML
+    private BorderPane rootPane;
+
+    @FXML
+    private HBox settingsMenuItem;
+
+    @FXML
+    private HBox auditMenuItem;
+
+    private javafx.scene.Node originalCenterContent;
+
+    @FXML
     public void initialize() {
+        // Store the original center content so we can restore it later
+        if (rootPane != null) {
+            originalCenterContent = rootPane.getCenter();
+        }
         // Populate dropdowns
         projetDropdown.getItems().addAll("Projet A", "Projet B", "Projet C");
         partenaireDropdown.getItems().addAll("Partenaire X", "Partenaire Y", "Partenaire Z");
