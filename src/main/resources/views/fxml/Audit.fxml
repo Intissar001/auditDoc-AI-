@@ -4,24 +4,20 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<ScrollPane fitToWidth="true"
+<ScrollPane fx:controller="com.yourapp.controller.AuditController"
+            fitToWidth="true"
             styleClass="page-scroll-pane"
             stylesheets="@../css/styles.css"
             xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.yourapp.controller.AuditController">
+            xmlns:fx="http://javafx.com/fxml/1">
 
-<ScrollPane stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yourapp.controller.AuditController"
-            fitToWidth="true" styleClass="page-scroll-pane" >
     <content>
         <VBox spacing="25.0" styleClass="page-content">
             <padding>
                 <Insets top="30.0" right="30.0" bottom="30.0" left="30.0"/>
             </padding>
 
-            <!-- ========================================= -->
-            <!--           PAGE HEADER                     -->
-            <!-- ========================================= -->
+            <!-- PAGE HEADER -->
             <VBox spacing="5.0">
                 <children>
                     <Label text="Audit" styleClass="page-title"/>
@@ -30,21 +26,15 @@
                 </children>
             </VBox>
 
-            <!-- ========================================= -->
-            <!--      PROJECT SELECTION CARD               -->
-            <!-- ========================================= -->
+            <!-- PROJECT SELECTION CARD -->
             <VBox spacing="20.0" styleClass="card">
                 <children>
                     <Label text="Audit Intelligent" styleClass="card-title"/>
-
                     <HBox spacing="20.0">
                         <children>
-
-                            <!-- Projet Dropdown -->
                             <VBox spacing="5.0" HBox.hgrow="ALWAYS">
                                 <children>
-                                    <Label text="Sélectionner le Projet"
-                                           styleClass="dropdown-label"/>
+                                    <Label text="Sélectionner le Projet" styleClass="dropdown-label"/>
                                     <ComboBox fx:id="projetDropdown"
                                               promptText="Sélectionner le Projet"
                                               styleClass="modern-dropdown"
@@ -53,11 +43,9 @@
                                 </children>
                             </VBox>
 
-                            <!-- Partenaire Dropdown -->
                             <VBox spacing="5.0" HBox.hgrow="ALWAYS">
                                 <children>
-                                    <Label text="Sélectionner un Partenaire"
-                                           styleClass="dropdown-label"/>
+                                    <Label text="Sélectionner un Partenaire" styleClass="dropdown-label"/>
                                     <ComboBox fx:id="partenaireDropdown"
                                               promptText="Sélectionner un Partenaire"
                                               styleClass="modern-dropdown"
@@ -65,46 +53,35 @@
                                               maxWidth="Infinity"/>
                                 </children>
                             </VBox>
-
                         </children>
                     </HBox>
                 </children>
             </VBox>
 
-            <!-- ========================================= -->
-            <!--      FILE UPLOAD CARD                     -->
-            <!-- ========================================= -->
+            <!-- FILE UPLOAD CARD -->
             <VBox spacing="20.0" styleClass="card">
                 <children>
                     <Label text="Importer les Documents" styleClass="card-title"/>
-
-                    <!-- Dropzone -->
                     <VBox fx:id="dropzone"
                           alignment="CENTER"
                           prefHeight="350.0"
                           styleClass="dropzone">
                         <children>
-
                             <Label text="⬆" styleClass="upload-icon-placeholder"/>
-
                             <Label text="Glissez-déposez vos fichiers ici"
                                    styleClass="dropzone-text-primary">
                                 <VBox.margin>
                                     <Insets top="15.0"/>
                                 </VBox.margin>
                             </Label>
-
-                            <Label text="ou"
-                                   styleClass="dropzone-text-separator">
+                            <Label text="ou" styleClass="dropzone-text-separator">
                                 <VBox.margin>
                                     <Insets top="5.0" bottom="5.0"/>
                                 </VBox.margin>
                             </Label>
-
                             <Button text="Parcourir les fichiers"
                                     styleClass="btn-secondary"
                                     onAction="#handleBrowseFiles"/>
-
                             <Label text="PDF, Excel, Word (Max 10MB par fichier)"
                                    styleClass="dropzone-file-info">
                                 <VBox.margin>
@@ -113,13 +90,11 @@
                             </Label>
                         </children>
                     </VBox>
-
                 </children>
             </VBox>
 
             <!-- Extra Space at Bottom -->
             <VBox prefHeight="50.0"/>
-
         </VBox>
     </content>
 

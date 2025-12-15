@@ -1,61 +1,58 @@
 package com.yourapp.model;
 
-import jakarta.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-@Entity
-@Table(name = "audit_reports")
+/**
+ * Model class pour les rapports d'audit
+ *
+ * ⚠️  NOTE POUR L'ÉQUIPE:
+ * Cette classe est un POJO simple sans persistence.
+ * Pour ajouter la persistence database:
+ * 1. Ajouter les imports JPA: import jakarta.persistence.*;
+ * 2. Ajouter @Entity sur la classe
+ * 3. Ajouter @Table(name = "audit_reports")
+ * 4. Ajouter @Id sur le champ id
+ * 5. Ajouter @Column(...) sur chaque champ
+ */
 public class AuditReport {
 
-    @Id
-    @Column(name = "id", length = 36)
+    // Identifiants
     private String id;
-
-    @Column(name = "audit_request_id", length = 36)
     private String auditRequestId;
 
-    @Column(name = "title", length = 255)
+    // Informations de base
     private String title;
-
-    @Column(name = "summary", columnDefinition = "TEXT")
     private String summary;
-
-    @Column(name = "status", length = 50)
     private String status; // "DRAFT", "FINAL"
 
-    @Column(name = "created_at")
+    // Dates
     private ZonedDateTime createdAt;
-
-    @Column(name = "finalized_at")
     private ZonedDateTime finalizedAt;
 
-    // Fields for History display
-    @Column(name = "project_name", length = 255)
+    // Informations pour l'affichage dans History
     private String projectName;
+    private String partnerName;
 
-    @Column(name = "partner_name", length = 255)
-    private String partnerName;  // NEW: Partner name
-
-    @Column(name = "score")
+    // Résultats de l'audit
     private Integer score;
-
-    @Column(name = "compliance_status", length = 50)
     private String complianceStatus; // "Conforme" / "Non-Conforme"
-
-    @Column(name = "problems_count")
     private Integer problemsCount;
 
-    @Column(name = "pdf_path", length = 500)
+    // Fichier PDF
     private String pdfPath;
 
-    // Default Constructor
+    /**
+     * Constructeur par défaut
+     */
     public AuditReport() {
         this.id = UUID.randomUUID().toString();
         this.createdAt = ZonedDateTime.now();
     }
 
-    // Constructor for easy creation
+    /**
+     * Constructeur pour création rapide
+     */
     public AuditReport(String projectName, Integer score, String complianceStatus, Integer problemsCount) {
         this();
         this.projectName = projectName;
@@ -65,43 +62,122 @@ public class AuditReport {
         this.status = "FINAL";
     }
 
-    // Getters and Setters
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    // ========================================
+    //            GETTERS & SETTERS
+    // ========================================
 
-    public String getAuditRequestId() { return auditRequestId; }
-    public void setAuditRequestId(String auditRequestId) { this.auditRequestId = auditRequestId; }
+    public String getId() {
+        return id;
+    }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public String getSummary() { return summary; }
-    public void setSummary(String summary) { this.summary = summary; }
+    public String getAuditRequestId() {
+        return auditRequestId;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public void setAuditRequestId(String auditRequestId) {
+        this.auditRequestId = auditRequestId;
+    }
 
-    public ZonedDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(ZonedDateTime createdAt) { this.createdAt = createdAt; }
+    public String getTitle() {
+        return title;
+    }
 
-    public ZonedDateTime getFinalizedAt() { return finalizedAt; }
-    public void setFinalizedAt(ZonedDateTime finalizedAt) { this.finalizedAt = finalizedAt; }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    public String getProjectName() { return projectName; }
-    public void setProjectName(String projectName) { this.projectName = projectName; }
+    public String getSummary() {
+        return summary;
+    }
 
-    public String getPartnerName() { return partnerName; }
-    public void setPartnerName(String partnerName) { this.partnerName = partnerName; }
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
 
-    public Integer getScore() { return score; }
-    public void setScore(Integer score) { this.score = score; }
+    public String getStatus() {
+        return status;
+    }
 
-    public String getComplianceStatus() { return complianceStatus; }
-    public void setComplianceStatus(String complianceStatus) { this.complianceStatus = complianceStatus; }
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-    public Integer getProblemsCount() { return problemsCount; }
-    public void setProblemsCount(Integer problemsCount) { this.problemsCount = problemsCount; }
+    public ZonedDateTime getCreatedAt() {
+        return createdAt;
+    }
 
-    public String getPdfPath() { return pdfPath; }
-    public void setPdfPath(String pdfPath) { this.pdfPath = pdfPath; }
+    public void setCreatedAt(ZonedDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public ZonedDateTime getFinalizedAt() {
+        return finalizedAt;
+    }
+
+    public void setFinalizedAt(ZonedDateTime finalizedAt) {
+        this.finalizedAt = finalizedAt;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getPartnerName() {
+        return partnerName;
+    }
+
+    public void setPartnerName(String partnerName) {
+        this.partnerName = partnerName;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public String getComplianceStatus() {
+        return complianceStatus;
+    }
+
+    public void setComplianceStatus(String complianceStatus) {
+        this.complianceStatus = complianceStatus;
+    }
+
+    public Integer getProblemsCount() {
+        return problemsCount;
+    }
+
+    public void setProblemsCount(Integer problemsCount) {
+        this.problemsCount = problemsCount;
+    }
+
+    public String getPdfPath() {
+        return pdfPath;
+    }
+
+    public void setPdfPath(String pdfPath) {
+        this.pdfPath = pdfPath;
+    }
+
+    @Override
+    public String toString() {
+        return "AuditReport{" +
+                "id='" + id + '\'' +
+                ", projectName='" + projectName + '\'' +
+                ", score=" + score +
+                ", status='" + status + '\'' +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }

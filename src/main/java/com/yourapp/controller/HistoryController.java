@@ -5,18 +5,15 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryController {
@@ -35,24 +32,12 @@ public class HistoryController {
     @FXML private TableColumn<AuditReport, String> problemsColumn;
     @FXML private TableColumn<AuditReport, Void> reportsColumn;
 
-    // Database service
-    private com.yourapp.service.AuditService auditService;
-
     private ObservableList<AuditReport> auditList;
     private ObservableList<AuditReport> filteredList;
 
     @FXML
     public void initialize() {
         System.out.println("✅ HistoryController initialized");
-
-        // Initialize service
-        try {
-            auditService = new com.yourapp.service.AuditService();
-            System.out.println("✅ AuditService initialized");
-        } catch (Exception e) {
-            System.err.println("❌ Failed to initialize AuditService: " + e.getMessage());
-            e.printStackTrace();
-        }
 
         // Initialize empty lists
         auditList = FXCollections.observableArrayList();
@@ -80,8 +65,9 @@ public class HistoryController {
         placeholderLabel.setStyle("-fx-text-fill: #667085; -fx-font-size: 14px; -fx-text-alignment: center;");
         auditTable.setPlaceholder(placeholderLabel);
 
-        // Load audits from database
-        loadAuditsFromDatabase();
+        // TODO: L'équipe doit implémenter loadAuditsFromDatabase() ici
+        // Pour l'instant, la table reste vide
+        System.out.println("⚠️  Database not connected - waiting for team implementation");
     }
 
     private void setupTableColumns() {
@@ -236,8 +222,13 @@ public class HistoryController {
     }
 
     private void setupFilters() {
-        // Partner filter - Load from database
-        loadPartnerFilter();
+        // Partner filter
+        partnerComboBox.getItems().clear();
+        partnerComboBox.getItems().add("Tous les partenaires");
+        partnerComboBox.setValue("Tous les partenaires");
+
+        // TODO: L'équipe doit charger les partenaires depuis la database
+        System.out.println("⚠️  Partner filter not loaded - database not connected");
 
         // Sort By filter
         sortByComboBox.getItems().addAll(
@@ -255,25 +246,6 @@ public class HistoryController {
         partnerComboBox.setOnAction(e -> filterAudits());
         sortByComboBox.setOnAction(e -> filterAudits());
         sortComboBox.setOnAction(e -> filterAudits());
-    }
-
-    private void loadPartnerFilter() {
-        try {
-            partnerComboBox.getItems().clear();
-            partnerComboBox.getItems().add("Tous les partenaires");
-
-            List<String> partnerNames = auditService.getAllPartnerNames();
-            partnerComboBox.getItems().addAll(partnerNames);
-            partnerComboBox.setValue("Tous les partenaires");
-
-            System.out.println("✅ Loaded " + partnerNames.size() + " partners in filter");
-
-        } catch (Exception e) {
-            System.err.println("❌ Error loading partner filter: " + e.getMessage());
-            partnerComboBox.getItems().clear();
-            partnerComboBox.getItems().add("Tous les partenaires");
-            partnerComboBox.setValue("Tous les partenaires");
-        }
     }
 
     private void filterAudits() {
@@ -345,7 +317,7 @@ public class HistoryController {
         if (audit != null) {
             System.out.println("Viewing report for: " + audit.getProjectName());
             System.out.println("Audit ID: " + audit.getId());
-            // TODO: Open report details view
+            // TODO: L'équipe doit implémenter la vue détaillée
         }
     }
 
@@ -353,15 +325,26 @@ public class HistoryController {
         if (audit != null) {
             System.out.println("Downloading PDF for: " + audit.getProjectName());
             System.out.println("Audit ID: " + audit.getId());
-            // TODO: Generate and download PDF
+            // TODO: L'équipe doit implémenter la génération PDF
         }
     }
 
+    /**
+     * TODO: L'équipe doit implémenter cette méthode
+     * Cette méthode doit:
+     * 1. Se connecter à la database
+     * 2. Récupérer tous les audits
+     * 3. Remplir auditList et filteredList
+     * 4. Appeler updateAuditCount()
+     */
     public void loadAuditsFromDatabase() {
-        try {
-            System.out.println("📊 Loading audits from database...");
+        System.out.println("⚠️  loadAuditsFromDatabase() not implemented - waiting for team");
 
-            List<AuditReport> audits = auditService.getAllAudits();
+        // Example de ce que l'équipe doit faire:
+        /*
+        try {
+            AuditService service = new AuditService();
+            List<AuditReport> audits = service.getAllAudits();
 
             auditList.clear();
             filteredList.clear();
@@ -371,26 +354,36 @@ public class HistoryController {
 
             updateAuditCount();
 
-            System.out.println("✅ Successfully loaded " + audits.size() + " audits");
+            // Charger aussi les partenaires pour le filtre
+            List<String> partners = service.getAllPartnerNames();
+            partnerComboBox.getItems().addAll(partners);
 
         } catch (Exception e) {
-            System.err.println("❌ Error loading audits from database: " + e.getMessage());
             e.printStackTrace();
-
-            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
-                    javafx.scene.control.Alert.AlertType.ERROR
-            );
-            alert.setTitle("Erreur");
-            alert.setHeaderText("Erreur de chargement");
-            alert.setContentText("Impossible de charger les audits depuis la base de données.");
-            alert.showAndWait();
         }
+        */
     }
 
+    /**
+     * Public method pour rafraîchir les audits
+     * TODO: L'équipe doit l'implémenter avec database
+     */
     public void refreshAudits() {
         auditList.clear();
         filteredList.clear();
-        loadAuditsFromDatabase();
         updateAuditCount();
+
+        // TODO: Appeler loadAuditsFromDatabase() quand elle sera implémentée
+        System.out.println("⚠️  refreshAudits() - database not connected");
+    }
+
+    /**
+     * Method pour ajouter un audit manuellement (pour testing)
+     * L'équipe peut utiliser cette méthode pour tester l'UI sans database
+     */
+    public void addAudit(AuditReport audit) {
+        auditList.add(audit);
+        filterAudits();
+        System.out.println("✅ Audit ajouté pour testing: " + audit.getProjectName());
     }
 }
