@@ -34,12 +34,9 @@ public class SettingsController implements Initializable {
     // FXML UI Elements - Templates
     @FXML private VBox templatesContainer;
     
-    // FXML UI Elements - System Settings
-    @FXML private ToggleButton localStoreToggle;
-    @FXML private ToggleButton cloudBackupToggle;
+    // FXML UI Elements - System Settings (Notifications only)
     @FXML private ToggleButton emailAlertToggle;
     @FXML private ToggleButton auditReminderToggle;
-    @FXML private Label ocrProviderLabel;
 
     private User currentUser;
     private SettingsService.SystemSettings systemSettings;
@@ -131,37 +128,39 @@ public class SettingsController implements Initializable {
     }
 
     /**
-     * Creates a template card UI element.
+     * Creates a template card UI element matching the Figma design exactly.
      */
     private VBox createTemplateCard(AuditTemplateService.AuditTemplate template) {
         VBox card = new VBox(8);
         card.getStyleClass().add("template-card");
         card.setPadding(new Insets(16, 20, 16, 20));
 
-        // Title
+        // Title (e.g., "Template AFD")
         Label titleLabel = new Label(template.getName());
         titleLabel.getStyleClass().add("template-title");
 
-        // Organization/Subtitle
+        // Organization/Subtitle (e.g., "Agence Française de Développement")
         Label orgLabel = new Label(template.getOrganization());
         orgLabel.getStyleClass().add("template-description");
 
-        // Description
+        // Description (e.g., "Normes d'audit selon les exigences AFD")
+        Label descLabel = null;
         if (template.getDescription() != null && !template.getDescription().isEmpty()) {
-            Label descLabel = new Label(template.getDescription());
+            descLabel = new Label(template.getDescription());
             descLabel.getStyleClass().add("template-description");
-            card.getChildren().add(descLabel);
         }
 
         // Bottom row with badge and action buttons
-        HBox bottomRow = new HBox(8);
+        HBox bottomRow = new HBox();
         bottomRow.setAlignment(Pos.CENTER_LEFT);
+        bottomRow.setSpacing(8);
+        HBox.setHgrow(bottomRow, javafx.scene.layout.Priority.ALWAYS);
 
-        // Rule count badge
+        // Rule count badge (e.g., "15 règles")
         Label badgeLabel = new Label(template.getRuleCount() + " règles");
         badgeLabel.getStyleClass().add("template-badge");
 
-        // Action buttons (Edit and Delete)
+        // Action buttons (Edit and Delete) on the right
         HBox actionsBox = new HBox(8);
         actionsBox.setAlignment(Pos.CENTER_RIGHT);
         HBox.setHgrow(actionsBox, javafx.scene.layout.Priority.ALWAYS);
@@ -177,7 +176,13 @@ public class SettingsController implements Initializable {
         actionsBox.getChildren().addAll(editBtn, deleteBtn);
         bottomRow.getChildren().addAll(badgeLabel, actionsBox);
 
-        card.getChildren().addAll(titleLabel, orgLabel, bottomRow);
+        // Add all elements to card
+        if (descLabel != null) {
+            card.getChildren().addAll(titleLabel, orgLabel, descLabel, bottomRow);
+        } else {
+            card.getChildren().addAll(titleLabel, orgLabel, bottomRow);
+        }
+        
         return card;
     }
 
@@ -212,44 +217,26 @@ public class SettingsController implements Initializable {
     }
 
     /**
-     * Loads and displays system settings from database.
+     * Loads and displays notification settings (in-memory only, no database).
      */
     private void setupSystemSettings() {
         try {
             systemSettings = SettingsService.loadSettings();
             
             if (systemSettings != null) {
-                if (localStoreToggle != null) {
-                    localStoreToggle.setSelected(systemSettings.isLocalStorage());
-                }
-                if (cloudBackupToggle != null) {
-                    cloudBackupToggle.setSelected(systemSettings.isCloudBackup());
-                }
                 if (emailAlertToggle != null) {
                     emailAlertToggle.setSelected(systemSettings.isEmailAlerts());
                 }
                 if (auditReminderToggle != null) {
                     auditReminderToggle.setSelected(systemSettings.isAuditReminders());
                 }
-                if (ocrProviderLabel != null) {
-                    ocrProviderLabel.setText(systemSettings.getOcrProvider() != null ? systemSettings.getOcrProvider() : "Intégré");
-                }
             } else {
-                // Default values if loading fails
-                if (localStoreToggle != null) {
-                    localStoreToggle.setSelected(true);
-                }
-                if (cloudBackupToggle != null) {
-                    cloudBackupToggle.setSelected(false);
-                }
+                // Default values
                 if (emailAlertToggle != null) {
                     emailAlertToggle.setSelected(true);
                 }
                 if (auditReminderToggle != null) {
                     auditReminderToggle.setSelected(true);
-                }
-                if (ocrProviderLabel != null) {
-                    ocrProviderLabel.setText("Intégré");
                 }
             }
         } catch (Exception e) {
@@ -259,86 +246,91 @@ public class SettingsController implements Initializable {
     }
 
     /**
-     * Sets up toggle button styling and behavior.
+     * Sets up toggle button styling and behavior (dynamic interactions).
      */
     private void setupToggleButtons() {
-        // Add listeners to update toggle button state
-        localStoreToggle.selectedProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal != oldVal) {
-                saveSettings();
-            }
-        });
+        // Add listeners to update toggle button state dynamically
+        if (emailAlertToggle != null) {
+            emailAlertToggle.selectedProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal != oldVal) {
+                    saveSettings();
+                }
+            });
+        }
         
-        cloudBackupToggle.selectedProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal != oldVal) {
-                saveSettings();
-            }
-        });
-        
-        emailAlertToggle.selectedProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal != oldVal) {
-                saveSettings();
-            }
-        });
-        
-        auditReminderToggle.selectedProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal != oldVal) {
-                saveSettings();
-            }
-        });
+        if (auditReminderToggle != null) {
+            auditReminderToggle.selectedProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal != oldVal) {
+                    saveSettings();
+                }
+            });
+        }
     }
 
     /**
      * Handles the invite user button action.
-     * Opens a dialog to invite a new user matching Figma design.
+     * Opens a dialog to invite a new user matching Figma design exactly.
      */
     @FXML
     private void handleInviteUser() {
         Dialog<VBox> dialog = new Dialog<>();
         dialog.setTitle("Inviter un Utilisateur");
         dialog.setHeaderText(null);
+        dialog.getDialogPane().getStyleClass().add("invite-user-dialog");
 
         // Set button types
         ButtonType sendButtonType = new ButtonType("Envoyer", ButtonBar.ButtonData.OK_DONE);
         ButtonType cancelButtonType = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
         dialog.getDialogPane().getButtonTypes().addAll(sendButtonType, cancelButtonType);
 
-        // Create form fields
+        // Create form fields matching screenshot design
+        Label emailLabel = new Label("Email");
+        emailLabel.getStyleClass().add("dialog-label");
+        
         TextField emailField = new TextField();
         emailField.setPromptText("utilisateur@example.com");
+        emailField.getStyleClass().add("dialog-textfield");
         emailField.setPrefWidth(400);
-        emailField.setStyle("-fx-padding: 10px; -fx-font-size: 14px;");
 
+        Label roleLabel = new Label("Rôle");
+        roleLabel.getStyleClass().add("dialog-label");
+        
         ComboBox<String> roleComboBox = new ComboBox<>();
         roleComboBox.getItems().addAll("Administrateur", "Chargé de Projet", "Lecteur");
         roleComboBox.setPromptText("Sélectionner le Statut");
+        roleComboBox.getStyleClass().add("dialog-combobox");
         roleComboBox.setPrefWidth(400);
-        roleComboBox.setStyle("-fx-padding: 10px; -fx-font-size: 14px;");
 
+        Label projectLabel = new Label("Accès au projet");
+        projectLabel.getStyleClass().add("dialog-label");
+        
         ComboBox<String> projectComboBox = new ComboBox<>();
         projectComboBox.getItems().addAll("Tous les projets", "Projet A", "Projet B", "Projet C");
         projectComboBox.setPromptText("Sélectionner le Projet");
+        projectComboBox.getStyleClass().add("dialog-combobox");
         projectComboBox.setPrefWidth(400);
-        projectComboBox.setStyle("-fx-padding: 10px; -fx-font-size: 14px;");
 
-        VBox form = new VBox(16);
-        form.setPadding(new Insets(20));
+        VBox form = new VBox(12);
+        form.setPadding(new Insets(24));
+        form.getStyleClass().add("invite-user-form");
         form.getChildren().addAll(
-            new Label("Email:"),
-            emailField,
-            new Label("Rôle:"),
-            roleComboBox,
-            new Label("Accès au projet:"),
-            projectComboBox
+            emailLabel, emailField,
+            roleLabel, roleComboBox,
+            projectLabel, projectComboBox
         );
 
         dialog.getDialogPane().setContent(form);
         dialog.getDialogPane().setPrefWidth(450);
 
-        // Enable/Disable send button based on validation
+        // Style buttons dynamically
         Button sendButton = (Button) dialog.getDialogPane().lookupButton(sendButtonType);
+        sendButton.getStyleClass().add("btn-send");
         sendButton.setDisable(true);
 
+        Button cancelButton = (Button) dialog.getDialogPane().lookupButton(cancelButtonType);
+        cancelButton.getStyleClass().add("btn-cancel");
+
+        // Dynamic validation
         emailField.textProperty().addListener((obs, oldVal, newVal) -> {
             updateInviteButtonState(sendButton, emailField, roleComboBox);
         });
@@ -358,7 +350,6 @@ public class SettingsController implements Initializable {
                 String project = projectComboBox.getValue();
                 
                 if (isValidEmail(email) && role != null) {
-                    // TODO: Implement actual invitation logic
                     System.out.println("Invitation sent to: " + email + " with role: " + role + " and project: " + project);
                     showAlert("Succès", "Invitation envoyée à " + email + ".", Alert.AlertType.INFORMATION);
                 }
@@ -379,45 +370,65 @@ public class SettingsController implements Initializable {
 
     /**
      * Handles the create audit model button action.
-     * Opens a dialog to create a new audit template.
+     * Opens a dialog matching the Invite User design style.
      */
     @FXML
     private void handleCreateModel() {
         Dialog<VBox> dialog = new Dialog<>();
         dialog.setTitle("Créer un Modèle d'Audit");
-        dialog.setHeaderText("Entrez les informations du nouveau modèle");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getStyleClass().add("invite-user-dialog");
 
         // Set button types
         ButtonType createButtonType = new ButtonType("Créer", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(createButtonType, ButtonType.CANCEL);
 
-        // Create input fields
+        // Create input fields matching Invite User dialog style
+        Label nameLabel = new Label("Nom");
+        nameLabel.getStyleClass().add("dialog-label");
+        
         TextField nameField = new TextField();
         nameField.setPromptText("Nom du modèle");
-        nameField.setStyle("-fx-padding: 10px; -fx-font-size: 14px;");
+        nameField.getStyleClass().add("dialog-textfield");
+        nameField.setPrefWidth(400);
+        
+        Label orgLabel = new Label("Organisation");
+        orgLabel.getStyleClass().add("dialog-label");
         
         TextField orgField = new TextField();
         orgField.setPromptText("Organisation");
-        orgField.setStyle("-fx-padding: 10px; -fx-font-size: 14px;");
+        orgField.getStyleClass().add("dialog-textfield");
+        orgField.setPrefWidth(400);
+        
+        Label descLabel = new Label("Description");
+        descLabel.getStyleClass().add("dialog-label");
         
         TextArea descField = new TextArea();
         descField.setPromptText("Description");
         descField.setPrefRowCount(3);
-        descField.setStyle("-fx-padding: 10px; -fx-font-size: 14px;");
+        descField.getStyleClass().add("dialog-textarea");
+        descField.setPrefWidth(400);
 
-        VBox form = new VBox(10);
-        form.setPadding(new Insets(20));
+        VBox form = new VBox(12);
+        form.setPadding(new Insets(24));
+        form.getStyleClass().add("invite-user-form");
         form.getChildren().addAll(
-            new Label("Nom:"), nameField,
-            new Label("Organisation:"), orgField,
-            new Label("Description:"), descField
+            nameLabel, nameField,
+            orgLabel, orgField,
+            descLabel, descField
         );
         dialog.getDialogPane().setContent(form);
+        dialog.getDialogPane().setPrefWidth(450);
 
-        // Enable/Disable create button based on validation
+        // Style buttons to match Invite User dialog
         Button createButton = (Button) dialog.getDialogPane().lookupButton(createButtonType);
+        createButton.getStyleClass().add("btn-send");
         createButton.setDisable(true);
 
+        Button cancelButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.CANCEL);
+        cancelButton.getStyleClass().add("btn-cancel");
+
+        // Dynamic validation
         nameField.textProperty().addListener((observable, oldValue, newValue) -> {
             createButton.setDisable(newValue == null || newValue.trim().isEmpty());
         });
@@ -436,7 +447,7 @@ public class SettingsController implements Initializable {
                     boolean success = AuditTemplateService.createTemplate(name, desc, org);
                     if (success) {
                         showAlert("Succès", "Modèle d'audit '" + name + "' créé avec succès.", Alert.AlertType.INFORMATION);
-                        setupTemplates(); // Refresh templates list
+                        setupTemplates(); // Refresh templates list dynamically
                     } else {
                         showAlert("Erreur", "Impossible de créer le modèle.", Alert.AlertType.ERROR);
                     }
@@ -449,41 +460,28 @@ public class SettingsController implements Initializable {
     }
 
     /**
-     * Saves system settings to database.
-     * Called when any toggle button is changed.
+     * Saves notification settings (in-memory only, no database).
+     * Called when any toggle button is changed (dynamic behavior).
      */
     @FXML
     private void saveSettings() {
-        boolean localStorage = localStoreToggle.isSelected();
-        boolean cloudBackup = cloudBackupToggle.isSelected();
+        if (emailAlertToggle == null || auditReminderToggle == null) {
+            return;
+        }
+        
         boolean emailAlerts = emailAlertToggle.isSelected();
         boolean auditReminders = auditReminderToggle.isSelected();
 
-        // Validate settings
-        if (!localStorage && !cloudBackup) {
-            showAlert("Avertissement", 
-                "Au moins une option de stockage doit être activée. " +
-                "Le stockage local sera activé automatiquement.", 
-                Alert.AlertType.WARNING);
-            localStoreToggle.setSelected(true);
-            localStorage = true;
-        }
-
-        // Save to database
-        boolean success = SettingsService.saveBasicSettings(localStorage, cloudBackup, emailAlerts, auditReminders);
+        // Save settings (in-memory only)
+        boolean success = SettingsService.saveNotificationSettings(emailAlerts, auditReminders);
         
         if (success) {
             // Update local settings object
             if (systemSettings != null) {
-                systemSettings.setLocalStorage(localStorage);
-                systemSettings.setCloudBackup(cloudBackup);
                 systemSettings.setEmailAlerts(emailAlerts);
                 systemSettings.setAuditReminders(auditReminders);
             }
-            System.out.println("Settings saved: Local=" + localStorage + ", Cloud=" + cloudBackup + 
-                             ", Email=" + emailAlerts + ", Reminders=" + auditReminders);
-        } else {
-            showAlert("Erreur", "Impossible de sauvegarder les paramètres. Veuillez réessayer.", Alert.AlertType.ERROR);
+            System.out.println("Notification settings updated: Email=" + emailAlerts + ", Reminders=" + auditReminders);
         }
     }
 

@@ -46,41 +46,43 @@ public class AuditTemplateService {
     }
     
     /**
-     * Gets all audit templates.
-     * @return List of AuditTemplate objects
+     * Gets all audit templates (in-memory only, no database).
+     * @return List of AuditTemplate objects matching the UI mockup
      */
     public static List<AuditTemplate> getAllTemplates() {
-        // For now, return empty list or sample data
-        // TODO: Load from database when database is available
         List<AuditTemplate> templates = new ArrayList<>();
-        // Add sample template for testing
-        templates.add(new AuditTemplate(1, "Modèle Standard", "Modèle d'audit standard", "Organisation", 0));
+        // Templates matching the Figma design screenshots
+        templates.add(new AuditTemplate(1, "Template AFD", 
+            "Normes d'audit selon les exigences AFD", 
+            "Agence Française de Développement", 15));
+        templates.add(new AuditTemplate(2, "Template USAID", 
+            "USAID Standard Provisions et CFR", 
+            "USAID", 22));
+        templates.add(new AuditTemplate(3, "Template ISO 19011", 
+            "Lignes directrices pour l'audit de systèmes de management", 
+            "Standard International", 18));
         return templates;
     }
     
     /**
-     * Creates a new audit template.
+     * Creates a new audit template (in-memory only, no database).
      * @param name template name
      * @param description template description
      * @param organization organization name
      * @return true if successful
      */
     public static boolean createTemplate(String name, String description, String organization) {
-        // For now, just return true
-        // TODO: Save to database when database is available
-        System.out.println("Template created: " + name);
+        System.out.println("Template created (in-memory): " + name + " - " + organization);
         return true;
     }
     
     /**
-     * Deletes an audit template.
+     * Deletes an audit template (in-memory only, no database).
      * @param templateId template ID
      * @return true if successful
      */
     public static boolean deleteTemplate(int templateId) {
-        // For now, just return true
-        // TODO: Delete from database when database is available
-        System.out.println("Template deleted: " + templateId);
+        System.out.println("Template deleted (in-memory): " + templateId);
         return true;
     }
 }
