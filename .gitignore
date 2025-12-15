@@ -1,3 +1,12 @@
+<<<<<<< HEAD
+# Maven / Java
+target/
+*.class
+
+# IntelliJ
+.idea/
+*.iml
+=======
 # Maven
 target/
 
@@ -7,3 +16,4 @@ target/
 
 # OS
 .DS_Store
+>>>>>>> origin/main

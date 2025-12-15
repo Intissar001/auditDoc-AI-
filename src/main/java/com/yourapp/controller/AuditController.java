@@ -1,14 +1,12 @@
 package com.yourapp.controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.ComboBox;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.TransferMode;
-import javafx.scene.input.Dragboard;
-import java.io.File;
-import java.util.List;
+import javafx.stage.Stage;
 
 /**
  * Controller for the AuditView.fxml
@@ -16,13 +14,17 @@ import java.util.List;
 public class AuditController {
 
     @FXML
+    private VBox dropzone;
+
+    @FXML
     private ComboBox<String> projetDropdown;
 
     @FXML
     private ComboBox<String> partenaireDropdown;
 
+    // ⭐ ADDED: Reference to Historique menu item
     @FXML
-    private VBox dropzone;
+    private HBox historiqueMenuItem;
 
     @FXML
     public void initialize() {
@@ -30,75 +32,56 @@ public class AuditController {
         projetDropdown.getItems().addAll("Projet A", "Projet B", "Projet C");
         partenaireDropdown.getItems().addAll("Partenaire X", "Partenaire Y", "Partenaire Z");
 
-        // Setup drag and drop handlers
-        setupDragAndDrop();
+        // ⭐ ADDED: Setup click handler for Historique menu
+        if (historiqueMenuItem != null) {
+            historiqueMenuItem.setOnMouseClicked(event -> openHistoryPage());
+        } else {
+            System.err.println("WARNING: historiqueMenuItem is NULL! Check fx:id in Audit.fxml");
+        }
     }
 
-    /**
-     * Setup drag and drop functionality for the dropzone
-     */
-    private void setupDragAndDrop() {
-        dropzone.setOnDragOver(event -> {
-            if (event.getGestureSource() != dropzone && event.getDragboard().hasFiles()) {
-                event.acceptTransferModes(TransferMode.COPY);
-            }
-            event.consume();
-        });
-
-        dropzone.setOnDragDropped(event -> {
-            Dragboard db = event.getDragboard();
-            boolean success = false;
-            if (db.hasFiles()) {
-                success = true;
-                List<File> files = db.getFiles();
-                handleFileUpload(files);
-            }
-            event.setDropCompleted(success);
-            event.consume();
-        });
+    @FXML
+    private void handleNewAudit() {
+        System.out.println("Lancer un Nouvel Audit button clicked.");
     }
 
-    /**
-     * Handle file browsing button click
-     */
     @FXML
     private void handleBrowseFiles() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Sélectionner des fichiers");
-
-        // Set file filters
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Tous les fichiers supportés", "*.pdf", "*.xlsx", "*.xls", "*.doc", "*.docx"),
-                new FileChooser.ExtensionFilter("PDF", "*.pdf"),
-                new FileChooser.ExtensionFilter("Excel", "*.xlsx", "*.xls"),
-                new FileChooser.ExtensionFilter("Word", "*.doc", "*.docx")
-        );
-
-        // Show open file dialog
-        List<File> selectedFiles = fileChooser.showOpenMultipleDialog(dropzone.getScene().getWindow());
-
-        if (selectedFiles != null && !selectedFiles.isEmpty()) {
-            handleFileUpload(selectedFiles);
-        }
+        System.out.println("Parcourir les fichiers button clicked.");
     }
 
-    /**
-     * Handle file upload logic
-     */
-    private void handleFileUpload(List<File> files) {
-        System.out.println("Fichiers sélectionnés:");
-        for (File file : files) {
-            System.out.println("  - " + file.getName() + " (" + file.length() / 1024 + " KB)");
+    // ⭐ ADDED: Navigation method to History page
+    @FXML
+    private void openHistoryPage() {
+        try {
+            System.out.println("=== STARTING NAVIGATION ===");
+            System.out.println("Button clicked!");
 
-            // Verify file size (Max 10MB)
-            if (file.length() > 10 * 1024 * 1024) {
-                System.out.println("    ERREUR: Fichier trop volumineux (> 10MB)");
+            // Check if FXML file exists
+            java.net.URL fxmlUrl = getClass().getResource("/views/fxml/history.fxml");
+            System.out.println("FXML URL: " + fxmlUrl);
+
+            if (fxmlUrl == null) {
+                System.err.println("ERROR: history.fxml NOT FOUND!");
+                System.err.println("Make sure history.fxml is in: src/main/resources/views/fxml/");
+                return;
             }
-        }
 
-        // TODO: Implement actual file processing logic here
-        // - Upload files to server
-        // - Display uploaded files in UI
-        // - Start audit process
+            System.out.println("Loading FXML...");
+            FXMLLoader loader = new FXMLLoader(fxmlUrl);
+            Parent root = loader.load();
+            System.out.println("FXML loaded successfully!");
+
+            // Change scene
+            Stage stage = (Stage) historiqueMenuItem.getScene().getWindow();
+            stage.getScene().setRoot(root);
+
+            System.out.println("=== NAVIGATION COMPLETED ===");
+
+        } catch (Exception e) {
+            System.err.println("=== NAVIGATION ERROR ===");
+            System.err.println("Error: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
