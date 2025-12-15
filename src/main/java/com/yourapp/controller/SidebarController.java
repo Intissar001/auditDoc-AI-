@@ -31,6 +31,9 @@ public class SidebarController {
     public void initialize() {
         toggleSidebarBtn.setOnAction(e -> toggle());
         if (footer != null) footer.setAlignment(Pos.CENTER_LEFT);
+
+        // Set dashboard as active by default
+        setActiveMenuItem(dashboardBtn);
     }
 
     public void setMainController(MainLayoutController controller) {
@@ -57,7 +60,7 @@ public class SidebarController {
     private void handleProjets(MouseEvent event) {
         setActiveMenuItem(projetsBtn);
         if (mainController != null) {
-            mainController.loadView("Projects.fxml");
+            mainController.loadView("ProjetsView.fxml");
         }
     }
 
@@ -88,6 +91,29 @@ public class SidebarController {
         // Add active class to selected item
         if (!selectedItem.getStyleClass().contains("active")) {
             selectedItem.getStyleClass().add("active");
+        }
+    }
+
+    public void setActiveMenuItemByName(String menuName) {
+        switch (menuName.toLowerCase()) {
+            case "dashboard":
+                setActiveMenuItem(dashboardBtn);
+                break;
+            case "audit":
+                setActiveMenuItem(auditBtn);
+                break;
+            case "projects":
+            case "projets":
+                setActiveMenuItem(projetsBtn);
+                break;
+            case "history":
+            case "historique":
+                setActiveMenuItem(historiqueBtn);
+                break;
+            case "settings":
+            case "paramètres":
+                setActiveMenuItem(settingsBtn);
+                break;
         }
     }
 
