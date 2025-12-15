@@ -8,7 +8,7 @@
             fx:controller="com.yourapp.controller.MainLayoutController">
 
     <top>
-        <fx:include source="Topbar.fxml" />
+        <fx:include fx:id="topbar" source="Topbar.fxml" />
     </top>
 
     <!-- Left: Sidebar -->

@@ -35,6 +35,7 @@ public class TopbarController {
 
     private final NotificationService notificationService = new NotificationService();
     private final UserService userService = new UserService();
+  //khadija's work
 
     // ================== INITIALIZE ==================
     @FXML
@@ -83,8 +84,9 @@ public class TopbarController {
     private void initActions() {
         if (btnNotifications != null) {
             btnNotifications.setOnAction(e -> showNotificationPopup());
+         
         }
-
+//khadija's work
         if (btnNewAudit != null) {
             btnNewAudit.setOnAction(e -> loadInCenter("/views/fxml/Audit.fxml"));
         }
@@ -101,6 +103,34 @@ public class TopbarController {
         userName.setOnMouseClicked(e -> showUserMenu());
         userRole.setOnMouseClicked(e -> showUserMenu());
         avatarCircle.setOnMouseClicked(e -> showUserMenu());
+
+        // Logo et nom de l'app - clickable pour retourner au dashboard
+        topLogo.setOnMouseClicked(e -> loadDashboard());
+        topAppName.setOnMouseClicked(e -> loadDashboard());
+        topLogo.setStyle("-fx-cursor: hand;");
+        topAppName.setStyle("-fx-cursor: hand;");
+    }
+
+    public void setMainController(MainLayoutController mainController) {
+        this.mainController = mainController;
+    }
+
+    private void loadAuditPage() {
+        if (mainController != null) {
+            mainController.loadView("Audit.fxml");
+            mainController.updateSidebarActive("audit");
+        } else {
+            System.err.println("MainController is not set in TopbarController");
+        }
+    }
+
+    private void loadDashboard() {
+        if (mainController != null) {
+            mainController.loadView("Dashboard.fxml");
+            mainController.updateSidebarActive("dashboard");
+        } else {
+            System.err.println("MainController is not set in TopbarController");
+        }
     }
 
     // ================== NOTIFICATIONS ==================

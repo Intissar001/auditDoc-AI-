@@ -11,6 +11,8 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.yourapp.controller.AuditController">
 
+<ScrollPane stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yourapp.controller.AuditController"
+            fitToWidth="true" styleClass="page-scroll-pane" >
     <content>
         <VBox spacing="25.0" styleClass="page-content">
             <padding>
