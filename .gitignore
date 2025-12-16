@@ -1,0 +1,19 @@
+<<<<<<< HEAD
+# Maven / Java
+target/
+*.class
+
+# IntelliJ
+.idea/
+*.iml
+=======
+# Maven
+target/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# OS
+.DS_Store
+>>>>>>> origin/main
