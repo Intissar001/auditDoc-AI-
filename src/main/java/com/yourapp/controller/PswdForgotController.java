@@ -1,47 +1,31 @@
 package com.yourapp.controller;
 
 import javafx.fxml.FXML;
-<<<<<<< Updated upstream
-import javafx.scene.control.TextField;
-=======
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
->>>>>>> Stashed changes
 
-public class LoginController {
+public class PswdForgotController {
 
     @FXML
     private TextField emailField;
 
     @FXML
-<<<<<<< Updated upstream
-    private TextField passwordField;
+    private Button sendCodeButton;
 
     @FXML
-    public void onLoginClick() {
-        System.out.println("=== LOGIN PRESSED ===");
-        System.out.println("Email: " + emailField.getText());
-        System.out.println("Password: " + passwordField.getText());
-    }
-}
-=======
-    private PasswordField passwordField;
-
-    @FXML
-    private Button connexionButton;
+    private Hyperlink motDePasseProblemLink;
 
     @FXML
     private Hyperlink creerCompteLink;
 
     @FXML
-    private Hyperlink motDePasseOublieLink;
+    private Button retourConnexionButton;  // Renommé pour plus de clarté
 
     @FXML
     public void initialize() {
@@ -49,18 +33,18 @@ public class LoginController {
     }
 
     private void setupEventHandlers() {
-        connexionButton.setOnAction(event -> handleConnexion());
+        sendCodeButton.setOnAction(event -> handleSendCode());
+        motDePasseProblemLink.setOnAction(event -> handleMotDePasseProblem());
         creerCompteLink.setOnAction(event -> handleCreerCompte());
-        motDePasseOublieLink.setOnAction(event -> handleMotDePasseOublie());
+        retourConnexionButton.setOnAction(event -> handleRetourConnexion());
     }
 
     @FXML
-    private void handleConnexion() {
+    private void handleSendCode() {
         String email = emailField.getText();
-        String password = passwordField.getText();
 
-        if (email.isEmpty() || password.isEmpty()) {
-            showAlert("Erreur", "Tous les champs sont obligatoires!");
+        if (email.isEmpty()) {
+            showAlert("Erreur", "Veuillez entrer votre adresse email!");
             return;
         }
 
@@ -69,28 +53,30 @@ public class LoginController {
             return;
         }
 
-        System.out.println("Connexion...");
-        System.out.println("Email: " + email);
+        System.out.println("Envoi du code de récupération à : " + email);
+        showAlert("Succès", "Un code de connexion a été envoyé à votre adresse email.");
+    }
 
-        showAlert("Succès", "Connexion réussie!");
+    @FXML
+    private void handleMotDePasseProblem() {
+        System.out.println("Aide supplémentaire pour la récupération de mot de passe...");
+        showAlert("Aide", "Pour plus d'assistance, veuillez contacter le support.");
     }
 
     @FXML
     private void handleCreerCompte() {
         try {
             // Charger la page de création de compte
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/views/fxml/signup.fxml"));
-
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/fxml/signup.fxml"));
             Parent root = loader.load();
 
             // Obtenir la scène actuelle
             Stage stage = (Stage) creerCompteLink.getScene().getWindow();
 
-            // Créer et définir la nouvelle scène
+            // Créer une nouvelle scène avec la page d'inscription
             Scene scene = new Scene(root);
             stage.setScene(scene);
-            stage.setTitle("Audit Doc AI - Créer un compte");
+            stage.setTitle("Audit Doc AI - Créer un Compte");
             stage.show();
 
             System.out.println("Redirection vers la page de création de compte...");
@@ -101,25 +87,25 @@ public class LoginController {
     }
 
     @FXML
-    private void handleMotDePasseOublie() {
+    private void handleRetourConnexion() {
         try {
-            // Charger la page PswdForgot
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/fxml/pswdforgot.fxml"));
+            // Charger la page de connexion
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/fxml/login.fxml"));
             Parent root = loader.load();
 
             // Obtenir la scène actuelle
-            Stage stage = (Stage) motDePasseOublieLink.getScene().getWindow();
+            Stage stage = (Stage) retourConnexionButton.getScene().getWindow();
 
-            // Créer une nouvelle scène avec la page PswdForgot
+            // Créer une nouvelle scène avec la page de connexion
             Scene scene = new Scene(root);
             stage.setScene(scene);
-            stage.setTitle("Audit Doc AI - Mot de passe oublié");
+            stage.setTitle("Audit Doc AI - Connexion");
             stage.show();
 
-            System.out.println("Redirection vers la page de récupération de mot de passe...");
+            System.out.println("Retour à la page de connexion...");
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Erreur", "Impossible de charger la page de récupération de mot de passe.");
+            showAlert("Erreur", "Impossible de charger la page de connexion.");
         }
     }
 
@@ -135,10 +121,4 @@ public class LoginController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
-    public void clearFields() {
-        emailField.clear();
-        passwordField.clear();
-    }
 }
->>>>>>> Stashed changes
