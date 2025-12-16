@@ -52,7 +52,7 @@ public class SidebarController {
     private void handleAudit(MouseEvent event) {
         setActiveMenuItem(auditBtn);
         if (mainController != null) {
-            mainController.loadView("AuditContent.fxml");
+            mainController.loadView("Audit.fxml");
         }
     }
 
