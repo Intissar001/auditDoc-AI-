@@ -7,7 +7,7 @@
 <ScrollPane fx:controller="com.yourapp.controller.AuditController"
             fitToWidth="true"
             styleClass="page-scroll-pane"
-            stylesheets="@../css/styles.css"
+            stylesheets="@../css/audit.css"
             xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1">
 
@@ -62,6 +62,8 @@
             <VBox spacing="20.0" styleClass="card">
                 <children>
                     <Label text="Importer les Documents" styleClass="card-title"/>
+
+                    <!-- DROPZONE -->
                     <VBox fx:id="dropzone"
                           alignment="CENTER"
                           prefHeight="350.0"
@@ -90,8 +92,57 @@
                             </Label>
                         </children>
                     </VBox>
+
+                    <!-- SELECTED FILES LIST - Maintenant en BAS -->
+                    <VBox fx:id="filesContainer"
+                          spacing="15"
+                          visible="false"
+                          managed="false">
+                        <VBox.margin>
+                            <Insets top="10.0"/>
+                        </VBox.margin>
+
+                        <Label fx:id="filesCountLabel"
+                               text="Fichiers Importés (0)"
+                               style="-fx-font-size: 16px; -fx-font-weight: 600;"/>
+
+                        <VBox fx:id="filesList" spacing="10"/>
+
+                        <Button text="▶ Démarrer l'Audit Intelligent"
+                                styleClass="btn-primary"
+                                prefHeight="50"
+                                maxWidth="Infinity"
+                                onAction="#handleStartAudit"/>
+                    </VBox>
                 </children>
             </VBox>
+            <VBox fx:id="auditProgressBox"
+                  spacing="10"
+                  visible="false"
+                  managed="false">
+
+                <Label fx:id="auditStatusLabel"
+                       text="Initialisation de l'audit..."
+                       styleClass="dropzone-text-primary"/>
+
+                <ProgressBar fx:id="auditProgressBar"
+                             prefHeight="18"
+                             progress="0"/>
+
+            </VBox>
+            <VBox fx:id="auditResultBox"
+                  spacing="15"
+                  visible="false"
+                  managed="false">
+
+                <Label text="Résultats de l'Audit"
+                       styleClass="card-title"/>
+
+                <VBox fx:id="issuesList" spacing="10"/>
+
+            </VBox>
+
+
 
             <!-- Extra Space at Bottom -->
             <VBox prefHeight="50.0"/>

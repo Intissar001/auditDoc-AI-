@@ -1,9 +1,19 @@
-/* --- Audit Page Content Styles (page-content) --- */
+/* ===== PAGE CONTENT STYLES ===== */
+.page-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-hbar-policy: never;
+    -fx-padding: 0;
+}
+
+.page-scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
 
 .page-content {
     -fx-background-color: transparent;
 }
 
+/* Page Titles */
 .page-title {
     -fx-font-size: 28px;
     -fx-font-weight: bold;
@@ -24,8 +34,6 @@
     -fx-border-width: 1px;
     -fx-border-radius: 16px;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 5);
-    -fx-pref-width: 100%;
-    -fx-max-width: infinity;
 }
 
 .card-title {
@@ -52,8 +60,16 @@
     -fx-pref-width: 100%;
 }
 
-/* --- Dropzone Styles --- */
+.modern-dropdown .arrow-button {
+    -fx-background-color: transparent;
+}
 
+.modern-dropdown .list-cell {
+    -fx-padding: 10px;
+    -fx-text-fill: #344054;
+}
+
+/* Dropzone */
 .dropzone {
     -fx-background-color: #ffffff;
     -fx-background-radius: 16px;
@@ -85,7 +101,21 @@
     -fx-text-fill: #999;
 }
 
-/* Secondary Button (Parcourir les fichiers) */
+/* ===== BUTTON STYLES ===== */
+.btn-primary {
+    -fx-background-color: #007bff;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 12px;
+    -fx-cursor: hand;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #0056b3;
+}
+
 .btn-secondary {
     -fx-background-color: #ffffff;
     -fx-border-color: #d0d7e3;
@@ -100,4 +130,34 @@
 
 .btn-secondary:hover {
     -fx-background-color: #f0f0f0;
+}
+
+/* ================================
+   STATUS BADGES (Conforme/Non-Conforme)
+   ================================ */
+.badge-conforme {
+    -fx-background-color: #d1fae5;
+    -fx-text-fill: #065f46;
+    -fx-background-radius: 5;
+    -fx-padding: 5 12 5 12;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+}
+
+.badge-non-conforme {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #991b1b;
+    -fx-background-radius: 5;
+    -fx-padding: 5 12 5 12;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+}
+
+.badge-draft {
+    -fx-background-color: #e5e7eb;
+    -fx-text-fill: #344054;
+    -fx-background-radius: 5;
+    -fx-padding: 5 12 5 12;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
 }

@@ -1,0 +1,189 @@
+/* ========================================================= */
+/* GLOBAL STYLES & FOND DE PAGE */
+/* ========================================================= */
+
+.root {
+    -fx-font-family: 'Segoe UI', sans-serif;
+}
+
+.title-text {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #344054;
+}
+
+.subtitle-text {
+    -fx-font-size: 16px;
+    -fx-text-fill: #667085;
+}
+
+/* Carte Projet */
+.project-card {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-padding: 16 18 16 18;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 20, 0, 0, 4);
+    -fx-border-color: transparent;
+    -fx-border-radius: 10;
+}
+
+.card-title {
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a202c;
+}
+
+.card-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: #718096;
+}
+
+.card-desc {
+    -fx-font-size: 13px;
+    -fx-text-fill: #4a5568;
+    -fx-wrap-text: true;
+    -fx-line-spacing: 2;
+}
+
+/* Badge Statut */
+.status-badge {
+    -fx-background-color: #000000;
+    -fx-text-fill: white;
+    -fx-padding: 4 10;
+    -fx-background-radius: 20;
+    -fx-font-size: 11px;
+}
+
+/* Boutons */
+.btn-primary {
+    -fx-background-color: #111827;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 8 16;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #2a2a2a;
+}
+
+.btn-primary:pressed {
+    -fx-background-color: #161616;
+}
+
+
+.btn-outline {
+    -fx-background-color: #f9fafb;
+    -fx-border-color: #e5e7eb;
+    -fx-text-fill: #111827;
+    -fx-padding: 10 16;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.btn-outline:hover {
+    -fx-background-color: #f1f5f9; /* gris très clair */
+    -fx-text-fill: #111827; /* plus foncé */
+}
+
+.btn-outline:pressed {
+    -fx-background-color: #e5e7eb;
+}
+
+.icon-button {
+    -fx-background-color: #f9fafb;
+    -fx-text-fill: #6b7280;
+    -fx-font-size: 20px;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+
+.icon-button:hover {
+    -fx-background-color: #f1f5f9; /* gris très clair */
+    -fx-text-fill: #111827; /* plus foncé */
+}
+
+.icon-button:pressed {
+    -fx-background-color: #e5e7eb;
+}
+
+/* --- LE FORMULAIRE --- */
+
+/* Le conteneur principal du formulaire */
+.form-container {
+    -fx-background-color: white;
+    -fx-padding: 30;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 4);
+}
+
+/* Le titre du formulaire ("Créer un Projet") */
+.form-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+    -fx-padding: 0 0 20 0; /* Espace sous le titre */
+}
+
+/* Les libellés des champs ("Nom du Projet", "Description"...) */
+.form-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #374151; /* Gris foncé */
+    -fx-padding: 10 0 5 0; /* Espace au-dessus et en dessous */
+}
+
+/* --- Styles des Champs (Input, TextArea, DatePicker, ComboBox) --- */
+
+.text-field, .text-area, .date-picker, .combo-box {
+    -fx-background-color: white;
+    -fx-border-color: #D1D5DB; /* Bordure grise claire */
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 8;
+    -fx-font-size: 13px;
+}
+
+.text-field:focused, .text-area:focused, .date-picker:focused, .combo-box:focused {
+    -fx-border-color: #111827; /* Bordure noire au clic */
+    -fx-effect: none; /* Enlève l'effet bleu par défaut de JavaFX */
+}
+
+/* Spécifique pour la ComboBox pour qu'elle remplisse la largeur si besoin */
+.combo-box .list-cell {
+    -fx-text-fill: #374151;
+}
+
+/* --- Boutons du Formulaire --- */
+
+/* Bouton "Enregistrer" (Noir) */
+.btn-save {
+    -fx-background-color: #111827;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-padding: 10 24;
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+}
+.btn-save:hover {
+    -fx-background-color: #000000;
+}
+
+/* Bouton "Annuler" (Blanc avec bordure) */
+.btn-cancel {
+    -fx-background-color: white;
+    -fx-border-color: #D1D5DB;
+    -fx-border-radius: 6;
+    -fx-text-fill: #374151;
+    -fx-font-weight: bold;
+    -fx-padding: 10 24;
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+}
+.btn-cancel:hover {
+    -fx-background-color: #F3F4F6;
+    -fx-border-color: #9CA3AF;
+}
