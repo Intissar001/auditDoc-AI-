@@ -17,6 +17,9 @@ public class MainLayoutController {
     private SidebarController sidebarController;
 
     @FXML
+    private TopbarController topbarController;
+
+    @FXML
     public void initialize() {
         System.out.println("MainController initialized - contentArea: " + (contentArea != null));
 
@@ -25,8 +28,18 @@ public class MainLayoutController {
             sidebarController.setMainController(this);
         }
 
+ fatima-branch
         // Load default view (Audit)
         loadView("AuditContent.fxml");
+
+        // Link topbar controller to main controller
+        if (topbarController != null) {
+            topbarController.setMainController(this);
+        }
+
+        // Load default view (Dashboard)
+        loadView("Dashboard.fxml");
+ main
     }
 
     public void loadView(String fxmlFile) {
@@ -75,6 +88,12 @@ public class MainLayoutController {
             System.err.println("Unexpected error loading view: " + fxmlFile);
             e.printStackTrace();
             showErrorView("Erreur inattendue: " + e.getMessage());
+        }
+    }
+
+    public void updateSidebarActive(String menuName) {
+        if (sidebarController != null) {
+            sidebarController.setActiveMenuItemByName(menuName);
         }
     }
 
