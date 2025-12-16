@@ -1,9 +1,6 @@
 package com.yourapp.controller;
 
 import javafx.fxml.FXML;
-<<<<<<< Updated upstream
-import javafx.scene.control.TextField;
-=======
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,7 +10,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
->>>>>>> Stashed changes
 
 public class LoginController {
 
@@ -21,17 +17,6 @@ public class LoginController {
     private TextField emailField;
 
     @FXML
-<<<<<<< Updated upstream
-    private TextField passwordField;
-
-    @FXML
-    public void onLoginClick() {
-        System.out.println("=== LOGIN PRESSED ===");
-        System.out.println("Email: " + emailField.getText());
-        System.out.println("Password: " + passwordField.getText());
-    }
-}
-=======
     private PasswordField passwordField;
 
     @FXML
@@ -141,4 +126,3 @@ public class LoginController {
         passwordField.clear();
     }
 }
->>>>>>> Stashed changes
