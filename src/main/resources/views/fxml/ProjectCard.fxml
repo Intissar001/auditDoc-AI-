@@ -13,7 +13,7 @@
 <AnchorPane prefWidth="340.0" styleClass="project-card" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yourapp.controller.ProjectCardController">
 
     <stylesheets>
-        <URL value="@../css/styles.css" />
+        <URL value="@../css/Project.css" />
     </stylesheets>
 
     <children>
