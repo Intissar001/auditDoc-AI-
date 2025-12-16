@@ -7,7 +7,7 @@
 <ScrollPane fx:controller="com.yourapp.controller.AuditController"
             fitToWidth="true"
             styleClass="page-scroll-pane"
-            stylesheets="@../css/styles.css"
+            stylesheets="@../css/audit.css"
             xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1">
 
