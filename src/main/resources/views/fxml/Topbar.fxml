@@ -23,10 +23,10 @@
     <Region HBox.hgrow="ALWAYS" />
 
     <!-- SEARCH BAR -->
-    <HBox alignment="CENTER" prefWidth="400.0" maxHeight="38" styleClass="search-bar">
+    <HBox alignment="CENTER" maxHeight="40.0" prefHeight="40.0" prefWidth="431.0" styleClass="search-bar">
         <children>
             <Label styleClass="search-icon" text="🔍" />
-            <TextField fx:id="searchField" prefWidth="360.0" promptText="Search audit, document, or dossier..." styleClass="search-field" HBox.hgrow="ALWAYS" />
+            <TextField fx:id="searchField" prefHeight="25.0" prefWidth="381.0" promptText="Search audit, document, or dossier..." styleClass="search-field" HBox.hgrow="ALWAYS" />
         </children>
     </HBox>
 
@@ -39,7 +39,7 @@
         <StackPane fx:id="notificationWrapper" alignment="CENTER">
             <Button fx:id="btnNotifications" prefHeight="38" prefWidth="38" styleClass="icon-btn" text="🔔" />
             <!-- BADGE - positioned at top right -->
-            <Circle fx:id="notificationBadge" fill="#ff4d4d" radius="4" StackPane.alignment="TOP_RIGHT" translateX="-6" translateY="6" visible="true" />
+            <Circle fx:id="notificationBadge" fill="#ff4d4d" radius="4" translateX="-6" translateY="6" visible="true" StackPane.alignment="TOP_RIGHT" />
         </StackPane>
 
         <Button fx:id="btnLanguage" prefHeight="38" prefWidth="38" styleClass="icon-btn" text="🌐" />
@@ -51,7 +51,7 @@
                 <Circle fx:id="avatarCircle" fill="#007bff" radius="12" />
                 <VBox alignment="CENTER_LEFT" spacing="1">
                     <children>
-                        <Label fx:id="userName" styleClass="user-name" text="Mohamed El Idrissi" />
+                        <Label fx:id="userName" styleClass="user-name" text="Intissar AIT HSSAIN" />
                         <Label fx:id="userRole" styleClass="user-role" text="Administrateur" />
                     </children>
                 </VBox>
