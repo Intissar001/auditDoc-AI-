@@ -1,63 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import java.net.URL?>
+<?import javafx.geometry.Insets?>
 
-<VBox spacing="15.0" styleClass="form-container" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yourapp.controller.ProjectFormController">
-
+<StackPane prefWidth="550.0" prefHeight="650.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yourapp.controller.ProjectFormController">
     <stylesheets>
         <URL value="@../css/Project.css" />
     </stylesheets>
 
     <children>
-        <Label styleClass="form-title" text="Créer un Projet" />
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="form-scroll-pane">
+            <content>
+                <VBox spacing="15.0" styleClass="form-container">
+                    <padding>
+                        <Insets top="30" right="40" bottom="30" left="40"/>
+                    </padding>
+                    <children>
+                        <Label styleClass="form-title" text="Créer un Projet" />
 
-        <VBox spacing="5.0">
-            <Label styleClass="form-label" text="Nom du Projet" />
-            <TextField fx:id="txtName" promptText="Entrez le nom" />
-        </VBox>
+                        <VBox spacing="5.0">
+                            <Label styleClass="form-label" text="Nom du Projet" />
+                            <TextField fx:id="txtName" promptText="Entrez le nom" />
+                        </VBox>
 
-        <VBox spacing="5.0">
-            <Label styleClass="form-label" text="Description" />
-            <TextArea fx:id="txtDescription" prefHeight="80.0" promptText="Description du projet" />
-        </VBox>
+                        <VBox spacing="5.0">
+                            <Label styleClass="form-label" text="Description" />
+                            <TextArea fx:id="txtDescription" prefHeight="100.0" promptText="Description du projet" wrapText="true" />
+                        </VBox>
 
-        <HBox spacing="10.0">
-            <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                <Label styleClass="form-label" text="Date de Début" />
-                <DatePicker fx:id="dpStart" maxWidth="Infinity" />
-            </VBox>
-            <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                <Label styleClass="form-label" text="Date de Fin" />
-                <DatePicker fx:id="dpEnd" maxWidth="Infinity" />
-            </VBox>
-        </HBox>
+                        <HBox spacing="15.0">
+                            <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                                <Label styleClass="form-label" text="Date de Début" />
+                                <DatePicker fx:id="dpStart" maxWidth="Infinity" promptText="mm/dd/yyyy" />
+                            </VBox>
+                            <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                                <Label styleClass="form-label" text="Date de Fin" />
+                                <DatePicker fx:id="dpEnd" maxWidth="Infinity" promptText="mm/dd/yyyy" />
+                            </VBox>
+                        </HBox>
 
-        <VBox spacing="5.0">
-            <Label styleClass="form-label" text="Partenaire Bailleur" />
-            <ComboBox fx:id="cbPartner" maxWidth="Infinity" promptText="Sélectionner un partenaire" />
-        </VBox>
+                        <VBox spacing="5.0">
+                            <Label styleClass="form-label" text="Partenaire Bailleur" />
+                            <ComboBox fx:id="cbPartner" maxWidth="Infinity" promptText="Sélectionner un partenaire" />
+                        </VBox>
 
-        <VBox spacing="5.0">
-            <Label styleClass="form-label" text="Normes d'Audit" />
-            <ComboBox fx:id="cbAuditStandards" maxWidth="Infinity" promptText="Sélectionner les normes" />
-        </VBox>
-        <VBox spacing="5.0">
-            <Label styleClass="form-label" text="Statut" />
-            <ComboBox fx:id="cbStatus" maxWidth="Infinity" />
-        </VBox>
+                        <VBox spacing="5.0">
+                            <Label styleClass="form-label" text="Normes d'Audit" />
+                            <ComboBox fx:id="cbAuditStandards" maxWidth="Infinity" promptText="Sélectionner les normes" />
+                        </VBox>
 
-        <HBox alignment="CENTER_RIGHT" spacing="10.0" style="-fx-padding: 10 0 0 0;">
-            <Button onAction="#handleCancel" styleClass="btn-cancel" text="Annuler" />
-            <Button onAction="#handleSave" styleClass="btn-save" text="Enregistrer" />
-        </HBox>
+                        <VBox spacing="5.0">
+                            <Label styleClass="form-label" text="Statut" />
+                            <ComboBox fx:id="cbStatus" maxWidth="Infinity" />
+                        </VBox>
+
+                        <HBox alignment="CENTER_RIGHT" spacing="15.0" style="-fx-padding: 20 0 0 0;">
+                            <Button onAction="#handleSave" styleClass="btn-save" text="Enregistrer" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+                            <Button onAction="#handleCancel" styleClass="btn-cancel" text="Annuler" />
+                        </HBox>
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
+
+        <Button text="✕" onAction="#handleCancel" StackPane.alignment="TOP_RIGHT" styleClass="btn-close">
+            <StackPane.margin>
+                <Insets top="15" right="15"/>
+            </StackPane.margin>
+        </Button>
     </children>
-</VBox>
+</StackPane>
