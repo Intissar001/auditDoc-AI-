@@ -1,0 +1,76 @@
+/* ========================================================= */
+/* GLOBAL STYLES & FOND DE PAGE */
+/* ========================================================= */
+
+.root {
+    -fx-font-family: 'Segoe UI', sans-serif;
+}
+
+.title-text {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a202c;
+}
+
+.subtitle-text {
+    -fx-font-size: 14px;
+    -fx-text-fill: #718096;
+}
+
+/* Carte Projet */
+.project-card {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 10;
+}
+
+.card-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.card-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: #718096;
+}
+
+.card-desc {
+    -fx-font-size: 13px;
+    -fx-text-fill: #4a5568;
+}
+
+/* Badge Statut */
+.status-badge {
+    -fx-background-color: #000000;
+    -fx-text-fill: white;
+    -fx-padding: 3 8 3 8;
+    -fx-background-radius: 15;
+    -fx-font-size: 11px;
+}
+
+/* Boutons */
+.btn-primary {
+    -fx-background-color: #1a202c;
+    -fx-text-fill: white;
+    -fx-padding: 8 16;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.btn-outline {
+    -fx-background-color: white;
+    -fx-border-color: #e2e8f0;
+    -fx-text-fill: #1a202c;
+    -fx-padding: 8 16;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.icon-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #4a5568;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
