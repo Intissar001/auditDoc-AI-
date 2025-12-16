@@ -21,9 +21,7 @@ import java.io.File;
 import java.util.List;
 
 
-/**
- * Controller for the AuditView.fxml
- */
+
 public class AuditController {
 
     @FXML
