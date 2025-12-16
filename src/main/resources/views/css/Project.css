@@ -187,3 +187,28 @@
     -fx-background-color: #F3F4F6;
     -fx-border-color: #9CA3AF;
 }
+
+/* Bouton de fermeture (X) */
+.btn-close {
+    -fx-background-color: transparent;
+    -fx-text-fill: #9CA3AF;
+    -fx-font-size: 18px;
+    -fx-cursor: hand;
+}
+.btn-close:hover {
+    -fx-text-fill: #111827;
+}
+
+/* ScrollPane invisible pour garder le design propre */
+.form-scroll-pane {
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+}
+.form-scroll-pane .viewport {
+    -fx-background-color: white;
+}
+
+/* Largeur du bouton enregistrer pour qu'il soit dominant comme sur l'image */
+.btn-save {
+    -fx-min-width: 200px;
+}
