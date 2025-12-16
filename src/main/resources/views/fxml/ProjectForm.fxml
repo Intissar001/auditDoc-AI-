@@ -47,6 +47,10 @@
         </VBox>
 
         <VBox spacing="5.0">
+            <Label styleClass="form-label" text="Normes d'Audit" />
+            <ComboBox fx:id="cbAuditStandards" maxWidth="Infinity" promptText="Sélectionner les normes" />
+        </VBox>
+        <VBox spacing="5.0">
             <Label styleClass="form-label" text="Statut" />
             <ComboBox fx:id="cbStatus" maxWidth="Infinity" />
         </VBox>
