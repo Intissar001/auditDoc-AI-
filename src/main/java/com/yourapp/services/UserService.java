@@ -5,6 +5,6 @@ import com.yourapp.model.User;
 public class UserService {
 
     public User getCurrentUser() {
-        return new User("Mohamed El Idrissi", "Administrateur");
+        return new User("Intissar AIT HSSAIN", "Administrateur");
     }
 }
