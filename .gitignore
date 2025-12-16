@@ -1,14 +1,6 @@
-<<<<<<< HEAD
 # Maven / Java
 target/
 *.class
-
-# IntelliJ
-.idea/
-*.iml
-=======
-# Maven
-target/
 
 # IntelliJ IDEA
 .idea/
@@ -16,4 +8,6 @@ target/
 
 # OS
 .DS_Store
->>>>>>> origin/main
+
+# Spring Boot configuration
+src/main/resources/application.yml
