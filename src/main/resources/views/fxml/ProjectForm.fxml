@@ -9,45 +9,51 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import java.net.URL?>
 
-<VBox spacing="15.0" style="-fx-background-color: white; -fx-padding: 20;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yourapp.controller.ProjectFormController">
+<VBox spacing="15.0" styleClass="form-container" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yourapp.controller.ProjectFormController">
+
+    <stylesheets>
+        <URL value="@../css/Project.css" />
+    </stylesheets>
+
     <children>
-        <Label styleClass="title-text" text="Détails du Projet" />
+        <Label styleClass="form-title" text="Créer un Projet" />
 
         <VBox spacing="5.0">
-            <Label text="Nom du Projet" />
+            <Label styleClass="form-label" text="Nom du Projet" />
             <TextField fx:id="txtName" promptText="Entrez le nom" />
         </VBox>
 
         <VBox spacing="5.0">
-            <Label text="Description" />
+            <Label styleClass="form-label" text="Description" />
             <TextArea fx:id="txtDescription" prefHeight="80.0" promptText="Description du projet" />
         </VBox>
 
         <HBox spacing="10.0">
             <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                <Label text="Date de Début" />
+                <Label styleClass="form-label" text="Date de Début" />
                 <DatePicker fx:id="dpStart" maxWidth="Infinity" />
             </VBox>
             <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                <Label text="Date de Fin" />
+                <Label styleClass="form-label" text="Date de Fin" />
                 <DatePicker fx:id="dpEnd" maxWidth="Infinity" />
             </VBox>
         </HBox>
 
         <VBox spacing="5.0">
-            <Label text="Partenaire Bailleur" />
+            <Label styleClass="form-label" text="Partenaire Bailleur" />
             <ComboBox fx:id="cbPartner" maxWidth="Infinity" promptText="Sélectionner un partenaire" />
         </VBox>
 
         <VBox spacing="5.0">
-            <Label text="Statut" />
+            <Label styleClass="form-label" text="Statut" />
             <ComboBox fx:id="cbStatus" maxWidth="Infinity" />
         </VBox>
 
         <HBox alignment="CENTER_RIGHT" spacing="10.0" style="-fx-padding: 10 0 0 0;">
-            <Button onAction="#handleCancel" styleClass="btn-outline" text="Annuler" />
-            <Button onAction="#handleSave" styleClass="btn-primary" text="Enregistrer" />
+            <Button onAction="#handleCancel" styleClass="btn-cancel" text="Annuler" />
+            <Button onAction="#handleSave" styleClass="btn-save" text="Enregistrer" />
         </HBox>
     </children>
 </VBox>
