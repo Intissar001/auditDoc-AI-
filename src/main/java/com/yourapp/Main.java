@@ -16,7 +16,9 @@ public class Main extends Application {
 
     @Override
     public void init() {
-        springContext = SpringApplication.run(AuditDocAiApplication.class);
+        SpringApplication app = new SpringApplication(AuditDocAiApplication.class);
+        app.setWebApplicationType(org.springframework.boot.WebApplicationType.NONE); // désactive Tomcat
+        springContext = app.run();
     }
 
     @Override

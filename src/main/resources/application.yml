@@ -3,6 +3,13 @@ spring:
     url: jdbc:postgresql://aws-1-eu-west-1.pooler.supabase.com:6543/postgres?pgbouncer=true
     username: postgres.ziyevqgoffoejasscxyg
     password: WcDmGFscwNTZL6pY
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
+      idle-timeout: 10000
+      max-lifetime: 30000
+      connection-test-query: SELECT 1
+      validation-timeout: 5000
   jpa:
     hibernate:
       ddl-auto: update
@@ -10,7 +17,6 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-
   sql:
     init:
       mode: never
