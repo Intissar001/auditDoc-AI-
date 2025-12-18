@@ -35,6 +35,8 @@ public class TopbarController {
     private final NotificationService notificationService = new NotificationService();
     private final UserService userService = new UserService();
 
+    private MainLayoutController mainController;
+
     @FXML
     public void initialize() {
         // Charger logo avec taille ajustée
@@ -63,7 +65,7 @@ public class TopbarController {
 
         // Actions
         btnNotifications.setOnAction(e -> showNotificationPopup());
-        btnNewAudit.setOnAction(e -> loadInCenter("/fxml/Audit.fxml"));
+        btnNewAudit.setOnAction(e -> loadAuditPage());
         btnLanguage.setOnAction(e -> showLanguageMenu());
         btnTheme.setOnAction(e -> toggleTheme());
 
@@ -71,6 +73,34 @@ public class TopbarController {
         userName.setOnMouseClicked(e -> showUserMenu());
         userRole.setOnMouseClicked(e -> showUserMenu());
         avatarCircle.setOnMouseClicked(e -> showUserMenu());
+
+        // Logo et nom de l'app - clickable pour retourner au dashboard
+        topLogo.setOnMouseClicked(e -> loadDashboard());
+        topAppName.setOnMouseClicked(e -> loadDashboard());
+        topLogo.setStyle("-fx-cursor: hand;");
+        topAppName.setStyle("-fx-cursor: hand;");
+    }
+
+    public void setMainController(MainLayoutController mainController) {
+        this.mainController = mainController;
+    }
+
+    private void loadAuditPage() {
+        if (mainController != null) {
+            mainController.loadView("Audit.fxml");
+            mainController.updateSidebarActive("audit");
+        } else {
+            System.err.println("MainController is not set in TopbarController");
+        }
+    }
+
+    private void loadDashboard() {
+        if (mainController != null) {
+            mainController.loadView("Dashboard.fxml");
+            mainController.updateSidebarActive("dashboard");
+        } else {
+            System.err.println("MainController is not set in TopbarController");
+        }
     }
 
     private void updateNotificationBadge() {
