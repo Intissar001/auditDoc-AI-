@@ -1,0 +1,16 @@
+# Maven / Java
+target/
+*.class
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# OS
+.DS_Store
+
+# Spring Boot configuration
+src/main/resources/application.yml
+target/
+.idea/
+*.iml

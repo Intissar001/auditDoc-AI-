@@ -3,200 +3,150 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.Circle?>
 
-<BorderPane stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yourapp.controller.AuditController" fx:id="rootPane">
-    <left>
-        <VBox spacing="5.0" styleClass="sidebar-menu" prefWidth="271.0">
-            <children>
-                <HBox alignment="CENTER_LEFT" prefHeight="80.0" spacing="10.0">
-                    <children>
-                        <Label prefHeight="47.0" prefWidth="195.0" styleClass="app-logo" text="       Audit Doc AI" />
-                    </children>
-                    <padding>
-                        <Insets left="20.0" right="20.0" />
-                    </padding>
-                </HBox>
+<ScrollPane fx:controller="com.yourapp.controller.AuditController"
+            fitToWidth="true"
+            styleClass="page-scroll-pane"
+            stylesheets="@../css/audit.css"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1">
 
-                <VBox spacing="5.0" VBox.vgrow="ALWAYS">
-                    <children>
-                        <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="menu-item">
-                            <children>
-                                <Label styleClass="menu-icon" text="☷" />
-                                <Label styleClass="menu-label" text="Tableau de Bord" />
-                            </children>
-                        </HBox>
+    <content>
+        <VBox spacing="25.0" styleClass="page-content">
+            <padding>
+                <Insets top="30.0" right="30.0" bottom="30.0" left="30.0"/>
+            </padding>
 
-                        <HBox fx:id="auditMenuItem" alignment="CENTER_LEFT" styleClass="menu-item-active" spacing="15.0" onMouseClicked="#handleAuditClick">
-                            <children>
-                                <Label styleClass="menu-icon" text="🔍" />
-                                <Label styleClass="menu-label" text="Audit" />
-                            </children>
-                            <VBox.margin>
-                                <Insets right="30.0" />
-                            </VBox.margin>
-                        </HBox>
+            <!-- PAGE HEADER -->
+            <VBox spacing="5.0">
+                <children>
+                    <Label text="Audit" styleClass="page-title"/>
+                    <Label text="Analysez automatiquement vos documents pour la conformité"
+                           styleClass="page-subtitle"/>
+                </children>
+            </VBox>
 
-                        <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="menu-item">
-                            <children>
-                                <Label styleClass="menu-icon" text="📂" />
-                                <Label styleClass="menu-label" text="Projets" />
-                            </children>
-                        </HBox>
-
-                        <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="menu-item">
-                            <children>
-                                <Label styleClass="menu-icon" text="⏱" />
-                                <Label styleClass="menu-label" text="Historique" />
-                            </children>
-                        </HBox>
-
-                        <HBox fx:id="settingsMenuItem" alignment="CENTER_LEFT" styleClass="menu-item" spacing="15.0" onMouseClicked="#handleSettingsClick">
-                            <children>
-                                <Label styleClass="menu-icon" text="⚙" />
-                                <Label styleClass="menu-label" text="Paramètres" />
-                            </children>
-                        </HBox>
-                    </children>
-                    <padding>
-                        <Insets left="20.0" right="20.0" top="10.0" />
-                    </padding>
-                </VBox>
-
-                <HBox alignment="CENTER_LEFT" prefHeight="50.0" styleClass="sidebar-footer">
-                    <children>
-                        <Label styleClass="sidebar-footer-icon" text="&lt;" />
-                        <Label styleClass="sidebar-footer-label" text="Réduire" />
-                    </children>
-                    <padding>
-                        <Insets left="20.0" />
-                    </padding>
-                </HBox>
-            </children>
-        </VBox>
-    </left>
-
-    <center>
-        <VBox styleClass="main-content" BorderPane.alignment="CENTER">
-            <children>
-
-                <HBox alignment="CENTER_LEFT" prefHeight="80.0" styleClass="topbar">
-                    <children>
-
-                        <HBox alignment="CENTER_LEFT" prefHeight="44.0" prefWidth="322.0" styleClass="search-bar">
-                            <children>
-                                <Label styleClass="search-icon" text="🔍" />
-                                <TextField prefHeight="22.0" prefWidth="162.0" promptText="Search audit, document, or dossier..." styleClass="search-field" HBox.hgrow="ALWAYS" />
-                            </children>
-                        </HBox>
-
-                        <HBox alignment="CENTER_RIGHT" spacing="20.0" HBox.hgrow="ALWAYS">
-                            <Button prefHeight="40.0" prefWidth="215.0" styleClass="btn-primary" text="+ Lancer un Nouvel Audit" />
-                            <Button prefHeight="41.0" prefWidth="34.0" styleClass="icon-btn" text="🔔" />
-                            <Circle fill="#f44336" radius="4.0" translateX="-30.0" translateY="-10.0" />
-                            <Button prefHeight="41.0" prefWidth="37.0" styleClass="icon-btn" text="🌐" />
-                            <Button prefHeight="41.0" prefWidth="38.0" styleClass="icon-btn" text="☀" />
-
-                            <HBox alignment="CENTER" prefHeight="48.0" prefWidth="172.0" spacing="10.0" styleClass="user-menu">
+            <!-- PROJECT SELECTION CARD -->
+            <VBox spacing="20.0" styleClass="card">
+                <children>
+                    <Label text="Audit Intelligent" styleClass="card-title"/>
+                    <HBox spacing="20.0">
+                        <children>
+                            <VBox spacing="5.0" HBox.hgrow="ALWAYS">
                                 <children>
-                                    <Circle fill="#007bff" radius="13.0" />
-                                    <VBox alignment="CENTER_LEFT">
-                                        <children>
-                                            <Label prefHeight="20.0" prefWidth="151.0" styleClass="user-name" text="Utilisateur Test" />
-                                            <Label styleClass="user-role" text="Administrateur" />
-                                        </children>
-                                    </VBox>
+                                    <Label text="Sélectionner le Projet" styleClass="dropdown-label"/>
+                                    <ComboBox fx:id="projetDropdown"
+                                              promptText="Sélectionner le Projet"
+                                              styleClass="modern-dropdown"
+                                              prefHeight="55.0"
+                                              maxWidth="Infinity"/>
                                 </children>
-                            </HBox>
-                        </HBox>
+                            </VBox>
 
-                    </children>
-                    <padding>
-                        <Insets left="30.0" right="30.0" />
-                    </padding>
-                </HBox>
+                            <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                                <children>
+                                    <Label text="Sélectionner un Partenaire" styleClass="dropdown-label"/>
+                                    <ComboBox fx:id="partenaireDropdown"
+                                              promptText="Sélectionner un Partenaire"
+                                              styleClass="modern-dropdown"
+                                              prefHeight="52.0"
+                                              maxWidth="Infinity"/>
+                                </children>
+                            </VBox>
+                        </children>
+                    </HBox>
+                </children>
+            </VBox>
 
-                <ScrollPane fitToWidth="true" styleClass="page-scroll-pane" VBox.vgrow="ALWAYS">
-                    <content>
+            <!-- FILE UPLOAD CARD -->
+            <VBox spacing="20.0" styleClass="card">
+                <children>
+                    <Label text="Importer les Documents" styleClass="card-title"/>
 
-                        <VBox spacing="25.0" styleClass="page-content">
-                            <children>
+                    <!-- DROPZONE -->
+                    <VBox fx:id="dropzone"
+                          alignment="CENTER"
+                          prefHeight="350.0"
+                          styleClass="dropzone">
+                        <children>
+                            <Label text="⬆" styleClass="upload-icon-placeholder"/>
+                            <Label text="Glissez-déposez vos fichiers ici"
+                                   styleClass="dropzone-text-primary">
+                                <VBox.margin>
+                                    <Insets top="15.0"/>
+                                </VBox.margin>
+                            </Label>
+                            <Label text="ou" styleClass="dropzone-text-separator">
+                                <VBox.margin>
+                                    <Insets top="5.0" bottom="5.0"/>
+                                </VBox.margin>
+                            </Label>
+                            <Button text="Parcourir les fichiers"
+                                    styleClass="btn-secondary"
+                                    onAction="#handleBrowseFiles"/>
+                            <Label text="PDF, Excel, Word (Max 10MB par fichier)"
+                                   styleClass="dropzone-file-info">
+                                <VBox.margin>
+                                    <Insets top="15.0"/>
+                                </VBox.margin>
+                            </Label>
+                        </children>
+                    </VBox>
 
-                                <VBox spacing="5.0">
-                                    <children>
-                                        <Label styleClass="page-title" text="Audit" />
-                                        <Label styleClass="page-subtitle" text="Analysez automatiquement vos documents pour la conformité" />
-                                    </children>
-                                </VBox>
+                    <!-- SELECTED FILES LIST - Maintenant en BAS -->
+                    <VBox fx:id="filesContainer"
+                          spacing="15"
+                          visible="false"
+                          managed="false">
+                        <VBox.margin>
+                            <Insets top="10.0"/>
+                        </VBox.margin>
 
-                                <VBox spacing="20.0" styleClass="card">
-                                    <children>
-                                        <Label styleClass="card-title" text="Audit Intelligent" />
-                                        <HBox spacing="20.0">
-                                            <children>
+                        <Label fx:id="filesCountLabel"
+                               text="Fichiers Importés (0)"
+                               style="-fx-font-size: 16px; -fx-font-weight: 600;"/>
 
-                                                <VBox prefHeight="77.0" prefWidth="0.0" spacing="5.0" HBox.hgrow="ALWAYS">
-                                                    <children>
-                                                        <Label styleClass="dropdown-label" text="Sélectionner le Projet" />
-                                                        <ComboBox fx:id="projetDropdown" prefHeight="55.0" prefWidth="284.0" promptText="Sélectionner le Projet" styleClass="modern-dropdown" />
-                                                    </children>
-                                                </VBox>
+                        <VBox fx:id="filesList" spacing="10"/>
 
-                                                <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                                                    <children>
-                                                        <Label styleClass="dropdown-label" text="Sélectionner un Partenaire" />
-                                                        <ComboBox fx:id="partenaireDropdown" prefHeight="52.0" prefWidth="415.0" promptText="Sélectionner un Partenaire" styleClass="modern-dropdown" />
-                                                    </children>
-                                                </VBox>
+                        <Button text="▶ Démarrer l'Audit Intelligent"
+                                styleClass="btn-primary"
+                                prefHeight="50"
+                                maxWidth="Infinity"
+                                onAction="#handleStartAudit"/>
+                    </VBox>
+                </children>
+            </VBox>
+            <VBox fx:id="auditProgressBox"
+                  spacing="10"
+                  visible="false"
+                  managed="false">
 
-                                            </children>
-                                        </HBox>
-                                    </children>
-                                </VBox>
+                <Label fx:id="auditStatusLabel"
+                       text="Initialisation de l'audit..."
+                       styleClass="dropzone-text-primary"/>
 
-                                <VBox spacing="20.0" styleClass="card">
-                                    <children>
-                                        <Label styleClass="card-title" text="Importer les Documents" />
+                <ProgressBar fx:id="auditProgressBar"
+                             prefHeight="18"
+                             progress="0"/>
 
-                                        <VBox fx:id="dropzone" alignment="CENTER" prefHeight="350.0" styleClass="dropzone">
-                                            <children>
-                                                <Label styleClass="upload-icon-placeholder" text="⬆" />
-                                                <Label styleClass="dropzone-text-primary" text="Glissez-déposez vos fichiers ici">
-                                                    <VBox.margin>
-                                                        <Insets top="15.0" />
-                                                    </VBox.margin>
-                                                </Label>
+            </VBox>
+            <VBox fx:id="auditResultBox"
+                  spacing="15"
+                  visible="false"
+                  managed="false">
 
-                                                <Label styleClass="dropzone-text-separator" text="ou">
-                                                    <VBox.margin>
-                                                        <Insets bottom="5.0" top="5.0" />
-                                                    </VBox.margin>
-                                                </Label>
+                <Label text="Résultats de l'Audit"
+                       styleClass="card-title"/>
 
-                                                <Button onAction="#handleBrowseFiles" styleClass="btn-secondary" text="Parcourir les fichiers" />
+                <VBox fx:id="issuesList" spacing="10"/>
 
-                                                <Label styleClass="dropzone-file-info" text="PDF, Excel, Word (Max 10MB par fichier)">
-                                                    <VBox.margin>
-                                                        <Insets top="15.0" />
-                                                    </VBox.margin>
-                                                </Label>
-                                            </children>
-                                        </VBox>
+            </VBox>
 
-                                    </children>
-                                </VBox>
 
-                                <VBox prefHeight="300.0" />
 
-                            </children>
-                            <padding>
-                                <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
-                            </padding>
-                        </VBox>
-
-                    </content>
-                </ScrollPane>
-            </children>
+            <!-- Extra Space at Bottom -->
+            <VBox prefHeight="50.0"/>
         </VBox>
-    </center>
-</BorderPane>
+    </content>
+
+</ScrollPane>

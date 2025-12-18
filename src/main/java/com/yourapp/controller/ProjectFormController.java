@@ -1,5 +1,6 @@
 package com.yourapp.controller;
 
+import com.sun.glass.ui.Menu;
 import com.yourapp.model.Project;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -16,6 +17,7 @@ public class ProjectFormController {
     @FXML private DatePicker dpEnd;
     @FXML private ComboBox<String> cbPartner;
     @FXML private ComboBox<String> cbStatus;
+    @FXML private ComboBox<String> cbAuditStandards;
 
     private Project currentProject; // Le projet en cours d'édition (si null = création)
 
@@ -24,6 +26,7 @@ public class ProjectFormController {
         // Initialiser les listes déroulantes
         cbPartner.getItems().addAll("USAID", "UNICEF", "Banque Mondiale", "Agence Française");
         cbStatus.getItems().addAll("Actif", "Clôturé", "En Attente");
+        cbAuditStandards.getItems().addAll("ISO 9001", "Interne", "Réglementaire", "Spécifique Bailleur");
     }
 
     // Méthode appelée par ProjetsController pour pré-remplir le formulaire
