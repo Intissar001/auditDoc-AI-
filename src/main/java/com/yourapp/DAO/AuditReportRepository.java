@@ -33,16 +33,25 @@ public interface AuditReportRepository extends JpaRepository<AuditReport, Intege
      */
     boolean existsByAuditId(Integer auditId);
 
-    // ========== NOUVELLE MÉTHODE POUR HISTORY CONTROLLER ==========
+    // ========== MÉTHODE POUR HISTORY CONTROLLER ==========
 
     /**
-     * CHARGER TOUS LES RAPPORTS AVEC LEURS RELATIONS (AUDIT, DOCUMENTS, ISSUES)
-     * ⬅️ SPÉCIALEMENT POUR L'HISTORIQUE
+     * OPTIMISÉ: Charger les rapports avec audit (sans issues pour éviter N+1)
+     * ⬅️ Version optimisée pour éviter les problèmes de performance
      */
     @Query("SELECT DISTINCT ar FROM AuditReport ar " +
-            "LEFT JOIN FETCH ar.audit a " +
-            "LEFT JOIN FETCH a.documents " +
-            "LEFT JOIN FETCH a.issues " +
+            "LEFT JOIN FETCH ar.audit a " +           // 👈 Charger l'audit
+            "LEFT JOIN FETCH a.documents " +          // 👈 Charger les documents
+            "LEFT JOIN FETCH a.issues " +           // 👈 DÉCOMMENTER SI BESOIN DES ISSUES
             "ORDER BY ar.generatedAt DESC")
     List<AuditReport> findAllWithAuditAndRelations();
+
+    /**
+     * OPTION: Version plus légère sans les documents
+     * ⬅️ Pour les cas où on a besoin seulement des infos de base
+     */
+    @Query("SELECT ar FROM AuditReport ar " +
+            "JOIN FETCH ar.audit " +                  // 👈 JOIN au lieu de LEFT JOIN
+            "ORDER BY ar.generatedAt DESC")
+    List<AuditReport> findAllWithAudit();            // 👈 AJOUTER CETTE MÉTHODE
 }

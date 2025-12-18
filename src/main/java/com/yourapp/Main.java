@@ -6,7 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.apache.catalina.core.ApplicationContext;
+//import org.apache.catalina.core.ApplicationContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -29,7 +29,7 @@ public class Main extends Application {
 
         // 🔗 INJECTION MANUELLE
         MainLayoutController mainController = loader.getController();
-        mainController.setSpringContext((ApplicationContext) springContext);
+        mainController.setSpringContext(/*(ApplicationContext)*/ springContext);
 
         stage.setScene(new Scene(root, 800, 600));
         stage.setTitle("AuditDoc AI");
