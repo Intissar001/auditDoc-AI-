@@ -17,12 +17,4 @@ public class AuditDocAiApplication {
         SpringApplication.run(AuditDocAiApplication.class, args);
     }
 
-    @PostConstruct
-    public void testDatabaseConnection() {
-        Audit audit = new Audit();
-        audit.setStatus("TEST_OK");
-        auditRepository.save(audit);
-
-        System.out.println("✅ Connexion PostgreSQL OK + INSERT réussi");
-    }
 }
