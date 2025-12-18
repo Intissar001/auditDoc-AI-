@@ -1,4 +1,5 @@
 package com.yourapp.model;
+
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -7,9 +8,8 @@ import java.time.LocalDateTime;
 public class AuditReport {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // AUTO_INCREMENT
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
@@ -19,75 +19,54 @@ public class AuditReport {
     )
     private Audit audit;
 
-
-    @Column(
-            name = "generated_at",
-            nullable = false,
-            updatable = false
-    )
+    @Column(name = "generated_at", nullable = false, updatable = false)
     private LocalDateTime generatedAt;
 
-
-    @Column(
-            name = "report_path",
-            nullable = false,
-            length = 512
-    )
+    @Column(name = "report_path", nullable = false, length = 512)
     private String reportPath;
 
-
-    @Column(
-            name = "report_summary",
-            columnDefinition = "TEXT"
-    )
+    @Column(name = "report_summary", columnDefinition = "TEXT")
     private String reportSummary;
 
+    @Column(name = "score")  // ⬅️ AJOUTÉ
+    private Integer score;
+
+    @Column(name = "problems_count")  // ⬅️ AJOUTÉ
+    private Integer problemsCount;
 
     @PrePersist
     protected void onCreate() {
         this.generatedAt = LocalDateTime.now();
     }
 
-
     public AuditReport() {}
 
-    public AuditReport(Audit audit, String reportPath, String reportSummary) {
+    // Constructeur amélioré
+    public AuditReport(Audit audit, String reportPath, String reportSummary, Integer score, Integer problemsCount) {
         this.audit = audit;
         this.reportPath = reportPath;
         this.reportSummary = reportSummary;
+        this.score = score;
+        this.problemsCount = problemsCount;
     }
 
+    // Getters & Setters
+    public Integer getId() { return id; }
 
+    public Audit getAudit() { return audit; }
+    public void setAudit(Audit audit) { this.audit = audit; }
 
-    public Integer getId() {
-        return id;
-    }
+    public LocalDateTime getGeneratedAt() { return generatedAt; }
 
-    public Audit getAudit() {
-        return audit;
-    }
+    public String getReportPath() { return reportPath; }
+    public void setReportPath(String reportPath) { this.reportPath = reportPath; }
 
-    public void setAudit(Audit audit) {
-        this.audit = audit;
-    }
+    public String getReportSummary() { return reportSummary; }
+    public void setReportSummary(String reportSummary) { this.reportSummary = reportSummary; }
 
-    public LocalDateTime getGeneratedAt() {
-        return generatedAt;
-    }
+    public Integer getScore() { return score; }  // ⬅️ AJOUTÉ
+    public void setScore(Integer score) { this.score = score; }  // ⬅️ AJOUTÉ
 
-    public String getReportPath() {
-        return reportPath;
-    }
-
-    public void setReportPath(String reportPath) {
-        this.reportPath = reportPath;
-    }
-
-    public String getReportSummary() {
-        return reportSummary;
-    }
-
-    public void setReportSummary(String reportSummary) {
-        this.reportSummary = reportSummary;
-    }
+    public Integer getProblemsCount() { return problemsCount; }  // ⬅️ AJOUTÉ
+    public void setProblemsCount(Integer problemsCount) { this.problemsCount = problemsCount; }  // ⬅️ AJOUTÉ
 }

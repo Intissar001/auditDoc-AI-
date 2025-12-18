@@ -22,11 +22,20 @@ public class Audit {
     private Long auditorId;
 
     // ===== Fields =====
+    @Column(name = "project_name", length = 255)  // ⬅️ AJOUTÉ
+    private String projectName;
+
     @Column(name = "audit_date", nullable = false)
     private LocalDate auditDate;
 
     @Column(nullable = false, length = 50)
     private String status;
+
+    @Column(name = "score")  // ⬅️ AJOUTÉ
+    private Integer score;
+
+    @Column(name = "problems_count")  // ⬅️ AJOUTÉ
+    private Integer problemsCount;
 
     @Column(columnDefinition = "TEXT")
     private String comments;
@@ -39,7 +48,6 @@ public class Audit {
     private LocalDateTime updatedAt;
 
     // ===== Bidirectional Relationships =====
-
     @OneToMany(mappedBy = "audit", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<AuditDocument> documents = new ArrayList<>();
 
@@ -62,71 +70,38 @@ public class Audit {
     }
 
     // ===== Getters & Setters =====
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
 
-    public Long getProjectId() {
-        return projectId;
-    }
+    public Long getProjectId() { return projectId; }
+    public void setProjectId(Long projectId) { this.projectId = projectId; }
 
-    public void setProjectId(Long projectId) {
-        this.projectId = projectId;
-    }
+    public Long getAuditorId() { return auditorId; }
+    public void setAuditorId(Long auditorId) { this.auditorId = auditorId; }
 
-    public Long getAuditorId() {
-        return auditorId;
-    }
+    public String getProjectName() { return projectName; }  // ⬅️ AJOUTÉ
+    public void setProjectName(String projectName) { this.projectName = projectName; }  // ⬅️ AJOUTÉ
 
-    public void setAuditorId(Long auditorId) {
-        this.auditorId = auditorId;
-    }
+    public LocalDate getAuditDate() { return auditDate; }
+    public void setAuditDate(LocalDate auditDate) { this.auditDate = auditDate; }
 
-    public LocalDate getAuditDate() {
-        return auditDate;
-    }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
-    public void setAuditDate(LocalDate auditDate) {
-        this.auditDate = auditDate;
-    }
+    public Integer getScore() { return score; }  // ⬅️ AJOUTÉ
+    public void setScore(Integer score) { this.score = score; }  // ⬅️ AJOUTÉ
 
-    public String getStatus() {
-        return status;
-    }
+    public Integer getProblemsCount() { return problemsCount; }  // ⬅️ AJOUTÉ
+    public void setProblemsCount(Integer problemsCount) { this.problemsCount = problemsCount; }  // ⬅️ AJOUTÉ
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    public String getComments() { return comments; }
+    public void setComments(String comments) { this.comments = comments; }
 
-    public String getComments() {
-        return comments;
-    }
+    public List<AuditDocument> getDocuments() { return documents; }
+    public void setDocuments(List<AuditDocument> documents) { this.documents = documents; }
 
-    public void setComments(String comments) {
-        this.comments = comments;
-    }
+    public List<AuditIssue> getIssues() { return issues; }
+    public void setIssues(List<AuditIssue> issues) { this.issues = issues; }
 
-    public List<AuditDocument> getDocuments() {
-        return documents;
-    }
-
-    public void setDocuments(List<AuditDocument> documents) {
-        this.documents = documents;
-    }
-
-    public List<AuditIssue> getIssues() {
-        return issues;
-    }
-
-    public void setIssues(List<AuditIssue> issues) {
-        this.issues = issues;
-    }
-
-    public List<AuditReport> getReports() {
-        return reports;
-    }
-
-    public void setReports(List<AuditReport> reports) {
-        this.reports = reports;
-    }
+    public List<AuditReport> getReports() { return reports; }
+    public void setReports(List<AuditReport> reports) { this.reports = reports; }
 }
