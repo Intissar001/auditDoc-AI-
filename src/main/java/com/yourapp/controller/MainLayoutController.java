@@ -1,9 +1,11 @@
 package com.yourapp.controller;
 
+import com.yourapp.services.HistoryService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.StackPane;
 import javafx.scene.Parent;
+import javafx.scene.layout.StackPane;
+import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 
@@ -18,57 +20,44 @@ public class MainLayoutController {
     @FXML
     private TopbarController topbarController;
 
+    private ApplicationContext springContext;
+
     @FXML
     public void initialize() {
-        System.out.println("MainController initialized - contentArea: " + (contentArea != null));
-
-        // Link sidebar controller to main controller
         if (sidebarController != null) {
             sidebarController.setMainController(this);
         }
 
-        // Link topbar controller to main controller
         if (topbarController != null) {
             topbarController.setMainController(this);
         }
 
-        // Load default view (Dashboard)
         loadView("Dashboard.fxml");
+    }
+
+    public void setSpringContext(ApplicationContext context) {
+        this.springContext = context;
     }
 
     public void loadView(String fxmlFile) {
         try {
-            // Clear current content
             contentArea.getChildren().clear();
 
-            // Load new FXML - adjust path based on your project structure
             String fxmlPath = "/views/fxml/" + fxmlFile;
-
-            System.out.println("Attempting to load: " + fxmlPath);
-
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource(fxmlPath));
-
-            if (loader.getLocation() == null) {
-                throw new IOException("FXML file not found: " + fxmlPath);
-            }
-
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent view = loader.load();
 
-            // Add to content area
+            if ("History.fxml".equals(fxmlFile)) {
+                HistoryController historyController = loader.getController();
+                HistoryService historyService = springContext.getBean(HistoryService.class);
+                historyController.setHistoryService(historyService);
+            }
+
             contentArea.getChildren().add(view);
 
-            System.out.println("Successfully loaded view: " + fxmlFile);
-
         } catch (IOException e) {
-            System.err.println("Error loading view: " + fxmlFile);
-            e.printStackTrace();
-
-            // Show error message in content area
-            showErrorView("Impossible de charger la page: " + fxmlFile + "\nChemin: /views/fxml/" + fxmlFile);
+            showErrorView("Impossible de charger la page: " + fxmlFile);
         } catch (Exception e) {
-            System.err.println("Unexpected error loading view: " + fxmlFile);
-            e.printStackTrace();
             showErrorView("Erreur inattendue: " + e.getMessage());
         }
     }
@@ -80,18 +69,9 @@ public class MainLayoutController {
     }
 
     private void showErrorView(String errorMessage) {
-        try {
-            contentArea.getChildren().clear();
-
-            // Create a simple error label
-            javafx.scene.control.Label errorLabel = new javafx.scene.control.Label(errorMessage);
-            errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 16px;");
-
-            contentArea.getChildren().add(errorLabel);
-
-        } catch (Exception e) {
-            System.err.println("Error showing error view");
-            e.printStackTrace();
-        }
+        contentArea.getChildren().clear();
+        javafx.scene.control.Label errorLabel = new javafx.scene.control.Label(errorMessage);
+        errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 16px;");
+        contentArea.getChildren().add(errorLabel);
     }
 }
