@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="CENTER" styleClass="root" stylesheets="@../css/login.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yourapp.controller.PswdForgotController">
+
+    <VBox alignment="CENTER" spacing="20" styleClass="container">
+        <padding>
+            <Insets bottom="40" left="40" right="40" top="40" />
+        </padding>
+
+        <HBox alignment="CENTER" styleClass="logo-container">
+            <VBox alignment="CENTER" styleClass="logo-box">
+                <ImageView fitHeight="60" fitWidth="60" preserveRatio="true">
+                    <image>
+                        <Image url="@./icons/logo.png" />
+                    </image>
+                </ImageView>
+            </VBox>
+        </HBox>
+
+        <Label styleClass="title" text="Audit Doc AI">
+            <font>
+                <Font name="System Bold" size="28" />
+            </font>
+        </Label>
+
+        <Label styleClass="subtitle" text="Problème de connexion ?">
+            <font>
+                <Font size="16" />
+            </font>
+        </Label>
+
+        <Label prefHeight="39.0" prefWidth="448.0" styleClass="email-mssg" text="Entrez votre email et nous vous enverrons un lien pour vous reconnecter à votre compte.">
+            <font>
+                <Font size="13" />
+            </font>
+        </Label>
+
+        <VBox maxWidth="461.0" prefHeight="250.0" prefWidth="461.0" spacing="20" styleClass="form-container">
+
+            <VBox spacing="8">
+                <TextField fx:id="emailField" promptText="exemple@email.com" styleClass="text-field" />
+            </VBox>
+
+            <Button fx:id="sendCodeButton" maxWidth="Infinity" styleClass="create-button" text="Envoyer le code de connexion">
+                <font>
+                    <Font name="System Bold" size="14" />
+                </font>
+                <VBox.margin>
+                    <Insets top="10" />
+                </VBox.margin>
+            </Button>
+
+            <HBox alignment="CENTER">
+                <Hyperlink fx:id="motDePasseProblemLink" styleClass="link-small" text="Vous n'arrivez pas à réinitialiser votre mot de passe ?">
+                    <font>
+                        <Font size="12" />
+                    </font>
+                </Hyperlink>
+            </HBox>
+
+            <HBox alignment="CENTER" prefHeight="36.0" prefWidth="398.0" spacing="10" styleClass="or-divider">
+                <Line endX="94.0" startX="-100.0" />
+                <Label styleClass="or-text" text="OU" />
+                <Line endX="100.0" startX="-94.0" />
+            </HBox>
+
+            <HBox alignment="CENTER">
+                <VBox.margin>
+                    <Insets top="-20" />
+                </VBox.margin>
+                <Hyperlink fx:id="creerCompteLink" styleClass="link" text="Créer un nouveau compte">
+                    <font>
+                        <Font size="13" />
+                    </font>
+                </Hyperlink>
+            </HBox>
+        </VBox>
+
+        <Button fx:id="retourConnexionButton" maxWidth="Infinity" styleClass="back-to-login-button" text="Retour à la connexion">
+            <font>
+                <Font name="System Bold" size="14.0" />
+            </font>
+            <VBox.margin>
+                <Insets bottom="-38" left="-40" right="-40" top="10" />
+            </VBox.margin>
+        </Button>
+    </VBox>
+</VBox>
