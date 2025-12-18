@@ -3,6 +3,8 @@ package com.yourapp.model;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "audit")
@@ -13,7 +15,6 @@ public class Audit {
     private Long id;
 
     // ===== Relations =====
-
     @Column(name = "project_id", nullable = false)
     private Long projectId;
 
@@ -21,7 +22,6 @@ public class Audit {
     private Long auditorId;
 
     // ===== Fields =====
-
     @Column(name = "audit_date", nullable = false)
     private LocalDate auditDate;
 
@@ -32,15 +32,24 @@ public class Audit {
     private String comments;
 
     // ===== Timestamps =====
-
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    // ===== Auto timestamps =====
+    // ===== Bidirectional Relationships =====
 
+    @OneToMany(mappedBy = "audit", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<AuditDocument> documents = new ArrayList<>();
+
+    @OneToMany(mappedBy = "audit", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<AuditIssue> issues = new ArrayList<>();
+
+    @OneToMany(mappedBy = "audit", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<AuditReport> reports = new ArrayList<>();
+
+    // ===== Auto timestamps =====
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -53,7 +62,6 @@ public class Audit {
     }
 
     // ===== Getters & Setters =====
-
     public Long getId() {
         return id;
     }
@@ -96,5 +104,29 @@ public class Audit {
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    public List<AuditDocument> getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(List<AuditDocument> documents) {
+        this.documents = documents;
+    }
+
+    public List<AuditIssue> getIssues() {
+        return issues;
+    }
+
+    public void setIssues(List<AuditIssue> issues) {
+        this.issues = issues;
+    }
+
+    public List<AuditReport> getReports() {
+        return reports;
+    }
+
+    public void setReports(List<AuditReport> reports) {
+        this.reports = reports;
     }
 }
