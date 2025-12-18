@@ -1,26 +1,43 @@
 package com.yourapp;
 
+import com.yourapp.controller.MainLayoutController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.apache.catalina.core.ApplicationContext;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 public class Main extends Application {
 
+    private static ConfigurableApplicationContext springContext;
+
+    @Override
+    public void init() {
+        springContext = SpringApplication.run(AuditDocAiApplication.class);
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(
-                Main.class.getResource("/views/fxml/MainLayout.fxml")  // USE AUDIT HERE
+        FXMLLoader loader = new FXMLLoader(
+                Main.class.getResource("/views/fxml/MainLayout.fxml")
         );
 
-        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+        Parent root = loader.load();
 
-        stage.setTitle("JavaFX - Audit Screen");
-        stage.setScene(scene);
+        // 🔗 INJECTION MANUELLE
+        MainLayoutController mainController = loader.getController();
+        mainController.setSpringContext((ApplicationContext) springContext);
+
+        stage.setScene(new Scene(root, 800, 600));
+        stage.setTitle("AuditDoc AI");
         stage.show();
     }
 
-    public static void main(String[] args) {
-        launch();
+    @Override
+    public void stop() {
+        springContext.close();
     }
 }
