@@ -9,74 +9,45 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
-
-
 
 public class AuditController {
 
-    @FXML
-    private VBox dropzone;
-
-    @FXML
-    private ComboBox<String> projetDropdown;
-
-    @FXML
-    private ComboBox<String> partenaireDropdown;
-
-    @FXML
-    private HBox historiqueMenuItem;
-
-    @FXML
-    private VBox filesContainer;
-
-    @FXML
-    private VBox filesList;
-
-    @FXML
-    private Label filesCountLabel;
-
-    @FXML
-    private VBox auditProgressBox;
-
-    @FXML
-    private ProgressBar auditProgressBar;
-
-    @FXML
-    private Label auditStatusLabel;
-    @FXML
-    private VBox auditResultBox;
-
-    @FXML
-    private VBox issuesList;
-
+    @FXML private VBox dropzone;
+    @FXML private ComboBox<String> projetDropdown;
+    @FXML private ComboBox<String> partenaireDropdown;
+    @FXML private HBox historiqueMenuItem;
+    @FXML private VBox filesContainer;
+    @FXML private VBox filesList;
+    @FXML private Label filesCountLabel;
+    @FXML private VBox auditProgressBox;
+    @FXML private ProgressBar auditProgressBar;
+    @FXML private Label auditStatusLabel;
+    @FXML private VBox auditResultBox;
+    @FXML private VBox issuesList;
 
     private VBox notificationBox;
-
+    private List<File> selectedFiles = new ArrayList<>();
 
     @FXML
     public void initialize() {
-        // Populate dropdowns
         projetDropdown.getItems().addAll("Projet A", "Projet B", "Projet C");
         partenaireDropdown.getItems().addAll("Partenaire X", "Partenaire Y", "Partenaire Z");
 
-        // Setup click handler for Historique menu
         if (historiqueMenuItem != null) {
             historiqueMenuItem.setOnMouseClicked(event -> openHistoryPage());
         } else {
             System.err.println("WARNING: historiqueMenuItem is NULL! Check fx:id in Audit.fxml");
         }
 
-        // Créer la notification box (invisible au départ)
         createNotificationBox();
     }
 
@@ -86,7 +57,6 @@ public class AuditController {
     }
 
     private HBox createFileItem(File file) {
-
         Label fileName = new Label(file.getName());
         fileName.setStyle("-fx-font-weight: 600;");
 
@@ -102,7 +72,7 @@ public class AuditController {
         -fx-text-fill: #667085;
         -fx-font-size: 14px;
         -fx-cursor: hand;
-    """);
+        """);
 
         HBox fileItem = new HBox(fileInfo, removeBtn);
         fileItem.setAlignment(Pos.CENTER_LEFT);
@@ -113,10 +83,11 @@ public class AuditController {
         -fx-border-radius: 10;
         -fx-background-radius: 10;
         -fx-background-color: #ffffff;
-    """);
+        """);
 
         removeBtn.setOnAction(e -> {
             filesList.getChildren().remove(fileItem);
+            selectedFiles.remove(file);
             updateFileCount();
 
             if (filesList.getChildren().isEmpty()) {
@@ -130,7 +101,6 @@ public class AuditController {
 
     @FXML
     private void handleBrowseFiles() {
-
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Sélectionner des documents");
 
@@ -139,17 +109,19 @@ public class AuditController {
                         "*.pdf", "*.docx", "*.doc", "*.xlsx", "*.xls")
         );
 
-        List<File> selectedFiles = fileChooser.showOpenMultipleDialog(
+        List<File> files = fileChooser.showOpenMultipleDialog(
                 dropzone.getScene().getWindow()
         );
 
-        if (selectedFiles == null || selectedFiles.isEmpty()) {
+        if (files == null || files.isEmpty()) {
             return;
         }
 
         filesList.getChildren().clear();
+        selectedFiles.clear();
 
-        for (File file : selectedFiles) {
+        for (File file : files) {
+            selectedFiles.add(file);
             filesList.getChildren().add(createFileItem(file));
         }
 
@@ -174,7 +146,6 @@ public class AuditController {
     }
 
     private void showNotification(String title, String message) {
-        // Icône info (cercle bleu avec "i")
         Circle circle = new Circle(12);
         circle.setFill(Color.web("#1E88E5"));
 
@@ -182,10 +153,9 @@ public class AuditController {
         icon.setTextFill(Color.WHITE);
         icon.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
-        javafx.scene.layout.StackPane iconPane = new javafx.scene.layout.StackPane(circle, icon);
+        StackPane iconPane = new StackPane(circle, icon);
         iconPane.setPrefSize(24, 24);
 
-        // Titre et message
         Label titleLabel = new Label(title);
         titleLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: 600; -fx-text-fill: #1E88E5;");
 
@@ -194,7 +164,6 @@ public class AuditController {
 
         VBox textBox = new VBox(3, titleLabel, messageLabel);
 
-        // Bouton fermer
         Button closeBtn = new Button("✕");
         closeBtn.setStyle("""
             -fx-background-color: transparent;
@@ -205,7 +174,7 @@ public class AuditController {
 
         HBox contentBox = new HBox(15, iconPane, textBox);
         contentBox.setAlignment(Pos.CENTER_LEFT);
-        HBox.setHgrow(textBox, javafx.scene.layout.Priority.ALWAYS);
+        HBox.setHgrow(textBox, Priority.ALWAYS);
 
         HBox notification = new HBox(contentBox, closeBtn);
         notification.setAlignment(Pos.CENTER_LEFT);
@@ -219,39 +188,12 @@ public class AuditController {
             -fx-min-width: 320px;
         """);
 
-        // Ajouter au parent
-        VBox rootContent = (VBox) dropzone.getParent();
-        VBox scrollContent = (VBox) rootContent.getParent();
-
-        if (notificationBox.getParent() == null) {
-            javafx.scene.layout.StackPane overlay = new javafx.scene.layout.StackPane();
-            overlay.setPickOnBounds(false);
-            overlay.getChildren().add(notificationBox);
-            javafx.scene.layout.StackPane.setAlignment(notificationBox, Pos.TOP_RIGHT);
-            javafx.scene.layout.StackPane.setMargin(notificationBox, new Insets(20, 20, 0, 0));
-
-            if (scrollContent.getParent() instanceof javafx.scene.control.ScrollPane) {
-                ScrollPane scrollPane = (ScrollPane) scrollContent.getParent();
-                javafx.scene.layout.StackPane container = new javafx.scene.layout.StackPane(scrollPane, overlay);
-                scrollPane.getParent().getChildrenUnmodifiable().forEach(node -> {
-                    if (node == scrollPane) {
-                        ((javafx.scene.layout.Pane) scrollPane.getParent()).getChildren().set(
-                                ((javafx.scene.layout.Pane) scrollPane.getParent()).getChildren().indexOf(scrollPane),
-                                container
-                        );
-                    }
-                });
-            }
-        }
-
         notificationBox.getChildren().add(notification);
 
-        // Animation de fermeture
         closeBtn.setOnAction(e -> {
             notificationBox.getChildren().remove(notification);
         });
 
-        // Auto-fermeture après 5 secondes
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), e -> {
             notificationBox.getChildren().remove(notification);
         }));
@@ -260,24 +202,21 @@ public class AuditController {
 
     @FXML
     private void handleStartAudit() {
+        callAuditApi();
         int fileCount = filesList.getChildren().size();
 
-        // Afficher la notification
         showNotification(
                 "Démarrage de l'analyse...",
                 "Analyse de " + fileCount + " document(s) en cours"
         );
 
-        // Créer le dialog de progression
         Dialog<Void> progressDialog = new Dialog<>();
         progressDialog.setTitle("Progression de l'analyse");
         progressDialog.setHeaderText(null);
 
-        // Bouton fermer (X)
         ButtonType closeButtonType = new ButtonType("", ButtonBar.ButtonData.CANCEL_CLOSE);
         progressDialog.getDialogPane().getButtonTypes().add(closeButtonType);
 
-        // Contenu du dialog
         VBox dialogContent = new VBox(20);
         dialogContent.setPadding(new Insets(30, 40, 30, 40));
         dialogContent.setAlignment(Pos.CENTER_LEFT);
@@ -294,7 +233,7 @@ public class AuditController {
 
         HBox progressHeader = new HBox(statusLabel, new Region(), percentLabel);
         progressHeader.setAlignment(Pos.CENTER_LEFT);
-        HBox.setHgrow(progressHeader.getChildren().get(1), javafx.scene.layout.Priority.ALWAYS);
+        HBox.setHgrow(progressHeader.getChildren().get(1), Priority.ALWAYS);
 
         ProgressBar progressBar = new ProgressBar(0);
         progressBar.setPrefHeight(10);
@@ -309,10 +248,8 @@ public class AuditController {
         dialogContent.getChildren().addAll(titleLabel, progressHeader, progressBar, descLabel);
         progressDialog.getDialogPane().setContent(dialogContent);
 
-        // Supprimer les boutons par défaut du dialog
         progressDialog.getDialogPane().lookupButton(closeButtonType).setVisible(false);
 
-        // Tâche d'audit en arrière-plan
         Task<Void> auditTask = new Task<>() {
             @Override
             protected Void call() throws Exception {
@@ -333,7 +270,7 @@ public class AuditController {
             }
         };
 
-        // Bind properties
+
         statusLabel.textProperty().bind(auditTask.messageProperty());
         progressBar.progressProperty().bind(auditTask.progressProperty());
 
@@ -344,25 +281,8 @@ public class AuditController {
 
         auditTask.setOnSucceeded(e -> {
             progressDialog.close();
+            showAuditResultsDialog(fileCount);
             showSuccessNotification();
-            auditResultBox.setVisible(true);
-            auditResultBox.setManaged(true);
-
-            issuesList.getChildren().clear();
-
-            issuesList.getChildren().addAll(
-                    createIssueItem(
-                            "Document incomplet",
-                            "Le document ne contient pas toutes les sections obligatoires.",
-                            "Ajouter les sections manquantes selon la norme."
-                    ),
-                    createIssueItem(
-                            "Non-respect de la norme ISO",
-                            "Certaines clauses ISO 9001 ne sont pas respectées.",
-                            "Mettre à jour les procédures internes."
-                    )
-            );
-
         });
 
         auditTask.setOnFailed(e -> {
@@ -370,15 +290,388 @@ public class AuditController {
             showErrorNotification();
         });
 
-        // Démarrer la tâche
         new Thread(auditTask).start();
         progressDialog.show();
+    }
+    private void callAuditApi() {
+        try {
+            String boundary = "----JavaFXBoundary";
+            java.net.URL url = new java.net.URL("http://localhost:8080/api/audits/start");
+            java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+
+            var output = conn.getOutputStream();
+            var writer = new java.io.PrintWriter(
+                    new java.io.OutputStreamWriter(output, java.nio.charset.StandardCharsets.UTF_8),
+                    true
+            );
+
+            // JSON data
+            writer.append("--").append(boundary).append("\r\n");
+            writer.append("Content-Disposition: form-data; name=\"data\"\r\n");
+            writer.append("Content-Type: application/json\r\n\r\n");
+            writer.append("""
+                {
+                  "projectId": 1,
+                  "partnerId": 1
+                }
+                """).append("\r\n");
+
+            // Files
+            for (File file : selectedFiles) {
+                writer.append("--").append(boundary).append("\r\n");
+                writer.append("Content-Disposition: form-data; name=\"files\"; filename=\"")
+                        .append(file.getName()).append("\"\r\n");
+                writer.append("Content-Type: application/octet-stream\r\n\r\n");
+                writer.flush();
+
+                java.nio.file.Files.copy(file.toPath(), output);
+                output.flush();
+
+                writer.append("\r\n").flush();
+            }
+
+            writer.append("--").append(boundary).append("--").append("\r\n");
+            writer.close();
+
+            int responseCode = conn.getResponseCode();
+            System.out.println("API RESPONSE CODE: " + responseCode);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void showAuditResultsDialog(int fileCount) {
+        Dialog<Void> resultsDialog = new Dialog<>();
+        resultsDialog.setTitle("Analyse terminée");
+        resultsDialog.setHeaderText(null);
+
+        ButtonType closeButton = new ButtonType("", ButtonBar.ButtonData.CANCEL_CLOSE);
+        resultsDialog.getDialogPane().getButtonTypes().add(closeButton);
+
+        // Style du bouton X
+        javafx.scene.Node closeButtonNode = resultsDialog.getDialogPane().lookupButton(closeButton);
+        closeButtonNode.setStyle("""
+            -fx-background-color: transparent;
+            -fx-font-size: 20px;
+            -fx-text-fill: #667085;
+            -fx-cursor: hand;
+        """);
+
+        VBox mainContent = new VBox(15);
+        mainContent.setPadding(new Insets(20));
+        mainContent.setPrefWidth(700);
+        mainContent.setPrefHeight(600);
+
+        // Header
+        Label titleLabel = new Label("Analyse terminée");
+        titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: 600; -fx-text-fill: #1f2937;");
+
+        // Rapport de conformité section
+        VBox reportBox = new VBox(8);
+        reportBox.setStyle("""
+            -fx-background-color: #f3f4f6;
+            -fx-padding: 15;
+            -fx-border-radius: 10;
+            -fx-background-radius: 10;
+        """);
+
+        Label reportTitle = new Label("Rapport de Conformité");
+        reportTitle.setStyle("-fx-font-size: 16px; -fx-font-weight: 600; -fx-text-fill: #1f2937;");
+
+        Label reportSubtitle = new Label("Analyse terminée pour " + fileCount + " document(s)");
+        reportSubtitle.setStyle("-fx-font-size: 13px; -fx-text-fill: #6b7280;");
+
+        reportBox.getChildren().addAll(reportTitle, reportSubtitle);
+
+        // ScrollPane pour les documents et recommandations
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(false);
+        scrollPane.setPrefHeight(350);
+        scrollPane.setMaxHeight(350);
+        scrollPane.setStyle("""
+            -fx-background-color: white; 
+            -fx-background: white;
+            -fx-border-color: transparent;
+        """);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        VBox scrollContent = new VBox(15);
+        scrollContent.setPadding(new Insets(5, 10, 5, 0));
+
+        // Documents container
+        VBox documentsContainer = new VBox(12);
+        for (File file : selectedFiles) {
+            documentsContainer.getChildren().add(createDocumentResultCard(file.getName()));
+        }
+
+        // Recommandations section
+        VBox recommendationsSection = createRecommendationsSection();
+
+        scrollContent.getChildren().addAll(documentsContainer, recommendationsSection);
+        scrollPane.setContent(scrollContent);
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
+
+        // Boutons d'action en bas
+        HBox actionButtons = new HBox(12);
+        actionButtons.setAlignment(Pos.CENTER);
+        actionButtons.setPadding(new Insets(5, 0, 0, 0));
+
+        Button downloadBtn = new Button("⬇ Télécharger le rapport");
+        downloadBtn.setStyle("""
+            -fx-background-color: #10b981;
+            -fx-text-fill: white;
+            -fx-font-weight: 600;
+            -fx-font-size: 13px;
+            -fx-padding: 10 20;
+            -fx-border-radius: 8;
+            -fx-background-radius: 8;
+            -fx-cursor: hand;
+            -fx-pref-width: 220;
+        """);
+        downloadBtn.setOnAction(e -> handleDownloadReport());
+
+        Button newAuditBtn = new Button("Lancer un Nouvel Audit");
+        newAuditBtn.setStyle("""
+            -fx-background-color: white;
+            -fx-text-fill: #374151;
+            -fx-font-weight: 600;
+            -fx-font-size: 13px;
+            -fx-padding: 10 20;
+            -fx-border-color: #d1d5db;
+            -fx-border-width: 1;
+            -fx-border-radius: 8;
+            -fx-background-radius: 8;
+            -fx-cursor: hand;
+            -fx-pref-width: 220;
+        """);
+        newAuditBtn.setOnAction(e -> {
+            resultsDialog.close();
+            resetAuditForm();
+        });
+
+        actionButtons.getChildren().addAll(downloadBtn, newAuditBtn);
+
+        mainContent.getChildren().addAll(titleLabel, reportBox, scrollPane, actionButtons);
+        resultsDialog.getDialogPane().setContent(mainContent);
+
+        // Taille fixe pour meilleure compatibilité
+        resultsDialog.setResizable(false);
+        resultsDialog.getDialogPane().setPrefWidth(700);
+        resultsDialog.getDialogPane().setPrefHeight(600);
+
+        resultsDialog.show();
+    }
+
+    private VBox createRecommendationsSection() {
+        VBox section = new VBox(15);
+        section.setPadding(new Insets(20, 0, 0, 0));
+
+        // Header avec icône
+        HBox header = new HBox(10);
+        header.setAlignment(Pos.CENTER_LEFT);
+
+        Circle checkCircle = new Circle(10);
+        checkCircle.setFill(Color.TRANSPARENT);
+        checkCircle.setStroke(Color.web("#10b981"));
+        checkCircle.setStrokeWidth(2);
+
+        Label checkIcon = new Label("✓");
+        checkIcon.setStyle("-fx-text-fill: #10b981; -fx-font-size: 12px; -fx-font-weight: bold;");
+
+        StackPane checkStack = new StackPane(checkCircle, checkIcon);
+        checkStack.setPrefSize(20, 20);
+
+        Label headerTitle = new Label("Recommandations Suggérées:");
+        headerTitle.setStyle("-fx-font-size: 16px; -fx-font-weight: 600; -fx-text-fill: #1f2937;");
+
+        header.getChildren().addAll(checkStack, headerTitle);
+
+        // Liste des recommandations
+        VBox recommendationsList = new VBox(12);
+
+        recommendationsList.getChildren().addAll(
+                createRecommendationItem(
+                        "Re-scanner le document en haute qualité",
+                        "Page 7, Paragraphe 2"
+                ),
+                createRecommendationItem(
+                        "Compléter toutes les sections obligatoires",
+                        "Page 2, Paragraphe 1"
+                ),
+                createRecommendationItem(
+                        "Vérifier les montants et totaux",
+                        "Page 7, Paragraphe 2"
+                )
+        );
+
+        section.getChildren().addAll(header, recommendationsList);
+        return section;
+    }
+
+    private VBox createRecommendationItem(String title, String location) {
+        VBox item = new VBox(8);
+        item.setStyle("""
+            -fx-background-color: #f9fafb;
+            -fx-padding: 15;
+            -fx-border-radius: 10;
+            -fx-background-radius: 10;
+            -fx-border-color: #e5e7eb;
+            -fx-border-width: 1;
+        """);
+
+        Label titleLabel = new Label(title);
+        titleLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: 600; -fx-text-fill: #1f2937;");
+        titleLabel.setWrapText(true);
+
+        Label locationLabel = new Label(location);
+        locationLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #6b7280;");
+
+        item.getChildren().addAll(titleLabel, locationLabel);
+        return item;
+    }
+
+    private void handleDownloadReport() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Enregistrer le rapport");
+        fileChooser.setInitialFileName("Rapport_Audit_" + System.currentTimeMillis() + ".pdf");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("PDF Files", "*.pdf")
+        );
+
+        File file = fileChooser.showSaveDialog(dropzone.getScene().getWindow());
+
+        if (file != null) {
+            showNotification(
+                    "Rapport téléchargé ✅",
+                    "Le rapport a été enregistré avec succès"
+            );
+        }
+    }
+
+    private void resetAuditForm() {
+        filesList.getChildren().clear();
+        selectedFiles.clear();
+        filesContainer.setVisible(false);
+        filesContainer.setManaged(false);
+        projetDropdown.setValue(null);
+        partenaireDropdown.setValue(null);
+        showNotification(
+                "Nouveau audit",
+                "Prêt pour un nouvel audit"
+        );
+    }
+
+    private VBox createDocumentResultCard(String fileName) {
+        VBox card = new VBox(15);
+        card.setStyle("""
+            -fx-background-color: white;
+            -fx-border-color: #e5e7eb;
+            -fx-border-width: 1;
+            -fx-border-radius: 12;
+            -fx-background-radius: 12;
+            -fx-padding: 20;
+        """);
+
+        // Header avec icône d'erreur et badge
+        HBox header = new HBox(15);
+        header.setAlignment(Pos.CENTER_LEFT);
+
+        // Icône d'erreur (cercle rouge avec X)
+        Circle errorCircle = new Circle(12);
+        errorCircle.setFill(Color.TRANSPARENT);
+        errorCircle.setStroke(Color.web("#dc2626"));
+        errorCircle.setStrokeWidth(2);
+
+        Label xIcon = new Label("✕");
+        xIcon.setStyle("-fx-text-fill: #dc2626; -fx-font-size: 14px; -fx-font-weight: bold;");
+
+        StackPane errorIcon = new StackPane(errorCircle, xIcon);
+        errorIcon.setPrefSize(24, 24);
+
+        // Nom du fichier
+        Label docName = new Label(fileName);
+        docName.setStyle("-fx-font-size: 16px; -fx-font-weight: 600; -fx-text-fill: #1f2937;");
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        // Badge Critique
+        Label badge = new Label("Critique");
+        badge.setStyle("""
+            -fx-background-color: #fee2e2;
+            -fx-text-fill: #dc2626;
+            -fx-padding: 6 14;
+            -fx-border-radius: 16;
+            -fx-background-radius: 16;
+            -fx-font-weight: 600;
+            -fx-font-size: 12px;
+        """);
+
+        header.getChildren().addAll(errorIcon, docName, spacer, badge);
+
+        // État de conformité
+        Label statusLabel = new Label("État de Conformité");
+        statusLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #9ca3af; -fx-font-weight: 500;");
+
+        // Section Problèmes Identifiés
+        VBox problemsSection = new VBox(10);
+
+        HBox problemsHeader = new HBox(8);
+        problemsHeader.setAlignment(Pos.CENTER_LEFT);
+
+        Circle warningCircle = new Circle(8);
+        warningCircle.setFill(Color.TRANSPARENT);
+        warningCircle.setStroke(Color.web("#dc2626"));
+        warningCircle.setStrokeWidth(2);
+
+        Label warningIcon = new Label("!");
+        warningIcon.setStyle("-fx-text-fill: #dc2626; -fx-font-size: 12px; -fx-font-weight: bold;");
+
+        StackPane warningStack = new StackPane(warningCircle, warningIcon);
+        warningStack.setPrefSize(16, 16);
+
+        Label problemsTitle = new Label("Problèmes Identifiés:");
+        problemsTitle.setStyle("-fx-font-size: 14px; -fx-text-fill: #dc2626; -fx-font-weight: 600;");
+
+        problemsHeader.getChildren().addAll(warningStack, problemsTitle);
+
+        // Problème détaillé
+        VBox problemBox = new VBox(8);
+        problemBox.setStyle("""
+            -fx-background-color: #fef2f2;
+            -fx-padding: 15;
+            -fx-border-radius: 10;
+            -fx-background-radius: 10;
+        """);
+
+        Label problemTitle = new Label("Document incomplet - sections manquantes");
+        problemTitle.setStyle("-fx-font-size: 14px; -fx-text-fill: #dc2626; -fx-font-weight: 600;");
+        problemTitle.setWrapText(true);
+
+        Label problemLocation = new Label("Page 2, Paragraphe 1");
+        problemLocation.setStyle("-fx-font-size: 12px; -fx-text-fill: #6b7280;");
+
+        problemBox.getChildren().addAll(problemTitle, problemLocation);
+
+        problemsSection.getChildren().addAll(problemsHeader, problemBox);
+
+        card.getChildren().addAll(header, statusLabel, problemsSection);
+
+        return card;
     }
 
     private void showSuccessNotification() {
         showNotification(
                 "Audit terminé avec succès ✅",
-                "Les résultats sont disponibles dans l'historique"
+                "Les résultats sont disponibles"
         );
     }
 
@@ -387,36 +680,6 @@ public class AuditController {
                 "Erreur lors de l'audit ❌",
                 "Une erreur s'est produite. Veuillez réessayer."
         );
-    }
-    private HBox createIssueItem(String type, String description, String suggestion) {
-
-        Label typeLabel = new Label(type);
-        typeLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #991b1b;");
-
-        Label descLabel = new Label(description);
-        descLabel.setWrapText(true);
-
-        Label suggLabel = new Label("Suggestion : " + suggestion);
-        suggLabel.setStyle("-fx-text-fill: #065f46;");
-
-        VBox content = new VBox(typeLabel, descLabel, suggLabel);
-        content.setSpacing(5);
-
-        Label statusBadge = new Label("NON CONFORME");
-        statusBadge.getStyleClass().add("badge-non-conforme");
-
-        HBox issueBox = new HBox(content, statusBadge);
-        issueBox.setSpacing(20);
-        issueBox.setAlignment(Pos.CENTER_LEFT);
-        issueBox.setStyle("""
-        -fx-padding: 15;
-        -fx-border-color: #e4e8ee;
-        -fx-border-radius: 12;
-        -fx-background-radius: 12;
-        -fx-background-color: #ffffff;
-    """);
-
-        return issueBox;
     }
 
     @FXML
