@@ -1,6 +1,11 @@
 package com.yourapp.controller;
 
+import com.yourapp.model.Audit;
+import com.yourapp.model.AuditDocument;
+import com.yourapp.model.AuditIssue;
 import com.yourapp.model.AuditReport;
+import com.yourapp.DAO.AuditReportRepository;
+import com.yourapp.services.HistoryService;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,9 +16,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryController {
@@ -35,9 +39,12 @@ public class HistoryController {
     private ObservableList<AuditReport> auditList;
     private ObservableList<AuditReport> filteredList;
 
+    private HistoryService historyService;
+    private AuditReportRepository auditReportRepository;
+
     @FXML
     public void initialize() {
-        System.out.println("✅ HistoryController initialized");
+        System.out.println("✅ HistoryController initialized - Prêt pour database");
 
         // Initialize empty lists
         auditList = FXCollections.observableArrayList();
@@ -65,61 +72,151 @@ public class HistoryController {
         placeholderLabel.setStyle("-fx-text-fill: #667085; -fx-font-size: 14px; -fx-text-alignment: center;");
         auditTable.setPlaceholder(placeholderLabel);
 
-        // TODO: L'équipe doit implémenter loadAuditsFromDatabase() ici
-        // Pour l'instant, la table reste vide
-        System.out.println("⚠️  Database not connected - waiting for team implementation");
+        System.out.println("⏳ En attente de l'injection de HistoryService...");
+        System.out.println("   ➤ MainLayoutController doit appeler setHistoryService()");
     }
 
+    // ======================== INJECTION DATABASE ========================
+
+    public void setHistoryService(HistoryService historyService) {
+        this.historyService = historyService;
+        System.out.println("🎯 HistoryService injecté avec succès!");
+        System.out.println("   ➤ Service: " + (historyService != null ? "VALIDE" : "NULL"));
+
+        if (historyService != null) {
+            loadAuditsFromDatabase();
+        } else {
+            System.out.println("❌ ERREUR: HistoryService null - contacter l'équipe");
+        }
+    }
+
+    public void setAuditReportRepository(AuditReportRepository repository) {
+        this.auditReportRepository = repository;
+        System.out.println("⚠️  MÉTHODE DÉPRÉCIÉE: Utilisez setHistoryService() à la place");
+        System.out.println("   ➤ Repository: " + (repository != null ? "VALIDE" : "NULL"));
+    }
+
+    // ======================== CONFIGURATION UI ========================
+
     private void setupTableColumns() {
-        // Date Column
+        // Date Column (inchangé)
         dateColumn.setCellValueFactory(cellData -> {
-            ZonedDateTime date = cellData.getValue().getCreatedAt();
+            LocalDateTime date = cellData.getValue().getGeneratedAt();
             if (date != null) {
                 return new SimpleStringProperty(date.format(
-                        DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
             }
             return new SimpleStringProperty("");
         });
 
-        // Project Column
-        projectColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getProjectName() != null ?
-                        cellData.getValue().getProjectName() : "N/A"));
+        // ======================== PROJECT COLUMN - MODIFIÉ ========================
+        // Project Column - Amélioré pour utiliser projectName
+        projectColumn.setCellValueFactory(cellData -> {
+            AuditReport report = cellData.getValue();
 
-        // Score Column with colors
+            if (report.getAudit() != null) {
+                Audit audit = report.getAudit();
+
+                // 1. Priorité: projectName du modèle Audit (si ajouté dans le modèle)
+                if (audit.getProjectName() != null && !audit.getProjectName().trim().isEmpty()) {
+                    return new SimpleStringProperty(audit.getProjectName());
+                }
+
+                // 2. Fallback: Utiliser le premier document non-null
+                List<AuditDocument> docs = audit.getDocuments();
+                if (docs != null && !docs.isEmpty()) {
+                    for (AuditDocument doc : docs) {
+                        if (doc != null && doc.getDocumentName() != null && !doc.getDocumentName().trim().isEmpty()) {
+                            return new SimpleStringProperty(doc.getDocumentName());
+                        }
+                    }
+                }
+
+                // 3. Dernier recours: projectId
+                return new SimpleStringProperty("Projet #" + audit.getProjectId());
+            }
+            return new SimpleStringProperty("N/A");
+        });
+
+        // ======================== SCORE COLUMN - MODIFIÉ ========================
+        // Score Column - Amélioré avec priorité sur les champs de la database
         scoreColumn.setCellValueFactory(cellData -> {
-            Integer score = cellData.getValue().getScore();
-            return new SimpleStringProperty(score != null ? score + "%" : "N/A");
+            AuditReport report = cellData.getValue();
+
+            if (report.getAudit() != null) {
+                Audit audit = report.getAudit();
+
+                // Priorité 1: Score depuis AuditReport (si le champ score existe dans le modèle)
+                try {
+                    if (report.getScore() != null) {
+                        return new SimpleStringProperty(report.getScore() + "%");
+                    }
+                } catch (Exception e) {
+                    // Si la méthode getScore() n'existe pas encore dans AuditReport
+                }
+
+                // Priorité 2: Score depuis Audit (si le champ score existe dans le modèle)
+                try {
+                    if (audit.getScore() != null) {
+                        return new SimpleStringProperty(audit.getScore() + "%");
+                    }
+                } catch (Exception e) {
+                    // Si la méthode getScore() n'existe pas encore dans Audit
+                }
+
+                // Priorité 3: Calculer depuis issues (comportement actuel)
+                List<AuditIssue> issues = audit.getIssues();
+                if (issues != null && !issues.isEmpty()) {
+                    // Compter seulement les issues ouvertes
+                    long openIssues = issues.stream()
+                            .filter(issue -> issue != null &&
+                                    ("Open".equals(issue.getStatus()) || "Ouvert".equals(issue.getStatus())))
+                            .count();
+                    int score = Math.max(0, 100 - ((int)openIssues * 10));
+                    return new SimpleStringProperty(score + "%");
+                }
+
+                // Si pas d'issues: score par défaut
+                return new SimpleStringProperty("100%");
+            }
+
+            return new SimpleStringProperty("0%");
         });
 
         scoreColumn.setCellFactory(column -> new TableCell<AuditReport, String>() {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || item == null || item.equals("N/A")) {
+                if (empty || item == null) {
                     setText(null);
                     setStyle("");
                 } else {
                     setText(item);
-                    int score = Integer.parseInt(item.replace("%", ""));
+                    try {
+                        int score = Integer.parseInt(item.replace("%", ""));
 
-                    if (score >= 90) {
-                        setStyle("-fx-text-fill: #10b981; -fx-font-weight: bold;");
-                    } else if (score >= 80) {
-                        setStyle("-fx-text-fill: #22c55e; -fx-font-weight: bold;");
-                    } else if (score >= 70) {
-                        setStyle("-fx-text-fill: #84cc16; -fx-font-weight: bold;");
-                    } else {
-                        setStyle("-fx-text-fill: #f59e0b; -fx-font-weight: bold;");
+                        if (score >= 90) setStyle("-fx-text-fill: #10b981; -fx-font-weight: bold;");
+                        else if (score >= 80) setStyle("-fx-text-fill: #22c55e; -fx-font-weight: bold;");
+                        else if (score >= 70) setStyle("-fx-text-fill: #84cc16; -fx-font-weight: bold;");
+                        else if (score >= 60) setStyle("-fx-text-fill: #f59e0b; -fx-font-weight: bold;");
+                        else setStyle("-fx-text-fill: #ef4444; -fx-font-weight: bold;");
+                    } catch (NumberFormatException e) {
+                        setText("N/A");
+                        setStyle("");
                     }
                 }
             }
         });
 
-        // Status Column with badges
-        statusColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getComplianceStatus() != null ?
-                        cellData.getValue().getComplianceStatus() : "N/A"));
+        // Status Column (inchangé)
+        statusColumn.setCellValueFactory(cellData -> {
+            AuditReport report = cellData.getValue();
+
+            if (report.getAudit() != null && report.getAudit().getStatus() != null) {
+                return new SimpleStringProperty(report.getAudit().getStatus());
+            }
+            return new SimpleStringProperty("N/A");
+        });
 
         statusColumn.setCellFactory(column -> new TableCell<AuditReport, String>() {
             @Override
@@ -134,12 +231,15 @@ public class HistoryController {
                     badge.setAlignment(Pos.CENTER);
                     badge.setStyle("-fx-background-radius: 5;");
 
-                    if (item.equals("Conforme")) {
+                    if (item.equals("Completed") || item.equals("Terminé")) {
                         badge.setStyle(badge.getStyle() +
                                 "-fx-background-color: #d1fae5; -fx-text-fill: #065f46;");
-                    } else if (item.equals("Non-Conforme")) {
+                    } else if (item.equals("Pending") || item.equals("En attente")) {
                         badge.setStyle(badge.getStyle() +
                                 "-fx-background-color: #fee2e2; -fx-text-fill: #991b1b;");
+                    } else if (item.equals("In Progress") || item.equals("En cours")) {
+                        badge.setStyle(badge.getStyle() +
+                                "-fx-background-color: #fef3c7; -fx-text-fill: #92400e;");
                     } else {
                         badge.setStyle(badge.getStyle() +
                                 "-fx-background-color: #e5e7eb; -fx-text-fill: #374151;");
@@ -151,12 +251,50 @@ public class HistoryController {
             }
         });
 
-        // Problems Column
+        // ======================== PROBLEMS COLUMN - MODIFIÉ ========================
+        // Problems Column - Amélioré avec priorité sur les champs de la database
         problemsColumn.setCellValueFactory(cellData -> {
-            Integer problems = cellData.getValue().getProblemsCount();
-            if (problems != null && problems > 0) {
-                return new SimpleStringProperty(problems + " problème" + (problems > 1 ? "s" : ""));
+            AuditReport report = cellData.getValue();
+
+            if (report.getAudit() != null) {
+                Audit audit = report.getAudit();
+
+                // Priorité 1: problemsCount depuis AuditReport (si le champ existe)
+                try {
+                    if (report.getProblemsCount() != null) {
+                        int count = report.getProblemsCount();
+                        if (count > 0) {
+                            return new SimpleStringProperty(count + " problème" + (count > 1 ? "s" : ""));
+                        }
+                        return new SimpleStringProperty("Aucun");
+                    }
+                } catch (Exception e) {
+                    // Si la méthode getProblemsCount() n'existe pas encore
+                }
+
+                // Priorité 2: problemsCount depuis Audit (si le champ existe)
+                try {
+                    if (audit.getProblemsCount() != null) {
+                        int count = audit.getProblemsCount();
+                        if (count > 0) {
+                            return new SimpleStringProperty(count + " problème" + (count > 1 ? "s" : ""));
+                        }
+                        return new SimpleStringProperty("Aucun");
+                    }
+                } catch (Exception e) {
+                    // Si la méthode getProblemsCount() n'existe pas encore
+                }
+
+                // Priorité 3: Compter depuis issues (comportement actuel)
+                List<AuditIssue> issues = audit.getIssues();
+                if (issues != null && !issues.isEmpty()) {
+                    int issueCount = issues.size();
+                    if (issueCount > 0) {
+                        return new SimpleStringProperty(issueCount + " problème" + (issueCount > 1 ? "s" : ""));
+                    }
+                }
             }
+
             return new SimpleStringProperty("Aucun");
         });
 
@@ -178,7 +316,7 @@ public class HistoryController {
             }
         });
 
-        // Reports Column with buttons
+        // Reports Column with buttons (inchangé)
         reportsColumn.setCellFactory(column -> new TableCell<AuditReport, Void>() {
             private final Button viewButton = new Button("👁 Voir");
             private final Button pdfButton = new Button("📥 PDF");
@@ -227,15 +365,8 @@ public class HistoryController {
         partnerComboBox.getItems().add("Tous les partenaires");
         partnerComboBox.setValue("Tous les partenaires");
 
-        // TODO: L'équipe doit charger les partenaires depuis la database
-        System.out.println("⚠️  Partner filter not loaded - database not connected");
-
         // Sort By filter
-        sortByComboBox.getItems().addAll(
-                "Date",
-                "Nom du projet",
-                "Statut"
-        );
+        sortByComboBox.getItems().addAll("Date", "Nom du projet", "Statut");
         sortByComboBox.setValue("Date");
 
         // Sort Order filter
@@ -248,26 +379,132 @@ public class HistoryController {
         sortComboBox.setOnAction(e -> filterAudits());
     }
 
+    // ======================== LOGIQUE DATABASE ========================
+
+    public void loadAuditsFromDatabase() {
+        System.out.println("📋 Chargement des audits depuis HistoryService...");
+
+        auditList.clear();
+        filteredList.clear();
+
+        try {
+            if (historyService == null) {
+                System.out.println("❌ ERREUR CRITIQUE: HistoryService est NULL");
+                System.out.println("   ACTION REQUISE: MainLayoutController doit:");
+                System.out.println("   1. Créer HistoryService avec @Service");
+                System.out.println("   2. Injecter via setHistoryService()");
+                System.out.println("   3. Vérifier que HistoryService est dans le package services/");
+                return;
+            }
+
+            List<AuditReport> reports = historyService.getAllAuditReports();
+
+            if (reports != null && !reports.isEmpty()) {
+                auditList.addAll(reports);
+                filteredList.addAll(reports);
+                System.out.println("✅ SUCCÈS: " + reports.size() + " audits chargés via HistoryService");
+
+                updatePartnerFilter();
+                logSampleData(reports);
+            } else {
+                System.out.println("ℹ️  INFO: Aucun audit trouvé dans la database");
+                System.out.println("   ➤ Les tables sont vides");
+                System.out.println("   ➤ Lancez un audit pour générer des données");
+            }
+
+        } catch (Exception e) {
+            System.err.println("❌ ERREUR DATABASE via HistoryService: " + e.getMessage());
+            System.err.println("   PROBLÈMES POSSIBLES:");
+            System.err.println("   1. HistoryService non configuré");
+            System.err.println("   2. Connexion PostgreSQL échouée");
+            System.err.println("   3. Méthode getAllAuditReports() n'existe pas");
+            e.printStackTrace();
+        }
+
+        updateAuditCount();
+        filterAudits();
+    }
+
+    private void logSampleData(List<AuditReport> reports) {
+        if (reports != null && !reports.isEmpty()) {
+            System.out.println("📊 Échantillon des données chargées:");
+            for (int i = 0; i < Math.min(reports.size(), 3); i++) {
+                AuditReport report = reports.get(i);
+                System.out.println("   Audit #" + (i+1) + ":");
+                System.out.println("     ➤ ID: " + report.getId());
+                System.out.println("     ➤ Date: " + report.getGeneratedAt());
+                if (report.getAudit() != null) {
+                    Audit audit = report.getAudit();
+                    System.out.println("     ➤ Projet ID: " + audit.getProjectId());
+
+                    // Essayer d'afficher projectName si disponible
+                    try {
+                        if (audit.getProjectName() != null) {
+                            System.out.println("     ➤ Projet Nom: " + audit.getProjectName());
+                        }
+                    } catch (Exception e) {
+                        // Si getProjectName() n'existe pas encore
+                    }
+
+                    System.out.println("     ➤ Statut: " + audit.getStatus());
+                    System.out.println("     ➤ Documents: " + audit.getDocuments().size());
+                    System.out.println("     ➤ Issues: " + audit.getIssues().size());
+
+                    // Afficher score si disponible
+                    try {
+                        if (audit.getScore() != null) {
+                            System.out.println("     ➤ Score: " + audit.getScore() + "%");
+                        }
+                    } catch (Exception e) {
+                        // Si getScore() n'existe pas encore
+                    }
+                }
+            }
+        }
+    }
+
+    private void updatePartnerFilter() {
+        partnerComboBox.getItems().clear();
+        partnerComboBox.getItems().add("Tous les partenaires");
+
+        auditList.stream()
+                .map(report -> report.getAudit())
+                .filter(audit -> audit != null)
+                .map(audit -> audit.getProjectId())
+                .distinct()
+                .sorted()
+                .forEach(projectId -> {
+                    partnerComboBox.getItems().add("Projet #" + projectId);
+                });
+
+        partnerComboBox.setValue("Tous les partenaires");
+        System.out.println("✅ Filtre partenaire: " + (partnerComboBox.getItems().size() - 1) + " projets");
+    }
+
+    // ======================== FONCTIONNALITÉS UI ========================
+
     private void filterAudits() {
         filteredList.clear();
 
         String searchText = searchField.getText().toLowerCase();
         String selectedPartner = partnerComboBox.getValue();
 
-        for (AuditReport audit : auditList) {
+        for (AuditReport report : auditList) {
             boolean matchesSearch = searchText.isEmpty() ||
-                    (audit.getProjectName() != null && audit.getProjectName().toLowerCase().contains(searchText)) ||
-                    (audit.getTitle() != null && audit.getTitle().toLowerCase().contains(searchText));
+                    (report.getReportSummary() != null && report.getReportSummary().toLowerCase().contains(searchText)) ||
+                    (report.getAudit() != null && report.getAudit().getComments() != null &&
+                            report.getAudit().getComments().toLowerCase().contains(searchText));
 
             boolean matchesPartner = selectedPartner == null ||
                     selectedPartner.equals("Tous les partenaires") ||
-                    (audit.getPartnerName() != null && audit.getPartnerName().equals(selectedPartner));
+                    isMatchingPartner(report, selectedPartner);
 
             if (matchesSearch && matchesPartner) {
-                filteredList.add(audit);
+                filteredList.add(report);
             }
         }
 
+        // Tri
         String sortBy = sortByComboBox.getValue();
         String sortOrder = sortComboBox.getValue();
         boolean ascending = sortOrder != null && sortOrder.equals("Ascendant");
@@ -275,30 +512,20 @@ public class HistoryController {
         if (sortBy != null) {
             switch (sortBy) {
                 case "Date":
-                    filteredList.sort((a1, a2) -> {
-                        if (a1.getCreatedAt() != null && a2.getCreatedAt() != null) {
-                            return ascending ?
-                                    a1.getCreatedAt().compareTo(a2.getCreatedAt()) :
-                                    a2.getCreatedAt().compareTo(a1.getCreatedAt());
+                    filteredList.sort((r1, r2) -> {
+                        LocalDateTime date1 = r1.getGeneratedAt();
+                        LocalDateTime date2 = r2.getGeneratedAt();
+                        if (date1 != null && date2 != null) {
+                            return ascending ? date1.compareTo(date2) : date2.compareTo(date1);
                         }
                         return 0;
                     });
                     break;
 
-                case "Nom du projet":
-                    filteredList.sort((a1, a2) -> {
-                        String name1 = a1.getProjectName() != null ? a1.getProjectName() : "";
-                        String name2 = a2.getProjectName() != null ? a2.getProjectName() : "";
-                        return ascending ?
-                                name1.compareToIgnoreCase(name2) :
-                                name2.compareToIgnoreCase(name1);
-                    });
-                    break;
-
                 case "Statut":
-                    filteredList.sort((a1, a2) -> {
-                        String status1 = a1.getComplianceStatus() != null ? a1.getComplianceStatus() : "";
-                        String status2 = a2.getComplianceStatus() != null ? a2.getComplianceStatus() : "";
+                    filteredList.sort((r1, r2) -> {
+                        String status1 = getStatusForSort(r1);
+                        String status2 = getStatusForSort(r2);
                         int comparison = status1.compareToIgnoreCase(status2);
                         return ascending ? comparison : -comparison;
                     });
@@ -309,81 +536,118 @@ public class HistoryController {
         updateAuditCount();
     }
 
+    private boolean isMatchingPartner(AuditReport report, String selectedPartner) {
+        if (report.getAudit() == null || selectedPartner == null) {
+            return false;
+        }
+
+        if (selectedPartner.startsWith("Projet #")) {
+            try {
+                Long selectedProjectId = Long.parseLong(selectedPartner.replace("Projet #", "").trim());
+                return report.getAudit().getProjectId().equals(selectedProjectId);
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    private String getStatusForSort(AuditReport report) {
+        if (report.getAudit() != null && report.getAudit().getStatus() != null) {
+            return report.getAudit().getStatus();
+        }
+        return "";
+    }
+
     private void updateAuditCount() {
         auditCountLabel.setText(filteredList.size() + " audits");
     }
 
-    private void handleViewReport(AuditReport audit) {
-        if (audit != null) {
-            System.out.println("Viewing report for: " + audit.getProjectName());
-            System.out.println("Audit ID: " + audit.getId());
-            // TODO: L'équipe doit implémenter la vue détaillée
+    private void handleViewReport(AuditReport report) {
+        if (report != null) {
+            System.out.println("📄 Viewing report #" + report.getId());
+            System.out.println("   Report Path: " + report.getReportPath());
+            if (report.getAudit() != null) {
+                Audit audit = report.getAudit();
+                System.out.println("   Audit ID: " + audit.getId());
+                System.out.println("   Audit Status: " + audit.getStatus());
+                System.out.println("   Documents: " + audit.getDocuments().size());
+                System.out.println("   Issues: " + audit.getIssues().size());
+
+                // Afficher plus d'informations si disponibles
+                try {
+                    if (audit.getProjectName() != null) {
+                        System.out.println("   Project Name: " + audit.getProjectName());
+                    }
+                } catch (Exception e) {}
+
+                try {
+                    if (audit.getScore() != null) {
+                        System.out.println("   Score: " + audit.getScore() + "%");
+                    }
+                } catch (Exception e) {}
+            }
         }
     }
 
-    private void handleDownloadPDF(AuditReport audit) {
-        if (audit != null) {
-            System.out.println("Downloading PDF for: " + audit.getProjectName());
-            System.out.println("Audit ID: " + audit.getId());
-            // TODO: L'équipe doit implémenter la génération PDF
+    private void handleDownloadPDF(AuditReport report) {
+        if (report != null) {
+            System.out.println("📥 Downloading PDF for report #" + report.getId());
+            System.out.println("   PDF Path: " + report.getReportPath());
         }
     }
 
-    /**
-     * TODO: L'équipe doit implémenter cette méthode
-     * Cette méthode doit:
-     * 1. Se connecter à la database
-     * 2. Récupérer tous les audits
-     * 3. Remplir auditList et filteredList
-     * 4. Appeler updateAuditCount()
-     */
-    public void loadAuditsFromDatabase() {
-        System.out.println("⚠️  loadAuditsFromDatabase() not implemented - waiting for team");
+    // ======================== MÉTHODES PUBLIQUES ========================
 
-        // Example de ce que l'équipe doit faire:
-        /*
-        try {
-            AuditService service = new AuditService();
-            List<AuditReport> audits = service.getAllAudits();
-
-            auditList.clear();
-            filteredList.clear();
-
-            auditList.addAll(audits);
-            filteredList.addAll(audits);
-
-            updateAuditCount();
-
-            // Charger aussi les partenaires pour le filtre
-            List<String> partners = service.getAllPartnerNames();
-            partnerComboBox.getItems().addAll(partners);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        */
-    }
-
-    /**
-     * Public method pour rafraîchir les audits
-     * TODO: L'équipe doit l'implémenter avec database
-     */
     public void refreshAudits() {
+        System.out.println("🔄 Rafraîchissement des audits via HistoryService...");
+        loadAuditsFromDatabase();
+    }
+
+    public void addNewAudit(AuditReport newReport) {
+        if (newReport == null) {
+            System.out.println("⚠️  Audit null - non ajouté");
+            return;
+        }
+
+        System.out.println("🎯 Ajout d'un NOUVEL audit à l'historique:");
+        System.out.println("   ➤ Report ID: " + newReport.getId());
+        System.out.println("   ➤ Date: " + newReport.getGeneratedAt());
+
+        auditList.add(0, newReport);
+        filterAudits();
+
+        if (auditTable != null) {
+            auditTable.scrollTo(0);
+            auditTable.getSelectionModel().select(0);
+        }
+
+        updatePartnerFilter();
+        System.out.println("✅ Nouvel audit ajouté à l'historique!");
+    }
+
+    public void setAuditData(List<AuditReport> reports) {
         auditList.clear();
         filteredList.clear();
-        updateAuditCount();
 
-        // TODO: Appeler loadAuditsFromDatabase() quand elle sera implémentée
-        System.out.println("⚠️  refreshAudits() - database not connected");
+        if (reports != null && !reports.isEmpty()) {
+            auditList.addAll(reports);
+            filteredList.addAll(reports);
+            System.out.println("✅ " + reports.size() + " audits définis");
+            updatePartnerFilter();
+        }
+
+        updateAuditCount();
+        filterAudits();
     }
 
-    /**
-     * Method pour ajouter un audit manuellement (pour testing)
-     * L'équipe peut utiliser cette méthode pour tester l'UI sans database
-     */
-    public void addAudit(AuditReport audit) {
-        auditList.add(audit);
-        filterAudits();
-        System.out.println("✅ Audit ajouté pour testing: " + audit.getProjectName());
+    public void checkStatus() {
+        System.out.println("\n=== ÉTAT HISTORY CONTROLLER ===");
+        System.out.println("HistoryService injecté: " + (historyService != null ? "✅ OUI" : "❌ NON"));
+        System.out.println("Repository injecté: " + (auditReportRepository != null ? "✅ OUI (déprécié)" : "❌ NON"));
+        System.out.println("Audits chargés: " + auditList.size());
+        System.out.println("Table initialisée: " + (auditTable != null ? "✅ OUI" : "❌ NON"));
+        System.out.println("===============================\n");
     }
 }
