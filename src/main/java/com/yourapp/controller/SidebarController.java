@@ -7,7 +7,9 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SidebarController {
 
     @FXML private VBox sidebar;

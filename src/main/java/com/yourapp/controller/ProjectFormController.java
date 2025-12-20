@@ -8,7 +8,9 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ProjectFormController {
 
     @FXML private TextField txtName;

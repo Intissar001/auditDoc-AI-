@@ -16,9 +16,16 @@ import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import java.io.File;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import com.yourapp.services.AuditService;
+import com.yourapp.model.Audit;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AuditController {
 
     @FXML private VBox dropzone;
@@ -33,6 +40,8 @@ public class AuditController {
     @FXML private Label auditStatusLabel;
     @FXML private VBox auditResultBox;
     @FXML private VBox issuesList;
+    @Autowired
+     private AuditService auditService;
 
     private VBox notificationBox;
     private List<File> selectedFiles = new ArrayList<>();
@@ -41,14 +50,8 @@ public class AuditController {
     public void initialize() {
         projetDropdown.getItems().addAll("Projet A", "Projet B", "Projet C");
         partenaireDropdown.getItems().addAll("Partenaire X", "Partenaire Y", "Partenaire Z");
-
-        if (historiqueMenuItem != null) {
-            historiqueMenuItem.setOnMouseClicked(event -> openHistoryPage());
-        } else {
-            System.err.println("WARNING: historiqueMenuItem is NULL! Check fx:id in Audit.fxml");
-        }
-
         createNotificationBox();
+        System.out.println("✅ AuditController chargé par Spring");
     }
 
     @FXML
@@ -202,6 +205,15 @@ public class AuditController {
 
     @FXML
     private void handleStartAudit() {
+        Audit audit = new Audit();
+
+        audit.setAuditorId(1L);
+        audit.setProjectId(1L);// ✅ OBLIGATOIRE
+        audit.setAuditDate(LocalDate.now());
+        audit.setStatus("STARTED");
+        audit = auditService.createAudit(audit); // ✅ TRÈS IMPORTANT
+        System.out.println("Audit créé avec ID = " + audit.getId());
+
         callAuditApi();
         int fileCount = filesList.getChildren().size();
 
@@ -682,35 +694,4 @@ public class AuditController {
         );
     }
 
-    @FXML
-    private void openHistoryPage() {
-        try {
-            System.out.println("=== STARTING NAVIGATION ===");
-            System.out.println("Button clicked!");
-
-            java.net.URL fxmlUrl = getClass().getResource("/views/fxml/history.fxml");
-            System.out.println("FXML URL: " + fxmlUrl);
-
-            if (fxmlUrl == null) {
-                System.err.println("ERROR: history.fxml NOT FOUND!");
-                System.err.println("Make sure history.fxml is in: src/main/resources/views/fxml/");
-                return;
-            }
-
-            System.out.println("Loading FXML...");
-            FXMLLoader loader = new FXMLLoader(fxmlUrl);
-            Parent root = loader.load();
-            System.out.println("FXML loaded successfully!");
-
-            Stage stage = (Stage) historiqueMenuItem.getScene().getWindow();
-            stage.getScene().setRoot(root);
-
-            System.out.println("=== NAVIGATION COMPLETED ===");
-
-        } catch (Exception e) {
-            System.err.println("=== NAVIGATION ERROR ===");
-            System.err.println("Error: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
 }

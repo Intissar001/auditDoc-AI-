@@ -15,8 +15,8 @@ public class Audit {
     private Long id;
 
     // ===== Relations =====
-    @Column(name = "project_id", nullable = false)
-    private Long projectId;
+    @Column(name = "organization", nullable = false)
+    private String organization;
 
     @Column(name = "auditor_id", nullable = false)
     private Long auditorId;
@@ -72,11 +72,11 @@ public class Audit {
     // ===== Getters & Setters =====
     public Long getId() { return id; }
 
-    public Long getProjectId() { return projectId; }
-    public void setProjectId(Long projectId) { this.projectId = projectId; }
+    public String getProjectId() { return organization; }
+    public void setProjectId(String organization) { this.organization = organization; }
 
-    public Long getAuditorId() { return auditorId; }
-    public void setAuditorId(Long auditorId) { this.auditorId = auditorId; }
+    public String getAuditorId() { return organization; }
+    public void setAuditorId(String organization) { this.organization = organization; }
 
     public String getProjectName() { return projectName; }  // ⬅️ AJOUTÉ
     public void setProjectName(String projectName) { this.projectName = projectName; }  // ⬅️ AJOUTÉ

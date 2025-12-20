@@ -3,7 +3,9 @@ package com.yourapp.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DashboardController {
 
     @FXML private Label totalAuditsLabel;

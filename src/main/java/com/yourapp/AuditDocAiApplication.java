@@ -1,20 +1,12 @@
 package com.yourapp;
 
-import com.yourapp.model.Audit;
-import com.yourapp.DAO.AuditRepository;
-import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
+@EnableJpaRepositories("com.yourapp.DAO")
+@EntityScan("com.yourapp.model")
 public class AuditDocAiApplication {
-
-    @Autowired
-    private AuditRepository auditRepository;
-
-    public static void main(String[] args) {
-        SpringApplication.run(AuditDocAiApplication.class, args);
-    }
-
 }
+

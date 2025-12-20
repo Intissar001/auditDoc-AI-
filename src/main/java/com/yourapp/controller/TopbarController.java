@@ -13,10 +13,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
-
+import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.List;
-
+@Component
 public class TopbarController {
 
     @FXML private ImageView topLogo;

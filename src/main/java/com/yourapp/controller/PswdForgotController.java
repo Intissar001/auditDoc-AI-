@@ -9,7 +9,9 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PswdForgotController {
 
     @FXML

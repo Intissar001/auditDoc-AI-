@@ -12,12 +12,13 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import org.springframework.stereotype.Component;
 
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
-
+@Component
 /**
  * Controller for the Settings page.
  * Manages user profile, audit templates, and system settings.

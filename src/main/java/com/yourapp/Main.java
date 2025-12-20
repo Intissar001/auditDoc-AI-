@@ -26,13 +26,15 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(
                 Main.class.getResource("/views/fxml/MainLayout.fxml")
         );
+        loader.setControllerFactory(param ->
+                springContext.getBean(param)
+        );
 
         Parent root = loader.load();
 
-        // 🔗 INJECTION MANUELLE
         MainLayoutController mainController = loader.getController();
-        mainController.setSpringContext(/*(ApplicationContext)*/ springContext);
-
+        mainController.setSpringContext(springContext);
+        mainController.loadView("Dashboard.fxml");
         stage.setScene(new Scene(root, 800, 600));
         stage.setTitle("AuditDoc AI");
         stage.show();

@@ -23,7 +23,7 @@ public interface AuditRepository extends JpaRepository<Audit, Long> {
     List<Audit> findByProjectId(Long projectId);
 
     // Trouver tous les audits d’un auditeur
-    List<Audit> findByAuditorId(Long auditorId);
+    List<Audit> findByOrganization(String organization);
 
     // Trouver les audits par statut
     List<Audit> findByStatus(String status);

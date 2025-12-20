@@ -6,9 +6,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-
+@Component
 public class MainLayoutController {
 
     @FXML
@@ -32,7 +33,6 @@ public class MainLayoutController {
             topbarController.setMainController(this);
         }
 
-        loadView("Dashboard.fxml");
     }
 
     public void setSpringContext(ApplicationContext context) {
@@ -41,26 +41,30 @@ public class MainLayoutController {
 
     public void loadView(String fxmlFile) {
         try {
-            contentArea.getChildren().clear();
-
-            String fxmlPath = "/views/fxml/" + fxmlFile;
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            Parent view = loader.load();
-
-            if ("History.fxml".equals(fxmlFile)) {
-                HistoryController historyController = loader.getController();
-                HistoryService historyService = springContext.getBean(HistoryService.class);
-                historyController.setHistoryService(historyService);
+            if (springContext == null) {
+                throw new IllegalStateException("SpringContext non initialisé !");
             }
 
+            contentArea.getChildren().clear();
+
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/views/fxml/" + fxmlFile)
+            );
+
+            loader.setControllerFactory(clazz ->
+                    springContext.getBean(clazz)
+            );
+
+            Parent view = loader.load();
             contentArea.getChildren().add(view);
 
-        } catch (IOException e) {
-            showErrorView("Impossible de charger la page: " + fxmlFile);
         } catch (Exception e) {
-            showErrorView("Erreur inattendue: " + e.getMessage());
+            showErrorView(e.getMessage());
+            e.printStackTrace();
         }
     }
+
+
 
     public void updateSidebarActive(String menuName) {
         if (sidebarController != null) {
