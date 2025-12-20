@@ -207,8 +207,8 @@ public class AuditController {
     private void handleStartAudit() {
         Audit audit = new Audit();
 
-        audit.setAuditorId(1L);
-        audit.setProjectId(1L);// ✅ OBLIGATOIRE
+        audit.setOrganization(String.valueOf(1L));
+        audit.setProjectId((1L));// ✅ OBLIGATOIRE
         audit.setAuditDate(LocalDate.now());
         audit.setStatus("STARTED");
         audit = auditService.createAudit(audit); // ✅ TRÈS IMPORTANT

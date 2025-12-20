@@ -3,7 +3,8 @@ package com.yourapp.controller;
 import com.yourapp.model.Notification;
 import com.yourapp.model.User;
 import com.yourapp.services.NotificationService;
-import com.yourapp.services.UserService;
+import com.yourapp.service.UserClient;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -33,7 +34,7 @@ public class TopbarController {
     @FXML private Button btnTheme;
 
     private final NotificationService notificationService = new NotificationService();
-    private final UserService userService = new UserService();
+
 
     private MainLayoutController mainController;
 
@@ -54,7 +55,7 @@ public class TopbarController {
         }
 
         // Charger utilisateur
-        User u = userService.getCurrentUser();
+        User u = UserClient.getCurrentUser();
         if (u != null) {
             userName.setText(u.getFullName());
             userRole.setText(u.getRole());

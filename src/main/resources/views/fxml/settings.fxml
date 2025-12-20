@@ -111,7 +111,7 @@
                                             <!-- Notifications Section -->
                                             <VBox spacing="16.0">
                                                 <Label text="Notifications" styleClass="section-title" />
-                                                
+
                                                 <!-- Email Alerts Toggle -->
                                                 <VBox spacing="0.0" styleClass="setting-card">
                                                     <padding>
