@@ -1,39 +1,16 @@
 package com.yourapp.model;
 
-import java.time.LocalDateTime;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "notifications")
 public class Notification {
 
-    private String message;
-    private boolean read;
-    private LocalDateTime createdAt;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    public Notification(String message) {
-        this.message = message;
-        this.read = false;
-        this.createdAt = LocalDateTime.now();
-    }
-
-    public String getMessage() { return message; }
-    public boolean isRead() { return read; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-
-    public void markAsRead() { this.read = true; }
-}
-/// /////////// code f
-
-
-
-@Entity  //
-@Table(name = "notifications")  // ⭐
-public class Notification {
-
-    @Id  // ⭐
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  // ⭐
-    private Long id;  // ⭐ل Notification
-
-    // ⭐ :
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -46,20 +23,19 @@ public class Notification {
     @JoinColumn(name = "audit_id")
     private Audit audit;
 
-    @Column(name = "notification_type")  // ⭐
+    @Column(name = "notification_type")
     private String type; // "UPCOMING_AUDIT", "MISSED_AUDIT", "FAILED_AUDIT"
 
     private String message;
 
-    @Column(name = "is_read")  //
+    @Column(name = "is_read")
     private boolean read;
 
-    @Column(name = "created_at", updatable = false)  // ⭐
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    ///
-    public Notification() {
-    }
+    // Constructeurs
+    public Notification() {}
 
     public Notification(String message) {
         this.message = message;
@@ -67,7 +43,6 @@ public class Notification {
         this.createdAt = LocalDateTime.now();
     }
 
-    // ⭐  User و Type
     public Notification(User user, String message, String type) {
         this.user = user;
         this.message = message;
@@ -76,14 +51,7 @@ public class Notification {
         this.createdAt = LocalDateTime.now();
     }
 
-    public String getMessage() { return message; }
-    public boolean isRead() { return read; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-
-    public void markAsRead() { this.read = true; }
-
-    // ⭐ زد Getters/Setters للحقول الجديدة:
-
+    // Getters et Setters
     public Long getId() {
         return id;
     }
@@ -124,15 +92,31 @@ public class Notification {
         this.type = type;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public boolean isRead() {
+        return read;
     }
 
     public void setRead(boolean read) {
         this.read = read;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public void markAsRead() {
+        this.read = true;
     }
 }
