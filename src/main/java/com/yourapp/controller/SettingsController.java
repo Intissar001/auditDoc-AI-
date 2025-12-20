@@ -16,6 +16,7 @@ import javafx.scene.layout.VBox;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 
 public class SettingsController implements Initializable {
 
@@ -34,8 +35,7 @@ public class SettingsController implements Initializable {
 
     private User currentUser;
     private Long currentUserId = 1L;
-
-    private boolean initializing = true; // 🔐 important
+    private boolean initializing = true;
 
     // ===================== INIT =====================
 
@@ -44,15 +44,12 @@ public class SettingsController implements Initializable {
         try {
             loadCurrentUser();
             setupUserProfile();
-
             loadUserSettings();
             setupToggleButtons();
-
             loadTemplates();
         } catch (Exception e) {
             System.err.println("❌ Error initializing SettingsController");
             e.printStackTrace();
-
             currentUser = new User("Admin", "admin@example.com", "ADMIN");
             setupUserProfile();
         } finally {
@@ -204,29 +201,54 @@ public class SettingsController implements Initializable {
     private void handleCreateModel() {
         Dialog<Void> dialog = new Dialog<>();
         dialog.setTitle("Créer un Modèle d'Audit");
+        dialog.getDialogPane().getStyleClass().add("invite-user-dialog");
 
         ButtonType createBtnType = new ButtonType("Créer", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(createBtnType, ButtonType.CANCEL);
 
+        Label nameLabel = new Label("Nom");
+        nameLabel.getStyleClass().add("dialog-label");
+
         TextField name = new TextField();
         name.setPromptText("Nom du modèle");
+        name.getStyleClass().add("dialog-textfield");
+        name.setPrefWidth(400);
+
+        Label orgLabel = new Label("Organisation");
+        orgLabel.getStyleClass().add("dialog-label");
 
         TextField org = new TextField();
         org.setPromptText("Organisation");
+        org.getStyleClass().add("dialog-textfield");
+        org.setPrefWidth(400);
+
+        Label descLabel = new Label("Description");
+        descLabel.getStyleClass().add("dialog-label");
 
         TextArea desc = new TextArea();
         desc.setPromptText("Description");
+        desc.setPrefRowCount(3);
+        desc.getStyleClass().add("dialog-textarea");
+        desc.setPrefWidth(400);
 
-        VBox box = new VBox(12, name, org, desc);
-        box.setPadding(new Insets(20));
+        VBox box = new VBox(12, nameLabel, name, orgLabel, org, descLabel, desc);
+        box.setPadding(new Insets(24));
+        box.getStyleClass().add("invite-user-form");
         dialog.getDialogPane().setContent(box);
+        dialog.getDialogPane().setPrefWidth(450);
 
         Button createBtn = (Button) dialog.getDialogPane().lookupButton(createBtnType);
+        createBtn.getStyleClass().add("btn-send");
         createBtn.setDisable(true);
+
+        Button cancelBtn = (Button) dialog.getDialogPane().lookupButton(ButtonType.CANCEL);
+        cancelBtn.getStyleClass().add("btn-cancel");
 
         name.textProperty().addListener((o, oldV, newV) ->
                 createBtn.setDisable(newV.trim().isEmpty())
         );
+
+        dialog.setOnShown(e -> name.requestFocus());
 
         dialog.setResultConverter(btn -> {
             if (btn == createBtnType) {
@@ -251,7 +273,72 @@ public class SettingsController implements Initializable {
 
     @FXML
     private void handleInviteUser() {
-        showAlert("Information", "Fonctionnalité d'invitation à venir.", Alert.AlertType.INFORMATION);
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Inviter un Utilisateur");
+        dialog.getDialogPane().getStyleClass().add("invite-user-dialog");
+
+        ButtonType sendBtnType = new ButtonType("Envoyer", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(sendBtnType, ButtonType.CANCEL);
+
+        Label emailLabel = new Label("Email");
+        emailLabel.getStyleClass().add("dialog-label");
+
+        TextField emailField = new TextField();
+        emailField.setPromptText("utilisateur@example.com");
+        emailField.getStyleClass().add("dialog-textfield");
+        emailField.setPrefWidth(400);
+
+        Label roleLabel = new Label("Rôle");
+        roleLabel.getStyleClass().add("dialog-label");
+
+        ComboBox<String> roleCombo = new ComboBox<>();
+        roleCombo.getItems().addAll("Administrateur", "Chargé de Projet", "Lecteur");
+        roleCombo.setPromptText("Sélectionner le Statut");
+        roleCombo.getStyleClass().add("dialog-combobox");
+        roleCombo.setPrefWidth(400);
+
+        Label projectLabel = new Label("Accès au projet");
+        projectLabel.getStyleClass().add("dialog-label");
+
+        ComboBox<String> projectCombo = new ComboBox<>();
+        projectCombo.getItems().addAll("Tous les projets", "Projet A", "Projet B");
+        projectCombo.setPromptText("Sélectionner le Projet");
+        projectCombo.getStyleClass().add("dialog-combobox");
+        projectCombo.setPrefWidth(400);
+
+        VBox form = new VBox(12, emailLabel, emailField, roleLabel, roleCombo,
+                projectLabel, projectCombo);
+        form.setPadding(new Insets(24));
+        form.getStyleClass().add("invite-user-form");
+        dialog.getDialogPane().setContent(form);
+        dialog.getDialogPane().setPrefWidth(450);
+
+        Button sendBtn = (Button) dialog.getDialogPane().lookupButton(sendBtnType);
+        sendBtn.getStyleClass().add("btn-send");
+        sendBtn.setDisable(true);
+
+        Button cancelBtn = (Button) dialog.getDialogPane().lookupButton(ButtonType.CANCEL);
+        cancelBtn.getStyleClass().add("btn-cancel");
+
+        emailField.textProperty().addListener((o, oldV, newV) ->
+                sendBtn.setDisable(!isValidEmail(newV) || roleCombo.getValue() == null)
+        );
+
+        roleCombo.valueProperty().addListener((o, oldV, newV) ->
+                sendBtn.setDisable(!isValidEmail(emailField.getText()) || newV == null)
+        );
+
+        dialog.setOnShown(e -> emailField.requestFocus());
+
+        dialog.setResultConverter(btn -> {
+            if (btn == sendBtnType) {
+                showAlert("Succès", "Invitation envoyée à " + emailField.getText(),
+                        Alert.AlertType.INFORMATION);
+            }
+            return null;
+        });
+
+        dialog.showAndWait();
     }
 
     // ===================== SAVE SETTINGS =====================
@@ -266,12 +353,16 @@ public class SettingsController implements Initializable {
                 auditReminderToggle.isSelected()
         );
 
-        System.out.println(success
-                ? "✅ Settings saved"
-                : "❌ Settings save failed");
+        System.out.println(success ? "✅ Settings saved" : "❌ Settings save failed");
     }
 
     // ===================== UTILS =====================
+
+    private boolean isValidEmail(String email) {
+        if (email == null || email.trim().isEmpty()) return false;
+        String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        return Pattern.matches(regex, email);
+    }
 
     private void showAlert(String title, String msg, Alert.AlertType type) {
         Alert alert = new Alert(type);
