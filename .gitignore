@@ -14,3 +14,7 @@ src/main/resources/application.yml
 target/
 .idea/
 *.iml
+.classpath
+.project
+*.class
+bin/
