@@ -5,8 +5,11 @@ import com.yourapp.services.ProjectService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import java.time.LocalDate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+@Component
 public class ProjectFormController {
 
     @FXML private TextField txtName;
@@ -16,7 +19,7 @@ public class ProjectFormController {
     @FXML private ComboBox<String> cbPartner;
     @FXML private ComboBox<String> cbStatus;
     @FXML private ComboBox<String> cbAuditStandards;
-
+    @Autowired
     private ProjectService projectService;
     private Project currentProject; // Si null = Création, sinon = Modification
 
@@ -34,10 +37,6 @@ public class ProjectFormController {
     /**
      * Reçoit le service Spring depuis le ProjetsController
      */
-    public void setProjectService(ProjectService service) {
-        this.projectService = service;
-    }
-
     /**
      * Pré-remplit le formulaire pour la MODIFICATION d'un projet existant
      */

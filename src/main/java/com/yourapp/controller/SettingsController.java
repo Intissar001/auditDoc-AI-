@@ -47,20 +47,7 @@ public class SettingsController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        try {
-            loadCurrentUser();
-            setupUserProfile();
-            loadUserSettings();
-            setupToggleButtons();
-            loadTemplates();
-        } catch (Exception e) {
-            System.err.println("❌ Error initializing SettingsController");
-            e.printStackTrace();
-            currentUser = new User("Admin", "admin@example.com", "ADMIN");
-            setupUserProfile();
-        } finally {
-            initializing = false;
-        }
+
     }
 
     // ===================== LOAD DATA =====================
@@ -377,4 +364,16 @@ public class SettingsController implements Initializable {
         alert.setContentText(msg);
         alert.showAndWait();
     }
+    public void refresh() {
+        try {
+            loadCurrentUser();
+            setupUserProfile();
+            loadUserSettings();
+            setupToggleButtons();
+            loadTemplates();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

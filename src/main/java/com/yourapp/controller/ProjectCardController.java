@@ -2,6 +2,7 @@ package com.yourapp.controller;
 
 import com.yourapp.model.Project;
 import com.yourapp.services.ProjectService;
+import com.yourapp.utils.SpringContext;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.fxml.FXMLLoader;
@@ -11,9 +12,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-
+@Component
 public class ProjectCardController {
 
     @FXML private Label lblName;
@@ -29,12 +32,10 @@ public class ProjectCardController {
     @FXML private Button btnFolder;
 
     private Project project;
+    @Autowired
     private ProjectService projectService;
 
     //  Nouvelle méthode pour recevoir le service depuis ProjetsController
-    public void setProjectService(ProjectService service) {
-        this.projectService = service;
-    }
 
     /**
      * Remplit les éléments de l'interface avec les données du projet.
@@ -65,13 +66,21 @@ public class ProjectCardController {
     @FXML
     private void handleEdit() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/fxml/ProjectForm.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/views/fxml/ProjectForm.fxml")
+            );
+
+            loader.setControllerFactory(clazz ->
+                    SpringContext.getContext().getBean(clazz)
+            );
+
             Parent root = loader.load();
+
 
             ProjectFormController formController = loader.getController();
 
             // ✅ ON DONNE LE SERVICE AU FORMULAIRE
-            formController.setProjectService(this.projectService);
+            //formController.setProjectService(this.projectService);
             // ✅ ON DONNE LES DONNÉES DU PROJET
             formController.setProjectData(this.project);
 
