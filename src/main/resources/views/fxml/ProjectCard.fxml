@@ -27,7 +27,7 @@
                                 <Label fx:id="lblPartner" styleClass="card-subtitle" text="Nom du Partenaire" />
                             </children>
                         </VBox>
-                        <Button fx:id="btnEdit" styleClass="icon-button" text="✎" />
+                        <Button fx:id="btnEdit" onAction="#handleEdit" styleClass="icon-button" text="✎" />
                     </children>
                 </HBox>
 
@@ -58,7 +58,7 @@
                     </children>
                 </GridPane>
 
-                <Button fx:id="btnFolder" maxWidth="Infinity" styleClass="btn-outline" text="📂  Dossier du projet" />
+                <Button fx:id="btnFolder" onAction="#handleOpenFolder" maxWidth="Infinity" styleClass="btn-outline" text="📂  Dossier du projet" />
             </children>
         </VBox>
     </children>
