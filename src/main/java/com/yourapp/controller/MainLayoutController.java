@@ -1,15 +1,15 @@
 package com.yourapp.controller;
 
 import com.yourapp.services.HistoryService;
+import com.yourapp.services.ProjectService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-@Component
+
 public class MainLayoutController {
 
     @FXML
@@ -33,6 +33,7 @@ public class MainLayoutController {
             topbarController.setMainController(this);
         }
 
+        loadView("Dashboard.fxml");
     }
 
     public void setSpringContext(ApplicationContext context) {
@@ -41,30 +42,35 @@ public class MainLayoutController {
 
     public void loadView(String fxmlFile) {
         try {
-            if (springContext == null) {
-                throw new IllegalStateException("SpringContext non initialisé !");
-            }
-
             contentArea.getChildren().clear();
 
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/views/fxml/" + fxmlFile)
-            );
-
-            loader.setControllerFactory(clazz ->
-                    springContext.getBean(clazz)
-            );
-
+            String fxmlPath = "/views/fxml/" + fxmlFile;
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent view = loader.load();
+
+            if ("History.fxml".equals(fxmlFile)) {
+                HistoryController historyController = loader.getController();
+                HistoryService historyService = springContext.getBean(HistoryService.class);
+                historyController.setHistoryService(historyService);
+            }
+
+            // --- TON NOUVEAU BLOC À AJOUTER ---
+            if ("ProjetsView.fxml".equals(fxmlFile)) {
+                ProjetsController projetsController = loader.getController();
+                // On va chercher le service dans Spring
+                ProjectService projectService = springContext.getBean(ProjectService.class);
+                // On le donne à ton contrôleur
+                projetsController.setProjectService(projectService);
+            }
+
             contentArea.getChildren().add(view);
 
+        } catch (IOException e) {
+            showErrorView("Impossible de charger la page: " + fxmlFile);
         } catch (Exception e) {
-            showErrorView(e.getMessage());
-            e.printStackTrace();
+            showErrorView("Erreur inattendue: " + e.getMessage());
         }
     }
-
-
 
     public void updateSidebarActive(String menuName) {
         if (sidebarController != null) {
