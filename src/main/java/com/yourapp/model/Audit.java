@@ -24,7 +24,11 @@ public class Audit {
     // ===== Fields =====
     @Column(name = "project_name", length = 255)  // ⬅️ AJOUTÉ
     private String projectName;
+    @Column(name = "model_id", nullable = false)
+    private Long modelId;
 
+    @Column(name = "model_name", length = 255)
+    private String modelName;
     @Column(name = "audit_date", nullable = false)
     private LocalDate auditDate;
 
@@ -71,6 +75,8 @@ public class Audit {
 
     // ===== Getters & Setters =====
     public Long getId() { return id; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
 
     public Long getProjectId() { return projectId; }
     public void setProjectId(Long projectId) { this.projectId = projectId; }
@@ -80,7 +86,10 @@ public class Audit {
 
     public String getProjectName() { return projectName; }  // ⬅️ AJOUTÉ
     public void setProjectName(String projectName) { this.projectName = projectName; }  // ⬅️ AJOUTÉ
-
+    public Long getModelId() { return modelId; }
+    public void setModelId(Long modelId) { this.modelId = modelId; }
+    public String getModelName() { return modelName; }
+    public void setModelName(String modelName) { this.modelName = modelName; }
     public LocalDate getAuditDate() { return auditDate; }
     public void setAuditDate(LocalDate auditDate) { this.auditDate = auditDate; }
 

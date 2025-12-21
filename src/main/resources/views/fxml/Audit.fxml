@@ -34,9 +34,9 @@
                         <children>
                             <VBox spacing="5.0" HBox.hgrow="ALWAYS">
                                 <children>
-                                    <Label text="Sélectionner le Projet" styleClass="dropdown-label"/>
+                                    <Label text="Sélectionner un Projet" styleClass="dropdown-label"/>
                                     <ComboBox fx:id="projetDropdown"
-                                              promptText="Sélectionner le Projet"
+                                              promptText="Sélectionner un Projet"
                                               styleClass="modern-dropdown"
                                               prefHeight="55.0"
                                               maxWidth="Infinity"/>
@@ -45,9 +45,9 @@
 
                             <VBox spacing="5.0" HBox.hgrow="ALWAYS">
                                 <children>
-                                    <Label text="Sélectionner un Partenaire" styleClass="dropdown-label"/>
+                                    <Label text="Sélectionner un Modéle" styleClass="dropdown-label"/>
                                     <ComboBox fx:id="partenaireDropdown"
-                                              promptText="Sélectionner un Partenaire"
+                                              promptText="Sélectionner un Modéle"
                                               styleClass="modern-dropdown"
                                               prefHeight="52.0"
                                               maxWidth="Infinity"/>

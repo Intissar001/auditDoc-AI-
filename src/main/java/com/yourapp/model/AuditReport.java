@@ -9,7 +9,7 @@ public class AuditReport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
@@ -51,7 +51,7 @@ public class AuditReport {
     }
 
     // Getters & Setters
-    public Integer getId() { return id; }
+    public Long getId() { return id; }
 
     public Audit getAudit() { return audit; }
     public void setAudit(Audit audit) { this.audit = audit; }
