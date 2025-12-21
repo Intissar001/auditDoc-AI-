@@ -1,8 +1,22 @@
+api:
+  base:
+    url: http://localhost:8080
+ai:
+  api:
+    url: https://api.openai.com/v1/chat/completions
+    key: ${OPENAI_API_KEY}
+  model: gpt-3.5-turbo
+  max:
+    tokens: 2000
+  temperature: 0.7
+
+
+
 spring:
   datasource:
     url: jdbc:postgresql://aws-1-eu-west-1.pooler.supabase.com:6543/postgres?pgbouncer=true
-    username: postgres.ziyevqgoffoejasscxyg
-    password: WcDmGFscwNTZL6pY
+    username: ${USERNAME}
+    password: ${PASSWORD}
 
     hikari:
       maximum-pool-size: 5
@@ -12,12 +26,11 @@ spring:
       connection-test-query: SELECT 1
       validation-timeout: 5000
 
-      # ✅ LIGNE AJOUTÉE (IMPORTANT)
       data-source-properties:
         prepareThreshold: 0
 
   jpa:
-    open-in-view: false   # ✅ LIGNE AJOUTÉE
+    open-in-view: false
     hibernate:
       ddl-auto: update
     show-sql: true

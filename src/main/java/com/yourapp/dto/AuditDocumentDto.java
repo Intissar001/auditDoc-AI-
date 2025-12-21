@@ -4,12 +4,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-
 import java.time.LocalDateTime;
 
-/**
- * DTO pour les documents d'audit
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

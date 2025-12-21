@@ -24,7 +24,4 @@ public class AuditCreateRequestDto {
     @NotNull(message = "Au moins un document est requis")
     private List<Long> documentIds;
 
-    private String description;
-
-    private String additionalNotes;
 }

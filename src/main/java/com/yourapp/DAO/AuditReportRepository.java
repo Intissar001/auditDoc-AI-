@@ -21,17 +21,17 @@ public interface AuditReportRepository extends JpaRepository<AuditReport, Intege
     /**
      * Trouver tous les rapports par ID d'audit
      */
-    List<AuditReport> findByAuditId(Integer auditId);
+    List<AuditReport> findByAuditId(Long auditId);
 
     /**
      * Trouver le dernier rapport généré pour un audit
      */
-    Optional<AuditReport> findTopByAuditIdOrderByGeneratedAtDesc(Integer auditId);
+    Optional<AuditReport> findTopByAuditIdOrderByGeneratedAtDesc(Long auditId);
 
     /**
      * Vérifier si un audit possède au moins un rapport
      */
-    boolean existsByAuditId(Integer auditId);
+    boolean existsByAuditId(Long auditId);
 
     // ========== MÉTHODE POUR HISTORY CONTROLLER ==========
 

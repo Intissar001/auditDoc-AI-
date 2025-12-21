@@ -29,13 +29,14 @@ public class AuditResponseDto {
 
     private String status; // PENDING, IN_PROGRESS, COMPLETED, FAILED
 
-    private String description;
-
-    private String additionalNotes;
-
     private LocalDateTime createdAt;
 
     private LocalDateTime completedAt;
+    private Integer score;
+
+    private Integer problemsCount;
+
+    private String comments;
 
     private List<AuditDocumentDto> documents;
 
@@ -43,11 +44,4 @@ public class AuditResponseDto {
 
     private AuditReportDto report;
 
-    private Integer totalIssues;
-
-    private Integer criticalIssues;
-
-    private Integer warningIssues;
-
-    private Integer infoIssues;
 }

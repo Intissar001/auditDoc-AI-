@@ -9,7 +9,7 @@ public class AuditDocument {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "audit_id", nullable = false)
@@ -24,16 +24,18 @@ public class AuditDocument {
     @Column(name = "uploaded_at", updatable = false)
     private LocalDateTime uploadedAt;
 
-    // ========================
-    // Constructeurs
-    // ========================
+    @Column(name = "status", length = 50)
+    private String status; // UPLOADED, PROCESSING, ANALYZED, ERROR
 
-    public AuditDocument() {
-    }
+    @Column(name = "analyzed_at")
+    private LocalDateTime analyzedAt;
 
-    // ========================
-    // Lifecycle callback
-    // ========================
+    @Column(name = "error_message", columnDefinition = "TEXT")
+    private String errorMessage;
+
+    @Column(name = "issues_count")
+    private Integer issuesCount;
+
 
     @PrePersist
     protected void onCreate() {
@@ -44,11 +46,11 @@ public class AuditDocument {
     // Getters & Setters
     // ========================
 
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -79,4 +81,21 @@ public class AuditDocument {
     public LocalDateTime getUploadedAt() {
         return uploadedAt;
     }
+
+    public String getStatus() { return status; }
+
+    public void setStatus(String status) { this.status = status; }
+
+    public LocalDateTime getAnalyzedAt() { return analyzedAt; }
+
+    public void setAnalyzedAt(LocalDateTime analyzedAt) { this.analyzedAt = analyzedAt; }
+
+    public String getErrorMessage() { return errorMessage; }
+
+    public void setErrorMessage(String errorMessage) { this.errorMessage = errorMessage; }
+
+    public Integer getIssuesCount() { return issuesCount; }
+
+    public void setIssuesCount(Integer issuesCount) { this.issuesCount = issuesCount; }
 }
+

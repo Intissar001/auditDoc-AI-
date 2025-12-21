@@ -11,36 +11,23 @@ import java.util.Optional;
 
 @Repository
 public interface AuditDocumentRepository
-        extends JpaRepository<AuditDocument, Integer>,
+        extends JpaRepository<AuditDocument, Long>,
         JpaSpecificationExecutor<AuditDocument> {
-
-    // =========================
-    // Basic queries
-    // =========================
-
     List<AuditDocument> findByAudit(Audit audit);
 
-    List<AuditDocument> findByAuditId(Integer auditId);
+    List<AuditDocument> findByAuditId(Long auditId);
 
     Optional<AuditDocument> findByDocumentNameAndAuditId(
             String documentName,
-            Integer auditId
+            Long auditId
     );
 
     boolean existsByDocumentNameAndAuditId(
             String documentName,
-            Integer auditId
+            Long auditId
     );
 
-    // =========================
-    // Ordered queries
-    // =========================
+    List<AuditDocument> findByAuditIdOrderByUploadedAtDesc(Long auditId);
 
-    List<AuditDocument> findByAuditIdOrderByUploadedAtDesc(Integer auditId);
-
-    // =========================
-    // Delete operations
-    // =========================
-
-    void deleteByAuditId(Integer auditId);
+    void deleteByAuditId(Long auditId);
 }
