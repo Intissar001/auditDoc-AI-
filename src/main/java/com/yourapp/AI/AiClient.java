@@ -4,15 +4,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * Client pour communiquer avec l'API d'intelligence artificielle
- * Envoie les requêtes et récupère les réponses
+ * Avec fallback automatique en mode simulation si quota dépassé
  */
 @Component
 @Slf4j
@@ -33,7 +33,11 @@ public class AiClient {
     @Value("${ai.temperature:0.7}")
     private Double temperature;
 
+    @Value("${ai.simulation.mode:auto}")
+    private String simulationMode; // auto, enabled, disabled
+
     private final RestTemplate restTemplate;
+    private boolean quotaExceeded = false;
 
     public AiClient() {
         this.restTemplate = new RestTemplate();
@@ -43,13 +47,21 @@ public class AiClient {
      * Envoyer une requête à l'API IA et récupérer la réponse
      */
     public String sendRequest(String prompt) {
-        log.info("Envoi d'une requête à l'API IA");
+        log.info("📤 Envoi d'une requête à l'API IA");
         log.debug("Prompt: {}", prompt.substring(0, Math.min(200, prompt.length())) + "...");
+
+        // Si le mode simulation est activé ou si le quota est dépassé
+        if ("enabled".equalsIgnoreCase(simulationMode) ||
+                ("auto".equalsIgnoreCase(simulationMode) && shouldUseSimulation())) {
+            log.info("🎭 Mode simulation actif");
+            return simulateAiResponse(prompt);
+        }
 
         try {
             // Vérifier que la clé API est configurée
             if (apiKey == null || apiKey.isEmpty()) {
-                log.warn("Clé API non configurée, utilisation du mode simulation");
+                log.warn("⚠️ Clé API non configurée, passage en mode simulation");
+                quotaExceeded = true;
                 return simulateAiResponse(prompt);
             }
 
@@ -86,7 +98,7 @@ public class AiClient {
                     Map<String, Object> message = (Map<String, Object>) firstChoice.get("message");
                     String content = (String) message.get("content");
 
-                    log.info("Réponse IA reçue avec succès");
+                    log.info("✅ Réponse IA reçue avec succès");
                     log.debug("Réponse: {}", content.substring(0, Math.min(200, content.length())) + "...");
 
                     return content;
@@ -95,48 +107,100 @@ public class AiClient {
 
             throw new RuntimeException("Réponse invalide de l'API IA");
 
+        } catch (HttpClientErrorException.TooManyRequests e) {
+            log.error("⚠️ Quota API dépassé (429), passage en mode simulation", e);
+            quotaExceeded = true;
+            return simulateAiResponse(prompt);
+
+        } catch (HttpClientErrorException.Unauthorized e) {
+            log.error("⚠️ Clé API invalide (401), passage en mode simulation", e);
+            quotaExceeded = true;
+            return simulateAiResponse(prompt);
+
         } catch (Exception e) {
-            log.error("Erreur lors de la communication avec l'API IA", e);
+            log.error("❌ Erreur lors de la communication avec l'API IA", e);
+
+            // En mode auto, basculer en simulation en cas d'erreur
+            if ("auto".equalsIgnoreCase(simulationMode)) {
+                log.warn("🎭 Passage en mode simulation suite à l'erreur");
+                quotaExceeded = true;
+                return simulateAiResponse(prompt);
+            }
+
             throw new RuntimeException("Erreur lors de la communication avec l'API IA: " + e.getMessage(), e);
         }
     }
 
     /**
-     * Simuler une réponse de l'IA pour les tests sans clé API
+     * Déterminer si le mode simulation doit être utilisé
+     */
+    private boolean shouldUseSimulation() {
+        return quotaExceeded || apiKey == null || apiKey.isEmpty();
+    }
+
+    /**
+     * Simuler une réponse de l'IA pour les tests ou en cas d'erreur
      */
     private String simulateAiResponse(String prompt) {
-        log.info("Mode simulation activé - génération d'une réponse de test");
+        log.info("🎭 Mode simulation - génération d'une réponse de test");
+
+        // Analyser le prompt pour générer une réponse plus pertinente
+        boolean isArabic = prompt.contains("مراسلة") || prompt.contains("الجمعية");
 
         // Réponse simulée au format JSON structuré
+        if (isArabic) {
+            return """
+            {
+              "issues": [
+                {
+                  "issueType": "مشكلة التنسيق",
+                  "description": "يحتوي المستند على تناقضات في التنسيق في عدة أقسام",
+                  "pageNumber": 1,
+                  "paragraphNumber": 2,
+                  "suggestion": "توحيد التنسيق باستخدام الأنماط المحددة في النموذج"
+                },
+                {
+                  "issueType": "معلومات مفقودة",
+                  "description": "بعض المعلومات المطلوبة غير موجودة في المستند",
+                  "pageNumber": 2,
+                  "paragraphNumber": 1,
+                  "suggestion": "إضافة جميع المراجع الببليوغرافية المطلوبة وفقًا للمعايير"
+                },
+                {
+                  "issueType": "عدم المطابقة للمعايير",
+                  "description": "لا يتبع تنظيم الوثيقة البنية الموصى بها",
+                  "pageNumber": null,
+                  "paragraphNumber": null,
+                  "suggestion": "إعادة تنظيم الأقسام حسب الترتيب القياسي: المقدمة، المنهجية، النتائج، الخاتمة"
+                }
+              ]
+            }
+            """;
+        }
+
         return """
         {
           "issues": [
             {
-              "title": "Problème de formatage",
-              "description": "Le document présente des incohérences de formatage dans plusieurs sections.",
-              "category": "FORMATTING",
-              "severity": "MEDIUM",
-              "location": "Page 1, section Introduction",
-              "detectedText": "Texte mal formaté détecté",
-              "suggestion": "Uniformiser le formatage en utilisant les styles définis dans le modèle."
+              "issueType": "Problème de formatage",
+              "description": "Le document présente des incohérences de formatage dans plusieurs sections",
+              "pageNumber": 1,
+              "paragraphNumber": 2,
+              "suggestion": "Uniformiser le formatage en utilisant les styles définis dans le modèle"
             },
             {
-              "title": "Manque d'informations obligatoires",
-              "description": "Certaines informations requises sont absentes du document.",
-              "category": "CONTENT",
-              "severity": "HIGH",
-              "location": "Page 3, section Références",
-              "detectedText": "Références incomplètes",
-              "suggestion": "Ajouter toutes les références bibliographiques requises selon les normes."
+              "issueType": "Informations manquantes",
+              "description": "Certaines informations requises sont absentes du document",
+              "pageNumber": 3,
+              "paragraphNumber": 1,
+              "suggestion": "Ajouter toutes les références bibliographiques requises selon les normes"
             },
             {
-              "title": "Structure non conforme",
-              "description": "L'organisation du document ne suit pas la structure recommandée.",
-              "category": "STRUCTURE",
-              "severity": "LOW",
-              "location": "Document global",
-              "detectedText": "Structure générale",
-              "suggestion": "Réorganiser les sections selon l'ordre standard: Introduction, Méthodologie, Résultats, Conclusion."
+              "issueType": "Non-conformité structurelle",
+              "description": "L'organisation du document ne suit pas la structure recommandée",
+              "pageNumber": null,
+              "paragraphNumber": null,
+              "suggestion": "Réorganiser les sections selon l'ordre standard: Introduction, Méthodologie, Résultats, Conclusion"
             }
           ]
         }
@@ -151,30 +215,37 @@ public class AiClient {
             String testResponse = sendRequest("Test de connexion. Réponds 'OK'.");
             return testResponse != null && !testResponse.isEmpty();
         } catch (Exception e) {
-            log.error("Échec du test de connexion avec l'API IA", e);
+            log.error("❌ Échec du test de connexion avec l'API IA", e);
             return false;
         }
     }
 
     /**
-     * Envoyer une requête avec un timeout personnalisé
+     * Réinitialiser le flag de quota dépassé
      */
-    public String sendRequestWithTimeout(String prompt, int timeoutSeconds) {
-        log.info("Envoi d'une requête avec timeout de {} secondes", timeoutSeconds);
-
-        // Note: Implémenter le timeout avec RestTemplate configuré
-        // Pour l'instant, déléguer à la méthode standard
-        return sendRequest(prompt);
+    public void resetQuotaFlag() {
+        quotaExceeded = false;
+        log.info("🔄 Flag quota réinitialisé");
     }
 
     /**
-     * Envoyer une requête streaming (pour les longues réponses)
+     * Vérifier si le mode simulation est actif
      */
-    public String sendStreamingRequest(String prompt) {
-        log.info("Envoi d'une requête en mode streaming");
+    public boolean isSimulationMode() {
+        return "enabled".equalsIgnoreCase(simulationMode) ||
+                ("auto".equalsIgnoreCase(simulationMode) && quotaExceeded);
+    }
 
-        // Note: Implémenter le streaming pour les réponses longues
-        // Pour l'instant, déléguer à la méthode standard
-        return sendRequest(prompt);
+    /**
+     * Obtenir le statut de l'API
+     */
+    public String getApiStatus() {
+        if (isSimulationMode()) {
+            return "MODE_SIMULATION";
+        } else if (apiKey == null || apiKey.isEmpty()) {
+            return "NO_API_KEY";
+        } else {
+            return "ACTIVE";
+        }
     }
 }

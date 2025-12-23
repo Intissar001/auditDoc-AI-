@@ -1,77 +1,52 @@
 package com.yourapp.services_UI;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yourapp.dto.AuditDocumentDto;
+import com.yourapp.services.AuditDocumentService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.mock.web.MockMultipartFile;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
- * Service JavaFX pour gérer l'upload de fichiers vers l'API
+ * Service UI pour gérer l'upload et l'extraction de contenu de fichiers
+ * Intermédiaire entre JavaFX et le service backend
  */
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class FileUploadService {
 
-    @Value("${api.base.url:http://localhost:8080}")
-    private String baseUrl;
-
-    private final HttpClient httpClient;
-    private final ObjectMapper objectMapper;
-
-    public FileUploadService() {
-        this.httpClient = HttpClient.newHttpClient();
-        this.objectMapper = new ObjectMapper();
-        this.objectMapper.findAndRegisterModules();
-    }
+    private final AuditDocumentService documentService;
 
     /**
-     * Upload un seul fichier pour un audit
+     * Upload un seul fichier pour un audit avec extraction du contenu
      */
     public AuditDocumentDto uploadFile(File file, Long auditId) {
-        log.info("Upload du fichier: {} pour l'audit ID: {}", file.getName(), auditId);
+        log.info("📤 Upload du fichier: {} pour l'audit ID: {}", file.getName(), auditId);
+
+        if (!validateFile(file)) {
+            throw new RuntimeException("Fichier invalide: " + file.getName());
+        }
 
         try {
-            String url = baseUrl + "/api/audit-documents/upload";
-            String boundary = "----Boundary" + UUID.randomUUID().toString().replace("-", "");
+            // Convertir File en MultipartFile
+            MultipartFile multipartFile = convertFileToMultipartFile(file);
 
-            // Construire le corps multipart
-            byte[] multipartBody = buildMultipartBody(file, auditId, boundary);
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .header("Content-Type", "multipart/form-data; boundary=" + boundary)
-                    .POST(HttpRequest.BodyPublishers.ofByteArray(multipartBody))
-                    .build();
-
-            HttpResponse<String> response = httpClient.send(request,
-                    HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200 || response.statusCode() == 201) {
-                AuditDocumentDto document = objectMapper.readValue(
-                        response.body(),
-                        AuditDocumentDto.class
-                );
-
-                log.info("✅ Fichier uploadé avec succès: {}", file.getName());
-                return document;
-            } else {
-                log.error("❌ Erreur upload: Code {}", response.statusCode());
-                throw new RuntimeException("Erreur lors de l'upload du fichier: " + response.statusCode());
-            }
-
+            AuditDocumentDto document = documentService.uploadDocument(multipartFile, auditId);
+            log.info("✅ Fichier uploadé avec succès: {}", file.getName());
+            return document;
         } catch (Exception e) {
             log.error("❌ Erreur lors de l'upload du fichier: {}", file.getName(), e);
             throw new RuntimeException("Impossible d'uploader le fichier: " + e.getMessage(), e);
@@ -82,7 +57,7 @@ public class FileUploadService {
      * Upload multiple fichiers pour un audit
      */
     public List<AuditDocumentDto> uploadMultipleFiles(List<File> files, Long auditId) {
-        log.info("Upload de {} fichiers pour l'audit ID: {}", files.size(), auditId);
+        log.info("📤 Upload de {} fichiers pour l'audit ID: {}", files.size(), auditId);
 
         List<AuditDocumentDto> uploadedDocuments = new ArrayList<>();
 
@@ -92,7 +67,6 @@ public class FileUploadService {
                 uploadedDocuments.add(document);
             } catch (Exception e) {
                 log.error("❌ Échec de l'upload du fichier: {}", file.getName(), e);
-                // Continuer avec les autres fichiers même si un échoue
             }
         }
 
@@ -101,57 +75,140 @@ public class FileUploadService {
     }
 
     /**
-     * Construire le corps multipart pour l'upload
+     * Extraire le contenu d'un fichier selon son type
      */
-    private byte[] buildMultipartBody(File file, Long auditId, String boundary) throws IOException {
-        StringBuilder builder = new StringBuilder();
+    public String extractFileContent(File file) {
+        log.info("📖 Extraction du contenu de: {}", file.getName());
 
-        // Ajouter le paramètre auditId
-        builder.append("--").append(boundary).append("\r\n");
-        builder.append("Content-Disposition: form-data; name=\"auditId\"\r\n");
-        builder.append("\r\n");
-        builder.append(auditId).append("\r\n");
+        try {
+            String fileName = file.getName().toLowerCase();
 
-        // Ajouter le fichier
-        builder.append("--").append(boundary).append("\r\n");
-        builder.append("Content-Disposition: form-data; name=\"file\"; filename=\"")
-                .append(file.getName()).append("\"\r\n");
-        builder.append("Content-Type: ").append(getContentType(file)).append("\r\n");
-        builder.append("\r\n");
-
-        byte[] header = builder.toString().getBytes(StandardCharsets.UTF_8);
-        byte[] fileContent = Files.readAllBytes(file.toPath());
-        byte[] footer = ("\r\n--" + boundary + "--\r\n").getBytes(StandardCharsets.UTF_8);
-
-        // Combiner header + contenu + footer
-        byte[] result = new byte[header.length + fileContent.length + footer.length];
-        System.arraycopy(header, 0, result, 0, header.length);
-        System.arraycopy(fileContent, 0, result, header.length, fileContent.length);
-        System.arraycopy(footer, 0, result, header.length + fileContent.length, footer.length);
-
-        return result;
+            if (fileName.endsWith(".txt")) {
+                return extractTextContent(file);
+            } else if (fileName.endsWith(".pdf")) {
+                return extractPdfContent(file);
+            } else if (fileName.endsWith(".docx")) {
+                return extractDocxContent(file);
+            } else if (fileName.endsWith(".doc")) {
+                return extractDocContent(file);
+            } else if (fileName.endsWith(".xlsx") || fileName.endsWith(".xls")) {
+                return extractExcelContent(file);
+            } else {
+                log.warn("⚠️ Type de fichier non supporté pour extraction: {}", fileName);
+                return "";
+            }
+        } catch (Exception e) {
+            log.error("❌ Erreur lors de l'extraction du contenu de: {}", file.getName(), e);
+            return "";
+        }
     }
 
     /**
-     * Déterminer le Content-Type basé sur l'extension du fichier
+     * Extraire le contenu d'un fichier texte
      */
-    private String getContentType(File file) {
-        String fileName = file.getName().toLowerCase();
+    private String extractTextContent(File file) throws IOException {
+        return Files.readString(file.toPath());
+    }
 
-        if (fileName.endsWith(".pdf")) {
-            return "application/pdf";
-        } else if (fileName.endsWith(".docx")) {
-            return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-        } else if (fileName.endsWith(".doc")) {
-            return "application/msword";
-        } else if (fileName.endsWith(".xlsx")) {
-            return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-        } else if (fileName.endsWith(".xls")) {
-            return "application/vnd.ms-excel";
-        } else if (fileName.endsWith(".txt")) {
-            return "text/plain";
-        } else {
-            return "application/octet-stream";
+    /**
+     * Extraire le contenu d'un fichier PDF
+     */
+    private String extractPdfContent(File file) throws IOException {
+        log.info("📄 Extraction PDF avec PDFBox: {}", file.getName());
+
+        try (org.apache.pdfbox.pdmodel.PDDocument document =
+                     org.apache.pdfbox.pdmodel.PDDocument.load(file)) {
+
+            org.apache.pdfbox.text.PDFTextStripper stripper =
+                    new org.apache.pdfbox.text.PDFTextStripper();
+            stripper.setSortByPosition(true);
+
+            String text = stripper.getText(document);
+            log.info("✅ PDF extrait: {} pages, {} caractères",
+                    document.getNumberOfPages(), text.length());
+
+            return text;
+        } catch (Exception e) {
+            log.error("❌ Erreur extraction PDF", e);
+            throw new IOException("Erreur extraction PDF: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Extraire le contenu d'un fichier DOCX
+     */
+    private String extractDocxContent(File file) throws IOException {
+        try (FileInputStream fis = new FileInputStream(file);
+             XWPFDocument document = new XWPFDocument(fis);
+             XWPFWordExtractor extractor = new XWPFWordExtractor(document)) {
+
+            String content = extractor.getText();
+            log.info("✅ Contenu DOCX extrait: {} caractères", content.length());
+            return content;
+        }
+    }
+
+    /**
+     * Extraire le contenu d'un fichier DOC (ancien format)
+     */
+    private String extractDocContent(File file) throws IOException {
+        log.info("📄 Extraction DOC: {}", file.getName());
+        // Pour les fichiers .doc, nécessite Apache POI HWPF
+        return "[Contenu DOC - Extraction nécessite Apache POI HWPF]";
+    }
+
+    /**
+     * Extraire le contenu d'un fichier Excel
+     */
+    private String extractExcelContent(File file) throws IOException {
+        StringBuilder content = new StringBuilder();
+
+        try (FileInputStream fis = new FileInputStream(file);
+             Workbook workbook = WorkbookFactory.create(fis)) {
+
+            for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
+                Sheet sheet = workbook.getSheetAt(i);
+                content.append("=== Feuille: ").append(sheet.getSheetName()).append(" ===\n\n");
+
+                for (Row row : sheet) {
+                    for (Cell cell : row) {
+                        String cellValue = getCellValueAsString(cell);
+                        if (!cellValue.isEmpty()) {
+                            content.append(cellValue).append("\t");
+                        }
+                    }
+                    content.append("\n");
+                }
+                content.append("\n");
+            }
+
+            log.info("✅ Contenu Excel extrait: {} caractères", content.length());
+            return content.toString();
+        }
+    }
+
+    /**
+     * Obtenir la valeur d'une cellule Excel en tant que String
+     */
+    private String getCellValueAsString(Cell cell) {
+        if (cell == null) {
+            return "";
+        }
+
+        switch (cell.getCellType()) {
+            case STRING:
+                return cell.getStringCellValue();
+            case NUMERIC:
+                if (DateUtil.isCellDateFormatted(cell)) {
+                    return cell.getDateCellValue().toString();
+                }
+                return String.valueOf(cell.getNumericCellValue());
+            case BOOLEAN:
+                return String.valueOf(cell.getBooleanCellValue());
+            case FORMULA:
+                return cell.getCellFormula();
+            default:
+                return "";
         }
     }
 
@@ -159,68 +216,30 @@ public class FileUploadService {
      * Récupérer tous les documents d'un audit
      */
     public List<AuditDocumentDto> getDocumentsByAudit(Long auditId) {
-        log.info("Récupération des documents de l'audit ID: {}", auditId);
+        log.info("📥 Récupération des documents de l'audit ID: {}", auditId);
 
         try {
-            String url = baseUrl + "/api/audit-documents/audit/" + auditId;
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .header("Content-Type", "application/json")
-                    .GET()
-                    .build();
-
-            HttpResponse<String> response = httpClient.send(request,
-                    HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200) {
-                List<AuditDocumentDto> documents = objectMapper.readValue(
-                        response.body(),
-                        objectMapper.getTypeFactory().constructCollectionType(List.class, AuditDocumentDto.class)
-                );
-
-                log.info("✅ {} documents récupérés", documents.size());
-                return documents;
-            } else {
-                log.error("❌ Erreur récupération documents: Code {}", response.statusCode());
-                return new ArrayList<>();
-            }
-
+            List<AuditDocumentDto> documents = documentService.getDocumentsByAudit(auditId);
+            log.info("✅ {} documents récupérés", documents.size());
+            return documents;
         } catch (Exception e) {
             log.error("❌ Erreur lors de la récupération des documents", e);
-            return new ArrayList<>();
+            throw new RuntimeException("Impossible de récupérer les documents: " + e.getMessage(), e);
         }
     }
 
     /**
      * Supprimer un document
      */
-    public boolean deleteDocument(Long documentId) {
-        log.info("Suppression du document ID: {}", documentId);
+    public void deleteDocument(Long documentId) {
+        log.info("🗑️ Suppression du document ID: {}", documentId);
 
         try {
-            String url = baseUrl + "/api/audit-documents/" + documentId;
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .header("Content-Type", "application/json")
-                    .DELETE()
-                    .build();
-
-            HttpResponse<String> response = httpClient.send(request,
-                    HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 204 || response.statusCode() == 200) {
-                log.info("✅ Document supprimé avec succès");
-                return true;
-            } else {
-                log.error("❌ Erreur suppression document: Code {}", response.statusCode());
-                return false;
-            }
-
+            documentService.deleteDocument(documentId);
+            log.info("✅ Document supprimé avec succès");
         } catch (Exception e) {
             log.error("❌ Erreur lors de la suppression du document", e);
-            return false;
+            throw new RuntimeException("Impossible de supprimer le document: " + e.getMessage(), e);
         }
     }
 
@@ -238,7 +257,7 @@ public class FileUploadService {
             return false;
         }
 
-        // Vérifier la taille (max 50MB par exemple)
+        // Vérifier la taille (max 50MB)
         long maxSize = 50 * 1024 * 1024; // 50MB
         if (file.length() > maxSize) {
             log.warn("⚠️ Fichier trop volumineux: {} (max 50MB)", file.getName());
@@ -275,5 +294,43 @@ public class FileUploadService {
         }
 
         return validFiles;
+    }
+
+    /**
+     * Convertir un File Java en MultipartFile Spring
+     */
+    private MultipartFile convertFileToMultipartFile(File file) throws IOException {
+        FileInputStream input = new FileInputStream(file);
+        String contentType = getContentType(file);
+
+        return new MockMultipartFile(
+                "file",
+                file.getName(),
+                contentType,
+                input
+        );
+    }
+
+    /**
+     * Déterminer le Content-Type basé sur l'extension du fichier
+     */
+    private String getContentType(File file) {
+        String fileName = file.getName().toLowerCase();
+
+        if (fileName.endsWith(".pdf")) {
+            return "application/pdf";
+        } else if (fileName.endsWith(".docx")) {
+            return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        } else if (fileName.endsWith(".doc")) {
+            return "application/msword";
+        } else if (fileName.endsWith(".xlsx")) {
+            return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        } else if (fileName.endsWith(".xls")) {
+            return "application/vnd.ms-excel";
+        } else if (fileName.endsWith(".txt")) {
+            return "text/plain";
+        } else {
+            return "application/octet-stream";
+        }
     }
 }

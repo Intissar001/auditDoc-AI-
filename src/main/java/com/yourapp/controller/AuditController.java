@@ -3,11 +3,11 @@ package com.yourapp.controller;
 import com.yourapp.dto.AuditCreateRequestDto;
 import com.yourapp.dto.AuditDocumentDto;
 import com.yourapp.dto.AuditResponseDto;
-import com.yourapp.model.AuditTemplate;
+import com.yourapp.dto.AuditTemplateDTO;
 import com.yourapp.model.Project;
 import com.yourapp.services_UI.AuditApiService;
 import com.yourapp.services_UI.FileUploadService;
-import com.yourapp.services_UI.ModelApiService;
+import com.yourapp.services_UI.ModelService;
 import com.yourapp.services_UI.ProjectApiService;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -29,11 +29,10 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Contrôleur JavaFX pour la page d'audit
- * Communique uniquement avec le backend via les services API
+ * Communique uniquement avec le backend via les services (pas de HTTP)
  */
 @Component
 @Slf4j
@@ -42,7 +41,7 @@ public class AuditController {
     // ============ FXML Components ============
     @FXML private VBox dropzone;
     @FXML private ComboBox<Project> projetDropdown;
-    @FXML private ComboBox<AuditTemplate> partenaireDropdown;
+    @FXML private ComboBox<AuditTemplateDTO> partenaireDropdown;
     @FXML private VBox filesContainer;
     @FXML private VBox filesList;
     @FXML private Label filesCountLabel;
@@ -54,7 +53,7 @@ public class AuditController {
 
     // ============ Services Spring ============
     @Autowired private ProjectApiService projectApiService;
-    @Autowired private ModelApiService modelApiService;
+    @Autowired private ModelService modelService;
     @Autowired private AuditApiService auditApiService;
     @Autowired private FileUploadService fileUploadService;
 
@@ -63,7 +62,7 @@ public class AuditController {
     private List<File> selectedFiles = new ArrayList<>();
     private Long currentAuditId;
     private Project selectedProject;
-    private AuditTemplate selectedModel;
+    private AuditTemplateDTO selectedModel;
 
     /**
      * Initialisation du contrôleur
@@ -102,18 +101,22 @@ public class AuditController {
             if (selectedProject != null) {
                 log.info("📌 Projet sélectionné: {}", selectedProject.getName());
                 loadModelsForProject(selectedProject.getId());
+            } else {
+                // Réinitialiser les modèles si aucun projet sélectionné
+                partenaireDropdown.getItems().clear();
+                selectedModel = null;
             }
         });
 
-        // Configurer le modèle dropdown
-        partenaireDropdown.setConverter(new javafx.util.StringConverter<AuditTemplate>() {
+        // Configurer le modèle dropdown (utilise AuditTemplateDTO)
+        partenaireDropdown.setConverter(new javafx.util.StringConverter<AuditTemplateDTO>() {
             @Override
-            public String toString(AuditTemplate template) {
+            public String toString(AuditTemplateDTO template) {
                 return template != null ? template.getName() : "";
             }
 
             @Override
-            public AuditTemplate fromString(String string) {
+            public AuditTemplateDTO fromString(String string) {
                 return null;
             }
         });
@@ -173,11 +176,11 @@ public class AuditController {
     private void loadModelsForProject(Long projectId) {
         log.info("📥 Chargement des modèles pour le projet ID: {}", projectId);
 
-        Task<List<AuditTemplate>> task = new Task<>() {
+        Task<List<AuditTemplateDTO>> task = new Task<>() {
             @Override
-            protected List<AuditTemplate> call() {
+            protected List<AuditTemplateDTO> call() {
                 try {
-                    return modelApiService.getModelsByProject(projectId);
+                    return modelService.getModelsByProject(projectId);
                 } catch (Exception e) {
                     log.error("❌ Erreur lors du chargement des modèles", e);
                     return new ArrayList<>();
@@ -186,10 +189,12 @@ public class AuditController {
         };
 
         task.setOnSucceeded(e -> {
-            List<AuditTemplate> models = task.getValue();
+            List<AuditTemplateDTO> models = task.getValue();
             Platform.runLater(() -> {
                 partenaireDropdown.getItems().clear();
                 partenaireDropdown.getItems().addAll(models);
+                partenaireDropdown.setValue(null); // Réinitialiser la sélection
+                selectedModel = null;
 
                 if (models.isEmpty()) {
                     showNotification("⚠️ Aucun modèle", "Aucun modèle disponible pour ce projet");
@@ -388,6 +393,8 @@ public class AuditController {
 
         auditTask.setOnFailed(e -> {
             progressDialog.close();
+            Throwable exception = auditTask.getException();
+            log.error("❌ Erreur lors de l'audit", exception);
             showErrorNotification();
         });
 
@@ -406,6 +413,11 @@ public class AuditController {
                     // Étape 1: Créer l'audit
                     updateMessage("Création de l'audit...");
                     updateProgress(1, 5);
+                    Platform.runLater(() -> {
+                        statusLabel.setText("Création de l'audit...");
+                        percentLabel.setText("20%");
+                        progressBar.setProgress(0.2);
+                    });
 
                     AuditCreateRequestDto request = new AuditCreateRequestDto();
                     request.setProjectId(selectedProject.getId());
@@ -420,6 +432,11 @@ public class AuditController {
                     // Étape 2: Upload des documents
                     updateMessage("Upload des documents...");
                     updateProgress(2, 5);
+                    Platform.runLater(() -> {
+                        statusLabel.setText("Upload des documents...");
+                        percentLabel.setText("40%");
+                        progressBar.setProgress(0.4);
+                    });
 
                     List<AuditDocumentDto> uploadedDocs = fileUploadService.uploadMultipleFiles(
                             selectedFiles, currentAuditId
@@ -430,6 +447,11 @@ public class AuditController {
                     // Étape 3: Lancer l'analyse
                     updateMessage("Lancement de l'analyse IA...");
                     updateProgress(3, 5);
+                    Platform.runLater(() -> {
+                        statusLabel.setText("Lancement de l'analyse IA...");
+                        percentLabel.setText("60%");
+                        progressBar.setProgress(0.6);
+                    });
 
                     auditApiService.startAnalysis(currentAuditId);
 
@@ -438,6 +460,11 @@ public class AuditController {
                     // Étape 4: Polling du statut
                     updateMessage("Analyse en cours...");
                     updateProgress(4, 5);
+                    Platform.runLater(() -> {
+                        statusLabel.setText("Analyse en cours...");
+                        percentLabel.setText("80%");
+                        progressBar.setProgress(0.8);
+                    });
 
                     AuditResponseDto finalAudit = auditApiService.pollAuditStatus(
                             currentAuditId, 60, 2 // 60 tentatives toutes les 2 secondes
@@ -446,6 +473,11 @@ public class AuditController {
                     // Étape 5: Terminé
                     updateMessage("Analyse terminée ✅");
                     updateProgress(5, 5);
+                    Platform.runLater(() -> {
+                        statusLabel.setText("Analyse terminée ✅");
+                        percentLabel.setText("100%");
+                        progressBar.setProgress(1.0);
+                    });
 
                     return finalAudit;
 
@@ -576,19 +608,20 @@ public class AuditController {
         Label descLabel = new Label(issue.getDescription());
         descLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #374151; -fx-wrap-text: true;");
 
-        if (issue.getLocation() != null) {
+        card.getChildren().addAll(typeLabel, descLabel);
+
+        if (issue.getLocation() != null && !issue.getLocation().isEmpty()) {
             Label locationLabel = new Label("📍 " + issue.getLocation());
             locationLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #6b7280;");
             card.getChildren().add(locationLabel);
         }
 
-        if (issue.getSuggestion() != null) {
+        if (issue.getSuggestion() != null && !issue.getSuggestion().isEmpty()) {
             Label suggestionLabel = new Label("💡 " + issue.getSuggestion());
             suggestionLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #059669; -fx-wrap-text: true;");
             card.getChildren().add(suggestionLabel);
         }
 
-        card.getChildren().addAll(0, List.of(typeLabel, descLabel));
         return card;
     }
 

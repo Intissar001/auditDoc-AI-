@@ -1,71 +1,36 @@
 package com.yourapp.services_UI;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yourapp.model.Project;
+import com.yourapp.DAO.ProjectRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Service JavaFX pour communiquer avec l'API REST des projets
+ * Service UI pour la gestion des projets
+ * Intermédiaire entre JavaFX et le repository backend
  */
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class ProjectApiService {
 
-    @Value("${api.base.url:http://localhost:8080}")
-    private String baseUrl;
-
-    private final HttpClient httpClient;
-    private final ObjectMapper objectMapper;
-
-    public ProjectApiService() {
-        this.httpClient = HttpClient.newHttpClient();
-        this.objectMapper = new ObjectMapper();
-        this.objectMapper.findAndRegisterModules(); // Pour LocalDate
-    }
+    private final ProjectRepository projectRepository;
 
     /**
      * Récupérer tous les projets disponibles
      */
     public List<Project> getAllProjects() {
-        log.info("Récupération de tous les projets depuis l'API");
+        log.info("📥 Récupération de tous les projets");
 
         try {
-            String url = baseUrl + "/api/projects";
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .header("Content-Type", "application/json")
-                    .GET()
-                    .build();
-
-            HttpResponse<String> response = httpClient.send(request,
-                    HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200) {
-                List<Project> projects = objectMapper.readValue(
-                        response.body(),
-                        new TypeReference<List<Project>>() {}
-                );
-
-                log.info("✅ {} projets récupérés avec succès", projects.size());
-                return projects;
-            } else {
-                log.error("❌ Erreur API: Code {}", response.statusCode());
-                throw new RuntimeException("Erreur lors de la récupération des projets: " + response.statusCode());
-            }
-
+            List<Project> projects = projectRepository.findAll();
+            log.info("✅ {} projets récupérés avec succès", projects.size());
+            return projects;
         } catch (Exception e) {
-            log.error("❌ Erreur lors de la communication avec l'API projets", e);
+            log.error("❌ Erreur lors de la récupération des projets", e);
             throw new RuntimeException("Impossible de récupérer les projets: " + e.getMessage(), e);
         }
     }
@@ -74,33 +39,14 @@ public class ProjectApiService {
      * Récupérer un projet par son ID
      */
     public Project getProjectById(Long projectId) {
-        log.info("Récupération du projet ID: {}", projectId);
+        log.info("📥 Récupération du projet ID: {}", projectId);
 
         try {
-            String url = baseUrl + "/api/projects/" + projectId;
+            Project project = projectRepository.findById(projectId)
+                    .orElseThrow(() -> new RuntimeException("Projet introuvable avec l'ID: " + projectId));
 
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .header("Content-Type", "application/json")
-                    .GET()
-                    .build();
-
-            HttpResponse<String> response = httpClient.send(request,
-                    HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200) {
-                Project project = objectMapper.readValue(
-                        response.body(),
-                        Project.class
-                );
-
-                log.info("✅ Projet récupéré: {}", project.getName());
-                return project;
-            } else {
-                log.error("❌ Projet introuvable: {}", projectId);
-                throw new RuntimeException("Projet introuvable avec l'ID: " + projectId);
-            }
-
+            log.info("✅ Projet récupéré: {}", project.getName());
+            return project;
         } catch (Exception e) {
             log.error("❌ Erreur lors de la récupération du projet", e);
             throw new RuntimeException("Impossible de récupérer le projet: " + e.getMessage(), e);
@@ -108,64 +54,65 @@ public class ProjectApiService {
     }
 
     /**
-     * Rechercher des projets par nom
+     * Créer un nouveau projet
      */
-    public List<Project> searchProjects(String query) {
-        log.info("Recherche de projets: {}", query);
+    public Project createProject(Project project) {
+        log.info("➕ Création d'un nouveau projet: {}", project.getName());
 
         try {
-            String url = baseUrl + "/api/projects/search?query=" + query;
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .header("Content-Type", "application/json")
-                    .GET()
-                    .build();
-
-            HttpResponse<String> response = httpClient.send(request,
-                    HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200) {
-                List<Project> projects = objectMapper.readValue(
-                        response.body(),
-                        new TypeReference<List<Project>>() {}
-                );
-
-                log.info("✅ {} projets trouvés", projects.size());
-                return projects;
-            } else {
-                log.warn("⚠️ Aucun projet trouvé pour: {}", query);
-                return new ArrayList<>();
-            }
-
+            Project saved = projectRepository.save(project);
+            log.info("✅ Projet créé avec succès: ID={}", saved.getId());
+            return saved;
         } catch (Exception e) {
-            log.error("❌ Erreur lors de la recherche de projets", e);
-            return new ArrayList<>();
+            log.error("❌ Erreur lors de la création du projet", e);
+            throw new RuntimeException("Impossible de créer le projet: " + e.getMessage(), e);
         }
     }
 
     /**
-     * Vérifier la disponibilité de l'API
+     * Mettre à jour un projet
      */
-    public boolean isApiAvailable() {
+    public Project updateProject(Long projectId, Project project) {
+        log.info("🔄 Mise à jour du projet ID: {}", projectId);
+
         try {
-            String url = baseUrl + "/api/projects";
+            if (!projectRepository.existsById(projectId)) {
+                throw new RuntimeException("Projet introuvable avec l'ID: " + projectId);
+            }
 
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .header("Content-Type", "application/json")
-                    .GET()
-                    .timeout(java.time.Duration.ofSeconds(5))
-                    .build();
-
-            HttpResponse<String> response = httpClient.send(request,
-                    HttpResponse.BodyHandlers.ofString());
-
-            return response.statusCode() == 200;
-
+            project.setId(projectId);
+            Project updated = projectRepository.save(project);
+            log.info("✅ Projet mis à jour avec succès");
+            return updated;
         } catch (Exception e) {
-            log.warn("⚠️ API non disponible: {}", e.getMessage());
-            return false;
+            log.error("❌ Erreur lors de la mise à jour du projet", e);
+            throw new RuntimeException("Impossible de mettre à jour le projet: " + e.getMessage(), e);
         }
+    }
+
+    /**
+     * Supprimer un projet
+     */
+    public void deleteProject(Long projectId) {
+        log.info("🗑️ Suppression du projet ID: {}", projectId);
+
+        try {
+            if (!projectRepository.existsById(projectId)) {
+                throw new RuntimeException("Projet introuvable avec l'ID: " + projectId);
+            }
+
+            projectRepository.deleteById(projectId);
+            log.info("✅ Projet supprimé avec succès");
+        } catch (Exception e) {
+            log.error("❌ Erreur lors de la suppression du projet", e);
+            throw new RuntimeException("Impossible de supprimer le projet: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Vérifier si un projet existe
+     */
+    public boolean projectExists(Long projectId) {
+        return projectRepository.existsById(projectId);
     }
 }
