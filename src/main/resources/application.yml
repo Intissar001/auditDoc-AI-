@@ -4,7 +4,7 @@ api:
   ai:
     api:
       url: https://api.openai.com/v1/chat/completions
-      key: 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
+      key: ${OPENAI_API_KEY}
     model: gpt-3.5-turbo
     max:
       tokens: 2000
