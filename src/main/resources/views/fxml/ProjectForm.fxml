@@ -56,6 +56,11 @@
                             <ComboBox fx:id="cbStatus" maxWidth="Infinity" />
                         </VBox>
 
+                        <VBox spacing="5.0">
+                            <Label styleClass="form-label" text="Date du Prochain Audit" />
+                            <DatePicker fx:id="dpAudit" maxWidth="Infinity" promptText="mm/dd/yyyy" />
+                        </VBox>
+
                         <HBox alignment="CENTER_RIGHT" spacing="15.0" style="-fx-padding: 20 0 0 0;">
                             <Button onAction="#handleSave" styleClass="btn-save" text="Enregistrer" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
                             <Button onAction="#handleCancel" styleClass="btn-cancel" text="Annuler" />
