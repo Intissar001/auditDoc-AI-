@@ -15,8 +15,8 @@ ai:
 spring:
   datasource:
     url: jdbc:postgresql://aws-1-eu-west-1.pooler.supabase.com:6543/postgres?pgbouncer=true
-    username: ${USERNAME}
-    password: ${PASSWORD}
+    username: postgres.ziyevqgoffoejasscxyg
+    password: WcDmGFscwNTZL6pY
 
     hikari:
       maximum-pool-size: 5
