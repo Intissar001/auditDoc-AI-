@@ -1,5 +1,9 @@
 package com.yourapp.controller;
 
+import com.yourapp.dto.AuthResponseDto;
+import com.yourapp.dto.PasswordResetRequestDto;
+import com.yourapp.services.AuthenticationService;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,29 +13,30 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PswdForgotController {
 
-    @FXML
-    private TextField emailField;
+    @FXML private TextField emailField;
+    @FXML private Button sendCodeButton;
+    @FXML private Hyperlink motDePasseProblemLink;
+    @FXML private Hyperlink creerCompteLink;
+    @FXML private Button retourConnexionButton;
 
-    @FXML
-    private Button sendCodeButton;
+    // 🔐 NEW: Inject authentication service
+    @Autowired
+    private AuthenticationService authenticationService;
 
-    @FXML
-    private Hyperlink motDePasseProblemLink;
-
-    @FXML
-    private Hyperlink creerCompteLink;
-
-    @FXML
-    private Button retourConnexionButton;  // Renommé pour plus de clarté
+    @Autowired
+    private ApplicationContext springContext;
 
     @FXML
     public void initialize() {
         setupEventHandlers();
+        System.out.println("✅ PswdForgotController initialized with authentication service");
     }
 
     private void setupEventHandlers() {
@@ -43,39 +48,69 @@ public class PswdForgotController {
 
     @FXML
     private void handleSendCode() {
-        String email = emailField.getText();
+        String email = emailField.getText().trim();
 
         if (email.isEmpty()) {
-            showAlert("Erreur", "Veuillez entrer votre adresse email!");
+            showAlert(Alert.AlertType.ERROR, "Erreur",
+                    "Veuillez entrer votre adresse email!");
             return;
         }
 
         if (!isValidEmail(email)) {
-            showAlert("Erreur", "Email invalide!");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Email invalide!");
             return;
         }
 
-        System.out.println("Envoi du code de récupération à : " + email);
-        showAlert("Succès", "Un code de connexion a été envoyé à votre adresse email.");
+        // 🔐 NEW: Call authentication service
+        sendCodeButton.setDisable(true);
+        sendCodeButton.setText("Envoi en cours...");
+
+        // Run password reset request in background thread
+        new Thread(() -> {
+            try {
+                PasswordResetRequestDto request = new PasswordResetRequestDto(email);
+                AuthResponseDto response = authenticationService.requestPasswordReset(request);
+
+                // Update UI on JavaFX thread
+                Platform.runLater(() -> {
+                    sendCodeButton.setDisable(false);
+                    sendCodeButton.setText("Envoyer le code de connexion");
+
+                    // Always show success for security (don't reveal if email exists)
+                    showAlert(Alert.AlertType.INFORMATION, "Email envoyé", response.getMessage());
+
+                    System.out.println("✅ Password reset email sent to: " + email);
+                });
+
+            } catch (Exception e) {
+                Platform.runLater(() -> {
+                    sendCodeButton.setDisable(false);
+                    sendCodeButton.setText("Envoyer le code de connexion");
+                    showAlert(Alert.AlertType.ERROR, "Erreur",
+                            "Une erreur s'est produite lors de l'envoi du code");
+                    e.printStackTrace();
+                });
+            }
+        }).start();
     }
 
     @FXML
     private void handleMotDePasseProblem() {
-        System.out.println("Aide supplémentaire pour la récupération de mot de passe...");
-        showAlert("Aide", "Pour plus d'assistance, veuillez contacter le support.");
+        showAlert(Alert.AlertType.INFORMATION, "Aide",
+                "Pour plus d'assistance, veuillez contacter le support à:\n" +
+                        "support_auditdocai@gmail.com");
     }
 
     @FXML
     private void handleCreerCompte() {
         try {
-            // Charger la page de création de compte
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/fxml/signup.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/views/fxml/signup.fxml")
+            );
+            loader.setControllerFactory(springContext::getBean);
             Parent root = loader.load();
 
-            // Obtenir la scène actuelle
             Stage stage = (Stage) creerCompteLink.getScene().getWindow();
-
-            // Créer une nouvelle scène avec la page d'inscription
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("Audit Doc AI - Créer un Compte");
@@ -84,21 +119,21 @@ public class PswdForgotController {
             System.out.println("Redirection vers la page de création de compte...");
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Erreur", "Impossible de charger la page de création de compte.");
+            showAlert(Alert.AlertType.ERROR, "Erreur",
+                    "Impossible de charger la page de création de compte.");
         }
     }
 
     @FXML
     private void handleRetourConnexion() {
         try {
-            // Charger la page de connexion
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/fxml/login.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/views/fxml/login.fxml")
+            );
+            loader.setControllerFactory(springContext::getBean);
             Parent root = loader.load();
 
-            // Obtenir la scène actuelle
             Stage stage = (Stage) retourConnexionButton.getScene().getWindow();
-
-            // Créer une nouvelle scène avec la page de connexion
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("Audit Doc AI - Connexion");
@@ -107,7 +142,8 @@ public class PswdForgotController {
             System.out.println("Retour à la page de connexion...");
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Erreur", "Impossible de charger la page de connexion.");
+            showAlert(Alert.AlertType.ERROR, "Erreur",
+                    "Impossible de charger la page de connexion.");
         }
     }
 
@@ -116,8 +152,8 @@ public class PswdForgotController {
         return email.matches(emailRegex);
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);

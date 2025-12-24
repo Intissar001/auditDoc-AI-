@@ -28,7 +28,7 @@
             <VBox alignment="CENTER" styleClass="logo-box">
                 <ImageView fitWidth="60" fitHeight="60" preserveRatio="true">
                     <image>
-                        <Image url="@./icons/logo.png"/>
+                        <Image url="@../icons/logo.png"/>
                     </image>
                 </ImageView>
             </VBox>

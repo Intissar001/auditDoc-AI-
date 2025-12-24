@@ -1,5 +1,12 @@
 package com.yourapp.controller;
 
+import com.yourapp.dto.AuthResponseDto;
+import com.yourapp.dto.LoginRequestDto;
+import com.yourapp.model.User;
+import com.yourapp.services.AuthenticationService;
+import com.yourapp.services.UserService;
+import com.yourapp.utils.SessionManager;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,29 +17,33 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 @Component
 public class LoginController {
 
-    @FXML
-    private TextField emailField;
+    @FXML private TextField emailField;
+    @FXML private PasswordField passwordField;
+    @FXML private Button connexionButton;
+    @FXML private Hyperlink creerCompteLink;
+    @FXML private Hyperlink motDePasseOublieLink;
 
-    @FXML
-    private PasswordField passwordField;
+    // 🔐 NEW: Inject authentication service
+    @Autowired
+    private AuthenticationService authenticationService;
 
-    @FXML
-    private Button connexionButton;
+    @Autowired
+    private UserService userService;
 
-    @FXML
-    private Hyperlink creerCompteLink;
-
-    @FXML
-    private Hyperlink motDePasseOublieLink;
+    @Autowired
+    private ApplicationContext springContext;
 
     @FXML
     public void initialize() {
         setupEventHandlers();
+        System.out.println("✅ LoginController initialized with authentication service");
     }
 
     private void setupEventHandlers() {
@@ -43,38 +54,101 @@ public class LoginController {
 
     @FXML
     private void handleConnexion() {
-        String email = emailField.getText();
+        String email = emailField.getText().trim();
         String password = passwordField.getText();
 
+        // Validation
         if (email.isEmpty() || password.isEmpty()) {
-            showAlert("Erreur", "Tous les champs sont obligatoires!");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Tous les champs sont obligatoires!");
             return;
         }
 
         if (!isValidEmail(email)) {
-            showAlert("Erreur", "Email invalide!");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Email invalide!");
             return;
         }
 
-        System.out.println("Connexion...");
-        System.out.println("Email: " + email);
+        // 🔐 NEW: Call authentication service
+        connexionButton.setDisable(true);
+        connexionButton.setText("Connexion en cours...");
 
-        showAlert("Succès", "Connexion réussie!");
+        // Run authentication in background thread
+        new Thread(() -> {
+            try {
+                LoginRequestDto request = new LoginRequestDto(email, password);
+                AuthResponseDto response = authenticationService.login(request);
+
+                // Update UI on JavaFX thread
+                Platform.runLater(() -> {
+                    connexionButton.setDisable(false);
+                    connexionButton.setText("Se connecter");
+
+                    if (response.isSuccess()) {
+                        // Get full user details
+                        User user = userService.getUserById(response.getUserId());
+
+                        // Store user in session
+                        SessionManager.getInstance().setCurrentUser(user);
+
+                        System.out.println("✅ Login successful: " + email);
+
+                        // Navigate to main application
+                        navigateToMainApp();
+                    } else {
+                        showAlert(Alert.AlertType.ERROR, "Échec de connexion", response.getMessage());
+                    }
+                });
+
+            } catch (Exception e) {
+                Platform.runLater(() -> {
+                    connexionButton.setDisable(false);
+                    connexionButton.setText("Se connecter");
+                    showAlert(Alert.AlertType.ERROR, "Erreur",
+                            "Une erreur s'est produite lors de la connexion");
+                    e.printStackTrace();
+                });
+            }
+        }).start();
+    }
+
+    private void navigateToMainApp() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/views/fxml/MainLayout.fxml")
+            );
+            loader.setControllerFactory(springContext::getBean);
+            Parent root = loader.load();
+
+            // Get the main controller and initialize
+            MainLayoutController mainController = loader.getController();
+            mainController.setSpringContext(springContext);
+            mainController.loadView("Dashboard.fxml");
+
+            Stage stage = (Stage) connexionButton.getScene().getWindow();
+            Scene scene = new Scene(root, 1200, 800);
+            stage.setScene(scene);
+            stage.setTitle("Audit Doc AI - Dashboard");
+            stage.show();
+
+            System.out.println("✅ Navigated to main application");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur",
+                    "Impossible de charger l'application principale");
+        }
     }
 
     @FXML
     private void handleCreerCompte() {
         try {
-            // Charger la page de création de compte
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/views/fxml/signup.fxml"));
+            loader.setControllerFactory(springContext::getBean);
 
             Parent root = loader.load();
-
-            // Obtenir la scène actuelle
             Stage stage = (Stage) creerCompteLink.getScene().getWindow();
 
-            // Créer et définir la nouvelle scène
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("Audit Doc AI - Créer un compte");
@@ -83,21 +157,21 @@ public class LoginController {
             System.out.println("Redirection vers la page de création de compte...");
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Erreur", "Impossible de charger la page de création de compte.");
+            showAlert(Alert.AlertType.ERROR, "Erreur",
+                    "Impossible de charger la page de création de compte.");
         }
     }
 
     @FXML
     private void handleMotDePasseOublie() {
         try {
-            // Charger la page PswdForgot
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/fxml/pswdforgot.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/views/fxml/pswdforgot.fxml")
+            );
+            loader.setControllerFactory(springContext::getBean);
             Parent root = loader.load();
 
-            // Obtenir la scène actuelle
             Stage stage = (Stage) motDePasseOublieLink.getScene().getWindow();
-
-            // Créer une nouvelle scène avec la page PswdForgot
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("Audit Doc AI - Mot de passe oublié");
@@ -106,7 +180,8 @@ public class LoginController {
             System.out.println("Redirection vers la page de récupération de mot de passe...");
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Erreur", "Impossible de charger la page de récupération de mot de passe.");
+            showAlert(Alert.AlertType.ERROR, "Erreur",
+                    "Impossible de charger la page de récupération de mot de passe.");
         }
     }
 
@@ -115,8 +190,8 @@ public class LoginController {
         return email.matches(emailRegex);
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);

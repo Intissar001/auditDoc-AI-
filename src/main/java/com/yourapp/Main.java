@@ -1,6 +1,5 @@
 package com.yourapp;
 
-import com.yourapp.controller.MainLayoutController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -40,6 +39,11 @@ public class Main extends Application {
      */
     @Override
     public void init() {
+
+        /** aicha
+        SpringApplication app = new SpringApplication(AuditDocAiApplication.class);
+        app.setWebApplicationType(org.springframework.boot.WebApplicationType.NONE);
+
         System.out.println("🔧 Initialisation de Spring Boot...");
 
         SpringApplication app = new SpringApplication(Main.class);
@@ -47,6 +51,7 @@ public class Main extends Application {
         // ⚠️ IMPORTANT : Désactiver le serveur web Tomcat
         // L'application tourne en LOCAL, pas en mode serveur
         app.setWebApplicationType(org.springframework.boot.WebApplicationType.NONE);
+        */
 
         springContext = app.run();
 
@@ -61,13 +66,17 @@ public class Main extends Application {
         System.out.println("🎨 Chargement de l'interface JavaFX...");
 
         FXMLLoader loader = new FXMLLoader(
-                Main.class.getResource("/views/fxml/MainLayout.fxml")
+                Main.class.getResource("/views/fxml/signup.fxml")
         );
 
         // Utiliser Spring pour instancier les contrôleurs
         loader.setControllerFactory(param -> springContext.getBean(param));
 
         Parent root = loader.load();
+
+/**aicha
+        stage.setScene(new Scene(root, 800, 600));
+        stage.setTitle("AuditDoc AI - Connexion");
 
         MainLayoutController mainController = loader.getController();
         mainController.setSpringContext(springContext);
@@ -77,6 +86,8 @@ public class Main extends Application {
         stage.setScene(scene);
         stage.setTitle("AuditDoc AI - Document Compliance Analysis");
         stage.setMaximized(true);
+        */
+
         stage.show();
 
         System.out.println("========================================");
@@ -88,11 +99,17 @@ public class Main extends Application {
      * Nettoyer les ressources lors de la fermeture
      */
     @Override
+  /**aicha
+    public void stop() {springContext.close();}
+
+    public static ConfigurableApplicationContext getSpringContext() {
+        return springContext;
     public void stop() {
         System.out.println("🛑 Fermeture de l'application...");
         if (springContext != null) {
             springContext.close();
         }
         System.out.println("👋 Application fermée");
-    }
+*/
+}
 }

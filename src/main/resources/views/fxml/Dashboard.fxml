@@ -2,247 +2,219 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-<ScrollPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yourapp.controller.DashboardController"
-            fitToWidth="true" styleClass="page-scroll-pane" stylesheets="@../css/Dashboard.css">
+<ScrollPane fitToWidth="true" styleClass="page-scroll-pane" stylesheets="@../css/Dashboard.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yourapp.controller.DashboardController">
     <content>
         <VBox spacing="25.0" styleClass="page-content">
-
             <padding>
                 <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
             </padding>
 
+            <!-- PAGE HEADER -->
             <VBox spacing="5.0">
-                <Label styleClass="page-title" text="Tableau de Bord" />
-                <Label styleClass="page-subtitle" text="Vue d'ensemble de vos audits et projets" />
+                <Label fx:id="welcomeLabel" styleClass="page-title" text="Bienvenue, Utilisateur " />
+                <Label styleClass="page-subtitle" text="Voici un aperçu de vos audits et de la conformité de votre organisation" />
             </VBox>
 
-            <HBox prefHeight="120.0" spacing="20.0">
+            <!-- MAIN CONTENT -->
+            <HBox spacing="25.0">
+                <!-- LEFT SECTION -->
+                <VBox spacing="25.0" HBox.hgrow="ALWAYS">
 
-                <VBox spacing="15.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
-                    <HBox alignment="CENTER_LEFT" spacing="15.0">
-                        <StackPane styleClass="stat-icon-container, stat-icon-blue">
-                            <Label styleClass="stat-icon" text="📊" />
-                        </StackPane>
-                        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                            <Label styleClass="stat-label" text="Total Audits" />
-                            <Label fx:id="totalAuditsLabel" styleClass="stat-value" text="24" />
+                    <!-- STATS CARDS -->
+                    <GridPane hgap="15.0" vgap="15.0">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
+                        </columnConstraints>
+
+                        <!-- NOMBRE D'AUDITS -->
+                        <VBox prefHeight="145.0" prefWidth="138.0" styleClass="stat-card" GridPane.columnIndex="0">
+                            <HBox alignment="TOP_RIGHT">
+                                <StackPane prefHeight="42.0" prefWidth="42.0" styleClass="icon-square, bg-muted-blue">
+                                    <ImageView fitHeight="22.0" fitWidth="22.0" preserveRatio="true">
+                                        <Image url="@../icons/stats.png" />
+                                    </ImageView>
+                                </StackPane>
+                            </HBox>
+                            <Label styleClass="stat-label" text="Nombre d'Audits">
+                        <font>
+                           <Font name="System Bold" size="12.0" />
+                        </font></Label>
+                            <Label fx:id="totalAuditsLabel" styleClass="stat-value" text="0" />
+                            <Label fx:id="auditsThisMonthLabel" styleClass="stat-badge" text="+0 ce mois" />
                         </VBox>
-                        <Label styleClass="stat-change, stat-change-positive" text="+12%" />
-                    </HBox>
-                    <Label styleClass="stat-period" text="Ce mois" />
-                </VBox>
 
-                <VBox spacing="15.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
-                    <HBox alignment="CENTER_LEFT" spacing="15.0">
-                        <StackPane styleClass="stat-icon-container, stat-icon-orange">
-                            <Label styleClass="stat-icon" text="⏱" />
-                        </StackPane>
-                        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                            <Label styleClass="stat-label" text="En Cours" />
-                            <Label fx:id="inProgressLabel" styleClass="stat-value" text="8" />
+                        <!-- NOMBRE DE PROJETS -->
+                        <VBox styleClass="stat-card" GridPane.columnIndex="1">
+                            <HBox alignment="TOP_RIGHT">
+                                <StackPane prefHeight="42.0" prefWidth="42.0" styleClass="icon-square, bg-muted-purple">
+                                    <ImageView fitHeight="22.0" fitWidth="22.0" preserveRatio="true">
+                                        <Image url="@../icons/file.png" />
+                                    </ImageView>
+                                </StackPane>
+                            </HBox>
+                            <Label styleClass="stat-label" text="Nombre de Projets" />
+                            <Label fx:id="projectsLabel" styleClass="stat-value" text="0" />
+                            <Label fx:id="projectsThisWeekLabel" styleClass="stat-badge" text="+0 cette semaine" />
                         </VBox>
-                        <Label styleClass="stat-change, stat-change-neutral" text="33%" />
-                    </HBox>
-                    <Label styleClass="stat-period" text="Audits actifs" />
-                </VBox>
 
-                <VBox spacing="15.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
-                    <HBox alignment="CENTER_LEFT" spacing="15.0">
-                        <StackPane styleClass="stat-icon-container, stat-icon-green">
-                            <Label styleClass="stat-icon" text="✓" />
-                        </StackPane>
-                        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                            <Label styleClass="stat-label" text="Terminés" />
-                            <Label fx:id="completedLabel" styleClass="stat-value" text="16" />
+                        <!-- AUDIT CONFORME -->
+                        <VBox styleClass="stat-card" GridPane.columnIndex="2">
+                            <HBox alignment="TOP_RIGHT">
+                                <StackPane prefHeight="42.0" prefWidth="42.0" styleClass="icon-square, bg-muted-green">
+                                    <ImageView fitHeight="22.0" fitWidth="22.0" preserveRatio="true">
+                                        <Image url="@../icons/check-mark.png" />
+                                    </ImageView>
+                                </StackPane>
+                            </HBox>
+                            <Label styleClass="stat-label" text="Audit Conforme" />
+                            <Label fx:id="conformeLabel" styleClass="stat-value" text="0" />
+                            <Label styleClass="stat-badge-success" text="Conforme" />
                         </VBox>
-                        <Label styleClass="stat-change, stat-change-positive" text="+8%" />
-                    </HBox>
-                    <Label styleClass="stat-period" text="Ce mois" />
-                </VBox>
 
-                <VBox spacing="15.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
-                    <HBox alignment="CENTER_LEFT" spacing="15.0">
-                        <StackPane styleClass="stat-icon-container, stat-icon-purple">
-                            <Label styleClass="stat-icon" text="📂" />
-                        </StackPane>
-                        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                            <Label styleClass="stat-label" text="Projets" />
-                            <Label fx:id="projectsLabel" styleClass="stat-value" text="12" />
+                        <!-- AUDIT NON-CONFORME -->
+                        <VBox styleClass="stat-card" GridPane.columnIndex="3">
+                            <HBox alignment="TOP_RIGHT">
+                                <StackPane prefHeight="42.0" prefWidth="42.0" styleClass="icon-square, bg-muted-orange">
+                                    <ImageView fitHeight="22.0" fitWidth="22.0" preserveRatio="true">
+                                        <Image url="@../icons/close.png" />
+                                    </ImageView>
+                                </StackPane>
+                            </HBox>
+                            <Label styleClass="stat-label" text="Audit Non-Conforme" />
+                            <Label fx:id="nonConformeLabel" styleClass="stat-value" text="0" />
+                            <Label styleClass="stat-badge-action" text="Action requise" />
                         </VBox>
-                        <Label styleClass="stat-change, stat-change-positive" text="+2" />
-                    </HBox>
-                    <Label styleClass="stat-period" text="Actifs" />
-                </VBox>
-            </HBox>
+                  <rowConstraints>
+                     <RowConstraints />
+                  </rowConstraints>
+                    </GridPane>
 
-            <HBox prefHeight="350.0" spacing="20.0">
+                    <!-- PROGRESSION DES AUDITS -->
+                    <VBox spacing="15.0" styleClass="white-card">
+                        <Label styleClass="section-title" text=" Aperçu de la Progression des Audits">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                            <graphic>
+                                <ImageView fitHeight="17.0" fitWidth="28.0" preserveRatio="true">
+                                    <Image url="@../icons/trend.png" />
+                                </ImageView>
+                            </graphic>
+                        </Label>
 
-                <VBox spacing="20.0" styleClass="card" HBox.hgrow="ALWAYS">
-                    <HBox alignment="CENTER_LEFT">
-                        <Label styleClass="card-title" text="Tendance des Audits" HBox.hgrow="ALWAYS" />
-                        <ComboBox prefWidth="126.0" promptText="30 derniers jours" styleClass="period-selector" />
-                    </HBox>
+                        <!-- SCORE GLOBAL -->
+                        <VBox fx:id="complianceCard" styleClass="compliance-card">
+                            <HBox alignment="CENTER_LEFT" spacing="20.0">
+                                <VBox HBox.hgrow="ALWAYS">
+                                    <Label styleClass="card-subtitle-white" text="Score de Conformité Global" />
+                                    <Label fx:id="globalScoreLabel" styleClass="compliance-value" text="0%" />
+                                    <Label fx:id="complianceStatusLabel" styleClass="card-footer-white" text="Chargement..." />
+                                </VBox>
+                                <StackPane>
+                                    <Circle fill="TRANSPARENT" radius="35.0" stroke="WHITE" strokeWidth="5.0" style="-fx-opacity: 0.3;" />
+                                    <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                        <Image url="@../icons/check-mark.png" />
+                                    </ImageView>
+                                </StackPane>
+                            </HBox>
+                        </VBox>
 
-                    <VBox fx:id="chartContainer" alignment="CENTER" styleClass="chart-placeholder" VBox.vgrow="ALWAYS">
-                        <Label styleClass="chart-icon" text="📈" />
-                        <Label styleClass="chart-placeholder-text" text="Graphique des tendances" />
+                        <Label styleClass="section-title" text="Progression par Projet">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                        </Label>
+                        <VBox fx:id="projectProgressContainer" spacing="15.0" />
+                    </VBox>
+
+                    <!-- ACTIVITÉS RÉCENTES -->
+                    <VBox spacing="15.0" styleClass="white-card">
+                        <Label styleClass="section-title" text="Activité Récente">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                        </Label>
+                        <VBox fx:id="recentAuditsContainer" spacing="10.0" />
                     </VBox>
                 </VBox>
 
-                <VBox prefWidth="350.0" spacing="20.0" styleClass="card">
-                    <Label styleClass="card-title" text="Distribution des Statuts" />
-
-                    <VBox spacing="15.0" VBox.vgrow="ALWAYS">
-
-                        <HBox alignment="CENTER_LEFT" spacing="12.0">
-                            <Circle radius="5.0" styleClass="status-dot, status-dot-success" />
-                            <Label styleClass="status-label" text="Terminés" HBox.hgrow="ALWAYS" />
-                            <Label styleClass="status-percentage" text="67%" />
+                <!-- RIGHT SECTION - CHATBOT AI -->
+                <VBox prefWidth="350.0" spacing="20.0">
+                    <VBox prefHeight="600.0" prefWidth="350.0" spacing="15.0" styleClass="ai-sidebar-card">
+                        <!-- HEADER -->
+                        <HBox alignment="CENTER_LEFT" spacing="15.0">
+                            <StackPane prefHeight="46.0" prefWidth="46.0" styleClass="ai-icon-bg">
+                                <ImageView fitHeight="25.0" fitWidth="25.0" preserveRatio="true">
+                                    <Image url="@../icons/ai.png" />
+                                </ImageView>
+                            </StackPane>
+                            <VBox>
+                                <Label styleClass="ai-title" text="Assistant IA" />
+                                <Label styleClass="ai-subtitle" text="Posez vos questions" />
+                            </VBox>
                         </HBox>
-                        <ProgressBar maxWidth="Infinity" progress="0.67" styleClass="status-progress, status-progress-success" />
 
-                        <HBox alignment="CENTER_LEFT" spacing="12.0">
-                            <Circle radius="5.0" styleClass="status-dot, status-dot-warning" />
-                            <Label styleClass="status-label" text="En cours" HBox.hgrow="ALWAYS" />
-                            <Label styleClass="status-percentage" text="25%" />
-                        </HBox>
-                        <ProgressBar maxWidth="Infinity" progress="0.25" styleClass="status-progress, status-progress-warning" />
+                        <Separator prefWidth="280.0" />
 
-                        <HBox alignment="CENTER_LEFT" spacing="12.0">
-                            <Circle radius="5.0" styleClass="status-dot, status-dot-pending" />
-                            <Label styleClass="status-label" text="En attente" HBox.hgrow="ALWAYS" />
-                            <Label styleClass="status-percentage" text="8%" />
-                        </HBox>
-                        <ProgressBar maxWidth="Infinity" progress="0.08" styleClass="status-progress, status-progress-pending" />
 
-                    </VBox>
-                </VBox>
-            </HBox>
-
-            <HBox prefHeight="400.0" spacing="20.0">
-
-                <VBox spacing="20.0" styleClass="card" HBox.hgrow="ALWAYS">
-                    <HBox alignment="CENTER_LEFT">
-                        <Label styleClass="card-title" text="Audits Récents" HBox.hgrow="ALWAYS" />
-                        <Hyperlink styleClass="view-all-link" text="Voir tout" />
-                    </HBox>
-
-                    <ScrollPane fitToWidth="true" styleClass="activities-scroll" VBox.vgrow="ALWAYS">
-                        <VBox fx:id="recentAuditsContainer" spacing="12.0">
-
-                            <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="activity-item">
-                                <StackPane styleClass="activity-icon-container, activity-icon-blue">
-                                    <Label styleClass="activity-icon" text="📄" />
-                                </StackPane>
-                                <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                                    <Label styleClass="activity-title" text="Audit Financier Q4" />
-                                    <Label styleClass="activity-subtitle" text="Projet Alpha - Il y a 2 heures" />
+                        <VBox prefHeight="113.0" prefWidth="280.0" spacing="20.0">
+                            <HBox spacing="10.0" styleClass="sidebar-item">
+                                <ImageView fitHeight="25.0" fitWidth="25.0" preserveRatio="true">
+                                    <Image url="@../icons/bulb.png" />
+                                </ImageView>
+                                <VBox>
+                                    <Label styleClass="sidebar-item-title" text="Recommandations" />
+                                    <Label styleClass="sidebar-item-sub" text="Suggestions pour améliorer" wrapText="true" />
                                 </VBox>
-                                <Label styleClass="activity-status, activity-status-progress" text="En cours" />
                             </HBox>
-
-                            <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="activity-item">
-                                <StackPane styleClass="activity-icon-container, activity-icon-green">
-                                    <Label styleClass="activity-icon" text="✓" />
-                                </StackPane>
-                                <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                                    <Label styleClass="activity-title" text="Conformité RGPD" />
-                                    <Label styleClass="activity-subtitle" text="Projet Beta - Il y a 5 heures" />
+                            <HBox spacing="10.0" styleClass="sidebar-item">
+                                <ImageView fitHeight="25.0" fitWidth="25.0" preserveRatio="true">
+                                    <Image url="@../icons/trend.png" />
+                                </ImageView>
+                                <VBox>
+                                    <Label styleClass="sidebar-item-title" text="Tendances" />
+                                    <Label styleClass="sidebar-item-sub" text="Analyse des derniers mois" wrapText="true" />
                                 </VBox>
-                                <Label styleClass="activity-status, activity-status-completed" text="Terminé" />
                             </HBox>
-
-                            <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="activity-item">
-                                <StackPane styleClass="activity-icon-container, activity-icon-orange">
-                                    <Label styleClass="activity-icon" text="⚠" />
-                                </StackPane>
-                                <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                                    <Label styleClass="activity-title" text="Audit de Sécurité" />
-                                    <Label styleClass="activity-subtitle" text="Projet Gamma - Hier" />
+                            <HBox spacing="10.0" styleClass="sidebar-item">
+                                <ImageView fitHeight="25.0" fitWidth="25.0" preserveRatio="true">
+                                    <Image url="@../icons/alert.png" />
+                                </ImageView>
+                                <VBox>
+                                    <Label styleClass="sidebar-item-title" text="Alertes" />
+                                    <Label styleClass="sidebar-item-sub" text="Problèmes récurrents détectés " wrapText="true" />
                                 </VBox>
-                                <Label styleClass="activity-status, activity-status-warning" text="Attention" />
                             </HBox>
-
-                            <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="activity-item">
-                                <StackPane styleClass="activity-icon-container, activity-icon-blue">
-                                    <Label styleClass="activity-icon" text="📄" />
-                                </StackPane>
-                                <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                                    <Label styleClass="activity-title" text="Rapport Qualité ISO" />
-                                    <Label styleClass="activity-subtitle" text="Projet Delta - Il y a 2 jours" />
-                                </VBox>
-                                <Label styleClass="activity-status, activity-status-progress" text="En cours" />
-                            </HBox>
-
                         </VBox>
-                    </ScrollPane>
-                </VBox>
 
-                <VBox prefWidth="320.0" spacing="20.0" styleClass="card">
-                    <Label styleClass="card-title" text="Actions Rapides" />
+                        <!-- CHAT MESSAGES -->
+                        <ScrollPane fitToWidth="true" prefHeight="346.0" prefWidth="310.0" style="-fx-background-color: transparent; -fx-border-width: 0;" VBox.vgrow="ALWAYS">
+                            <VBox fx:id="chatMessagesContainer" spacing="10" style="-fx-background-color: transparent;" />
+                        </ScrollPane>
 
-                    <VBox spacing="12.0" VBox.vgrow="ALWAYS">
 
-                        <Button maxWidth="Infinity" onAction="#handleNewAudit" styleClass="quick-action-btn, quick-action-primary">
-                            <graphic>
-                                <HBox alignment="CENTER_LEFT" spacing="12.0">
-                                    <Label styleClass="quick-action-icon" text="+" />
-                                    <VBox spacing="3.0" HBox.hgrow="ALWAYS">
-                                        <Label styleClass="quick-action-title" text="Nouvel Audit" />
-                                        <Label styleClass="quick-action-subtitle" text="Lancer une analyse" />
-                                    </VBox>
-                                </HBox>
-                            </graphic>
-                        </Button>
-
-                        <Button maxWidth="Infinity" onAction="#handleNewProject" styleClass="quick-action-btn">
-                            <graphic>
-                                <HBox alignment="CENTER_LEFT" spacing="12.0">
-                                    <Label styleClass="quick-action-icon" text="📂" />
-                                    <VBox spacing="3.0" HBox.hgrow="ALWAYS">
-                                        <Label styleClass="quick-action-title" text="Nouveau Projet" />
-                                        <Label styleClass="quick-action-subtitle" text="Créer un projet" />
-                                    </VBox>
-                                </HBox>
-                            </graphic>
-                        </Button>
-
-                        <Button maxWidth="Infinity" onAction="#handleUploadDocuments" styleClass="quick-action-btn">
-                            <graphic>
-                                <HBox alignment="CENTER_LEFT" spacing="12.0">
-                                    <Label styleClass="quick-action-icon" text="⬆" />
-                                    <VBox spacing="3.0" HBox.hgrow="ALWAYS">
-                                        <Label styleClass="quick-action-title" text="Importer Documents" />
-                                        <Label styleClass="quick-action-subtitle" text="Ajouter des fichiers" />
-                                    </VBox>
-                                </HBox>
-                            </graphic>
-                        </Button>
-
-                        <Button maxWidth="Infinity" onAction="#handleViewReports" styleClass="quick-action-btn">
-                            <graphic>
-                                <HBox alignment="CENTER_LEFT" spacing="12.0">
-                                    <Label styleClass="quick-action-icon" text="📊" />
-                                    <VBox spacing="3.0" HBox.hgrow="ALWAYS">
-                                        <Label styleClass="quick-action-title" text="Voir Rapports" />
-                                        <Label styleClass="quick-action-subtitle" text="Consulter les analyses" />
-                                    </VBox>
-                                </HBox>
-                            </graphic>
-                        </Button>
-                    </VBox>
-
-                    <VBox spacing="10.0" styleClass="help-section">
-                        <Label styleClass="help-title" text="💡 Besoin d'aide?" />
-                        <Label styleClass="help-text" text="Consultez notre guide ou contactez le support" wrapText="true" />
-                        <Hyperlink styleClass="help-link" text="Accéder au guide →" />
+                        <!-- INPUT CHAT -->
+                        <HBox prefHeight="48.0" prefWidth="310.0" spacing="8" styleClass="chat-input-container">
+                            <TextField fx:id="chatInputField" promptText="Posez une question..." styleClass="chat-field" HBox.hgrow="ALWAYS" />
+                            <Button fx:id="chatSendButton" styleClass="chat-send-btn">
+                                <graphic>
+                                    <ImageView fitHeight="18.0" fitWidth="18.0" preserveRatio="true">
+                                        <Image url="@../icons/send.png" />
+                                    </ImageView>
+                                </graphic>
+                            </Button>
+                        </HBox>
                     </VBox>
                 </VBox>
             </HBox>
-
         </VBox>
     </content>
 </ScrollPane>

@@ -19,6 +19,9 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(name = "password_hash", nullable = false)
+    private String passwordHash;
+
     @Column(nullable = false)
     private String role;
 
@@ -34,9 +37,20 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    // Notifications
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Notification> notifications = new ArrayList<>();
 
+    // Password reset tokens
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private List<PasswordResetToken> passwordResetTokens = new ArrayList<>();
+
+    // Lifecycle hooks
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -48,13 +62,16 @@ public class User {
         updatedAt = LocalDateTime.now();
     }
 
+    // --------------------
     // Constructors
+    // --------------------
+
     public User() {}
 
     public User(String fullName, String role) {
         this.fullName = fullName;
         this.role = role;
-        this.email = "";
+        this.email = ""; // kept for backward compatibility
     }
 
     public User(String fullName, String email, String role) {
@@ -63,7 +80,17 @@ public class User {
         this.role = role;
     }
 
+    public User(String fullName, String email, String passwordHash, String role) {
+        this.fullName = fullName;
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.role = role;
+    }
+
+    // --------------------
     // Getters & Setters
+    // --------------------
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -72,6 +99,9 @@ public class User {
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+
+    public String getPasswordHash() { return passwordHash; }
+    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
 
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
@@ -86,8 +116,17 @@ public class User {
     public LocalDateTime getUpdatedAt() { return updatedAt; }
 
     public List<Notification> getNotifications() { return notifications; }
-    public void setNotifications(List<Notification> notifications) { this.notifications = notifications; }
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
+    }
 
-    // Alias pour compatibilité
+    public List<PasswordResetToken> getPasswordResetTokens() {
+        return passwordResetTokens;
+    }
+    public void setPasswordResetTokens(List<PasswordResetToken> tokens) {
+        this.passwordResetTokens = tokens;
+    }
+
+    // UI compatibility alias
     public String getName() { return fullName; }
 }

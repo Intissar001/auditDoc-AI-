@@ -5,6 +5,7 @@ import com.yourapp.model.User;
 import com.yourapp.services.NotificationService;
 import com.yourapp.service.UserClient;
 
+import com.yourapp.services.UserService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -55,7 +56,7 @@ public class TopbarController {
         }
 
         // Charger utilisateur
-        User u = UserClient.getCurrentUser();
+        User u = UserService.getCurrentUser();
         if (u != null) {
             userName.setText(u.getFullName());
             userRole.setText(u.getRole());
