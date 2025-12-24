@@ -136,22 +136,24 @@ public class SignUpController {
 
     private void redirectToLogin() {
         try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/views/fxml/login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/fxml/login.fxml"));
             loader.setControllerFactory(springContext::getBean);
-
             Parent root = loader.load();
+
+            // RÉCUPÉRER la fenêtre actuelle au lieu d'en créer une nouvelle
             Stage stage = (Stage) creerCompteButton.getScene().getWindow();
 
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
+            // CHANGER uniquement le contenu (Root) de la scène actuelle
+            stage.getScene().setRoot(root);
 
-            System.out.println("Redirection vers la page de connexion...");
+            // S'assurer que la fenêtre reste bien dimensionnée
+            stage.sizeToScene();
+            stage.centerOnScreen();
+
+            System.out.println("✅ Redirection vers Login réussie dans la même fenêtre.");
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur",
-                    "Impossible de charger la page de connexion.");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger la page de connexion.");
         }
     }
 

@@ -113,52 +113,40 @@ public class LoginController {
 
     private void navigateToMainApp() {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/views/fxml/MainLayout.fxml")
-            );
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/fxml/MainLayout.fxml"));
             loader.setControllerFactory(springContext::getBean);
             Parent root = loader.load();
 
-            // Get the main controller and initialize
             MainLayoutController mainController = loader.getController();
             mainController.setSpringContext(springContext);
             mainController.loadView("Dashboard.fxml");
 
             Stage stage = (Stage) connexionButton.getScene().getWindow();
-            Scene scene = new Scene(root, 1200, 800);
-            stage.setScene(scene);
-            stage.setTitle("Audit Doc AI - Dashboard");
-            stage.show();
 
-            System.out.println("✅ Navigated to main application");
+            // Best way: On change le contenu (root) au lieu de recréer la Scene
+            // Cela évite tout clignotement ou changement de taille
+            stage.getScene().setRoot(root);
+            stage.setMaximized(true);
 
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur",
-                    "Impossible de charger l'application principale");
         }
     }
-
     @FXML
     private void handleCreerCompte() {
         try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/views/fxml/signup.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/fxml/signup.fxml"));
             loader.setControllerFactory(springContext::getBean);
-
             Parent root = loader.load();
+
+            // ON RÉUTILISE la scène existante
             Stage stage = (Stage) creerCompteLink.getScene().getWindow();
+            stage.getScene().setRoot(root);
 
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle("Audit Doc AI - Créer un compte");
-            stage.show();
-
-            System.out.println("Redirection vers la page de création de compte...");
+            stage.sizeToScene();
+            stage.centerOnScreen();
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur",
-                    "Impossible de charger la page de création de compte.");
         }
     }
 
