@@ -46,22 +46,26 @@ public class ProjetsController {
         if (projectService == null) return;
 
         try {
-            // 1. Récupérer la liste des projets depuis Supabase via le service
             List<Project> projects = projectService.getAllProjects();
-
-            // 2. Nettoyer l'affichage actuel
             projectsContainer.getChildren().clear();
 
-            // 3. Créer une carte pour chaque projet
             for (Project project : projects) {
-                createProjectCard(project);
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/fxml/ProjectCard.fxml"));
+
+                // IMPORTANT : On ne laisse PAS Spring gérer l'instance ici pour éviter le conflit de Singleton
+                // On laisse l'instance se créer normalement via le FXMLLoader
+                Node card = loader.load();
+
+                ProjectCardController cardController = loader.getController();
+
+                // On injecte manuellement les données et le service pour cette instance précise
+                cardController.setProjectData(project);
+                cardController.setProjectService(this.projectService);
+
+                projectsContainer.getChildren().add(card);
             }
-
-            System.out.println(projects.size() + " projets chargés avec succès.");
-
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("Erreur lors de la récupération des projets : " + e.getMessage());
         }
     }
 
