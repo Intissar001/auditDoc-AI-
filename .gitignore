@@ -18,3 +18,10 @@ target/
 .project
 *.class
 bin/
+# dossiers d'uploads
+uploads/
+auditDoc/
+*.pdf
+*.docx
+*.zip
+*.mp4
