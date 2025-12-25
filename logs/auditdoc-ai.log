@@ -379,3 +379,1041 @@ org.hibernate.LazyInitializationException: could not initialize proxy [com.youra
 2025-12-25T00:22:37.688+01:00  INFO 15608 --- [JavaFX Application Thread] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2025-12-25T00:22:37.690+01:00  INFO 15608 --- [JavaFX Application Thread] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2025-12-25T00:22:39.694+01:00  INFO 15608 --- [JavaFX Application Thread] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-12-25T00:22:46.175+01:00  INFO 29160 --- [JavaFX-Launcher] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-25T00:22:47.063+01:00  INFO 29160 --- [JavaFX-Launcher] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-12-25T00:22:49.080+01:00  INFO 29160 --- [JavaFX-Launcher] o.s.boot.SpringApplication               : Started application in 26.668 seconds (process running for 28.26)
+2025-12-25T00:23:20.339+01:00  INFO 29160 --- [JavaFX Application Thread] c.y.controller.DashboardController       : 🚀 Initialisation du Dashboard
+2025-12-25T00:23:20.342+01:00  INFO 29160 --- [Thread-5] com.yourapp.services.DashboardService    : Récupération des stats dashboard pour user 6
+2025-12-25T00:23:20.342+01:00  INFO 29160 --- [JavaFX Application Thread] c.y.controller.DashboardController       : ✅ Dashboard initialisé avec succès
+2025-12-25T00:23:21.115+01:00  INFO 29160 --- [Thread-5] com.yourapp.services.DashboardService    : Récupération de la progression des projets
+2025-12-25T00:23:21.348+01:00  INFO 29160 --- [Thread-5] com.yourapp.services.DashboardService    : Récupération des activités récentes
+2025-12-25T00:23:21.755+01:00 ERROR 29160 --- [Thread-5] c.y.controller.DashboardController       : ❌ Erreur lors du chargement des données
+
+org.hibernate.LazyInitializationException: could not initialize proxy [com.yourapp.model.Audit#71] - no Session
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:165) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:314) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor.intercept(ByteBuddyInterceptor.java:44) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.ProxyConfiguration$InterceptorDispatcher.intercept(ProxyConfiguration.java:102) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at com.yourapp.model.Audit$HibernateProxy$BtLcIK16.getProjectName(Unknown Source) ~[classes/:na]
+	at com.yourapp.services.DashboardService.getRecentActivities(DashboardService.java:146) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:85) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:73) ~[classes/:na]
+	at javafx.graphics@21.0.4/javafx.concurrent.Task$TaskCallable.call(Task.java:1399) ~[javafx-graphics-21.0.4-win.jar:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-12-25T00:23:45.564+01:00  INFO 29160 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 🚀 Initialisation du AuditController
+2025-12-25T00:23:45.565+01:00  INFO 29160 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📥 Chargement des projets...
+2025-12-25T00:23:45.565+01:00  INFO 29160 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ AuditController initialisé avec succès
+2025-12-25T00:23:45.566+01:00  INFO 29160 --- [Thread-6] c.yourapp.services_UI.ProjectApiService  : 📥 Récupération de tous les projets
+2025-12-25T00:23:45.844+01:00  INFO 29160 --- [Thread-6] c.yourapp.services_UI.ProjectApiService  : ✅ 6 projets récupérés avec succès
+2025-12-25T00:23:45.846+01:00  INFO 29160 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ 6 projets chargés
+2025-12-25T00:23:46.503+01:00  INFO 29160 --- [JavaFX Application Thread] c.y.controller.DashboardController       : 🚀 Initialisation du Dashboard
+2025-12-25T00:23:46.503+01:00  INFO 29160 --- [JavaFX Application Thread] c.y.controller.DashboardController       : ✅ Dashboard initialisé avec succès
+2025-12-25T00:23:46.503+01:00  INFO 29160 --- [Thread-7] com.yourapp.services.DashboardService    : Récupération des stats dashboard pour user 6
+2025-12-25T00:23:47.235+01:00  INFO 29160 --- [Thread-7] com.yourapp.services.DashboardService    : Récupération de la progression des projets
+2025-12-25T00:23:47.425+01:00  INFO 29160 --- [Thread-7] com.yourapp.services.DashboardService    : Récupération des activités récentes
+2025-12-25T00:23:47.855+01:00 ERROR 29160 --- [Thread-7] c.y.controller.DashboardController       : ❌ Erreur lors du chargement des données
+
+org.hibernate.LazyInitializationException: could not initialize proxy [com.yourapp.model.Audit#71] - no Session
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:165) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:314) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor.intercept(ByteBuddyInterceptor.java:44) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.ProxyConfiguration$InterceptorDispatcher.intercept(ProxyConfiguration.java:102) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at com.yourapp.model.Audit$HibernateProxy$BtLcIK16.getProjectName(Unknown Source) ~[classes/:na]
+	at com.yourapp.services.DashboardService.getRecentActivities(DashboardService.java:146) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:85) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:73) ~[classes/:na]
+	at javafx.graphics@21.0.4/javafx.concurrent.Task$TaskCallable.call(Task.java:1399) ~[javafx-graphics-21.0.4-win.jar:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-12-25T00:25:29.641+01:00  INFO 29160 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 🚀 Initialisation du AuditController
+2025-12-25T00:25:29.642+01:00  INFO 29160 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📥 Chargement des projets...
+2025-12-25T00:25:29.642+01:00  INFO 29160 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ AuditController initialisé avec succès
+2025-12-25T00:25:29.642+01:00  INFO 29160 --- [Thread-8] c.yourapp.services_UI.ProjectApiService  : 📥 Récupération de tous les projets
+2025-12-25T00:25:30.006+01:00  INFO 29160 --- [Thread-8] c.yourapp.services_UI.ProjectApiService  : ✅ 6 projets récupérés avec succès
+2025-12-25T00:25:30.007+01:00  INFO 29160 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ 6 projets chargés
+2025-12-25T00:25:31.445+01:00  INFO 29160 --- [JavaFX Application Thread] c.y.controller.DashboardController       : 🚀 Initialisation du Dashboard
+2025-12-25T00:25:31.445+01:00  INFO 29160 --- [JavaFX Application Thread] c.y.controller.DashboardController       : ✅ Dashboard initialisé avec succès
+2025-12-25T00:25:31.446+01:00  INFO 29160 --- [Thread-9] com.yourapp.services.DashboardService    : Récupération des stats dashboard pour user 6
+2025-12-25T00:25:32.175+01:00  INFO 29160 --- [Thread-9] com.yourapp.services.DashboardService    : Récupération de la progression des projets
+2025-12-25T00:25:32.386+01:00  INFO 29160 --- [Thread-9] com.yourapp.services.DashboardService    : Récupération des activités récentes
+2025-12-25T00:25:32.787+01:00 ERROR 29160 --- [Thread-9] c.y.controller.DashboardController       : ❌ Erreur lors du chargement des données
+
+org.hibernate.LazyInitializationException: could not initialize proxy [com.yourapp.model.Audit#71] - no Session
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:165) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:314) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor.intercept(ByteBuddyInterceptor.java:44) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.ProxyConfiguration$InterceptorDispatcher.intercept(ProxyConfiguration.java:102) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at com.yourapp.model.Audit$HibernateProxy$BtLcIK16.getProjectName(Unknown Source) ~[classes/:na]
+	at com.yourapp.services.DashboardService.getRecentActivities(DashboardService.java:146) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:85) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:73) ~[classes/:na]
+	at javafx.graphics@21.0.4/javafx.concurrent.Task$TaskCallable.call(Task.java:1399) ~[javafx-graphics-21.0.4-win.jar:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-12-25T00:26:20.129+01:00  INFO 29160 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 🚀 Initialisation du AuditController
+2025-12-25T00:26:20.129+01:00  INFO 29160 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📥 Chargement des projets...
+2025-12-25T00:26:20.129+01:00  INFO 29160 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ AuditController initialisé avec succès
+2025-12-25T00:26:20.130+01:00  INFO 29160 --- [Thread-10] c.yourapp.services_UI.ProjectApiService  : 📥 Récupération de tous les projets
+2025-12-25T00:26:20.448+01:00  INFO 29160 --- [Thread-10] c.yourapp.services_UI.ProjectApiService  : ✅ 6 projets récupérés avec succès
+2025-12-25T00:26:20.448+01:00  INFO 29160 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ 6 projets chargés
+2025-12-25T00:26:21.408+01:00  INFO 29160 --- [JavaFX Application Thread] c.y.controller.DashboardController       : 🚀 Initialisation du Dashboard
+2025-12-25T00:26:21.409+01:00  INFO 29160 --- [JavaFX Application Thread] c.y.controller.DashboardController       : ✅ Dashboard initialisé avec succès
+2025-12-25T00:26:21.409+01:00  INFO 29160 --- [Thread-11] com.yourapp.services.DashboardService    : Récupération des stats dashboard pour user 6
+2025-12-25T00:26:22.067+01:00  INFO 29160 --- [Thread-11] com.yourapp.services.DashboardService    : Récupération de la progression des projets
+2025-12-25T00:26:22.256+01:00  INFO 29160 --- [Thread-11] com.yourapp.services.DashboardService    : Récupération des activités récentes
+2025-12-25T00:26:22.648+01:00 ERROR 29160 --- [Thread-11] c.y.controller.DashboardController       : ❌ Erreur lors du chargement des données
+
+org.hibernate.LazyInitializationException: could not initialize proxy [com.yourapp.model.Audit#71] - no Session
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:165) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:314) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor.intercept(ByteBuddyInterceptor.java:44) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.ProxyConfiguration$InterceptorDispatcher.intercept(ProxyConfiguration.java:102) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at com.yourapp.model.Audit$HibernateProxy$BtLcIK16.getProjectName(Unknown Source) ~[classes/:na]
+	at com.yourapp.services.DashboardService.getRecentActivities(DashboardService.java:146) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:85) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:73) ~[classes/:na]
+	at javafx.graphics@21.0.4/javafx.concurrent.Task$TaskCallable.call(Task.java:1399) ~[javafx-graphics-21.0.4-win.jar:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-12-25T00:27:58.068+01:00  INFO 29160 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 🚀 Initialisation du AuditController
+2025-12-25T00:27:58.069+01:00  INFO 29160 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📥 Chargement des projets...
+2025-12-25T00:27:58.069+01:00  INFO 29160 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ AuditController initialisé avec succès
+2025-12-25T00:27:58.069+01:00  INFO 29160 --- [Thread-12] c.yourapp.services_UI.ProjectApiService  : 📥 Récupération de tous les projets
+2025-12-25T00:27:58.357+01:00  INFO 29160 --- [Thread-12] c.yourapp.services_UI.ProjectApiService  : ✅ 6 projets récupérés avec succès
+2025-12-25T00:27:58.357+01:00  INFO 29160 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ 6 projets chargés
+2025-12-25T00:28:30.014+01:00  INFO 29160 --- [JavaFX Application Thread] c.y.controller.DashboardController       : 🚀 Initialisation du Dashboard
+2025-12-25T00:28:30.014+01:00  INFO 29160 --- [JavaFX Application Thread] c.y.controller.DashboardController       : ✅ Dashboard initialisé avec succès
+2025-12-25T00:28:30.014+01:00  INFO 29160 --- [Thread-13] com.yourapp.services.DashboardService    : Récupération des stats dashboard pour user 6
+2025-12-25T00:28:30.659+01:00  INFO 29160 --- [Thread-13] com.yourapp.services.DashboardService    : Récupération de la progression des projets
+2025-12-25T00:28:30.847+01:00  INFO 29160 --- [Thread-13] com.yourapp.services.DashboardService    : Récupération des activités récentes
+2025-12-25T00:28:31.228+01:00 ERROR 29160 --- [Thread-13] c.y.controller.DashboardController       : ❌ Erreur lors du chargement des données
+
+org.hibernate.LazyInitializationException: could not initialize proxy [com.yourapp.model.Audit#71] - no Session
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:165) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:314) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor.intercept(ByteBuddyInterceptor.java:44) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.ProxyConfiguration$InterceptorDispatcher.intercept(ProxyConfiguration.java:102) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at com.yourapp.model.Audit$HibernateProxy$BtLcIK16.getProjectName(Unknown Source) ~[classes/:na]
+	at com.yourapp.services.DashboardService.getRecentActivities(DashboardService.java:146) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:85) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:73) ~[classes/:na]
+	at javafx.graphics@21.0.4/javafx.concurrent.Task$TaskCallable.call(Task.java:1399) ~[javafx-graphics-21.0.4-win.jar:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-12-25T00:28:37.484+01:00  INFO 29160 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 🚀 Initialisation du AuditController
+2025-12-25T00:28:37.484+01:00  INFO 29160 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📥 Chargement des projets...
+2025-12-25T00:28:37.484+01:00  INFO 29160 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ AuditController initialisé avec succès
+2025-12-25T00:28:37.484+01:00  INFO 29160 --- [Thread-14] c.yourapp.services_UI.ProjectApiService  : 📥 Récupération de tous les projets
+2025-12-25T00:28:37.757+01:00  INFO 29160 --- [Thread-14] c.yourapp.services_UI.ProjectApiService  : ✅ 6 projets récupérés avec succès
+2025-12-25T00:28:37.757+01:00  INFO 29160 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ 6 projets chargés
+2025-12-25T00:28:38.461+01:00  INFO 29160 --- [JavaFX Application Thread] c.y.controller.DashboardController       : 🚀 Initialisation du Dashboard
+2025-12-25T00:28:38.461+01:00  INFO 29160 --- [JavaFX Application Thread] c.y.controller.DashboardController       : ✅ Dashboard initialisé avec succès
+2025-12-25T00:28:38.462+01:00  INFO 29160 --- [Thread-15] com.yourapp.services.DashboardService    : Récupération des stats dashboard pour user 6
+2025-12-25T00:28:39.109+01:00  INFO 29160 --- [Thread-15] com.yourapp.services.DashboardService    : Récupération de la progression des projets
+2025-12-25T00:28:39.298+01:00  INFO 29160 --- [Thread-15] com.yourapp.services.DashboardService    : Récupération des activités récentes
+2025-12-25T00:28:39.709+01:00 ERROR 29160 --- [Thread-15] c.y.controller.DashboardController       : ❌ Erreur lors du chargement des données
+
+org.hibernate.LazyInitializationException: could not initialize proxy [com.yourapp.model.Audit#71] - no Session
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:165) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:314) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor.intercept(ByteBuddyInterceptor.java:44) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.ProxyConfiguration$InterceptorDispatcher.intercept(ProxyConfiguration.java:102) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at com.yourapp.model.Audit$HibernateProxy$BtLcIK16.getProjectName(Unknown Source) ~[classes/:na]
+	at com.yourapp.services.DashboardService.getRecentActivities(DashboardService.java:146) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:85) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:73) ~[classes/:na]
+	at javafx.graphics@21.0.4/javafx.concurrent.Task$TaskCallable.call(Task.java:1399) ~[javafx-graphics-21.0.4-win.jar:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-12-25T00:29:22.622+01:00  INFO 29160 --- [JavaFX Application Thread] c.y.controller.DashboardController       : 🚀 Initialisation du Dashboard
+2025-12-25T00:29:22.623+01:00  INFO 29160 --- [JavaFX Application Thread] c.y.controller.DashboardController       : ✅ Dashboard initialisé avec succès
+2025-12-25T00:29:22.623+01:00  INFO 29160 --- [Thread-16] com.yourapp.services.DashboardService    : Récupération des stats dashboard pour user 6
+2025-12-25T00:29:23.258+01:00  INFO 29160 --- [Thread-16] com.yourapp.services.DashboardService    : Récupération de la progression des projets
+2025-12-25T00:29:23.438+01:00  INFO 29160 --- [Thread-16] com.yourapp.services.DashboardService    : Récupération des activités récentes
+2025-12-25T00:29:23.486+01:00  INFO 29160 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 🚀 Initialisation du AuditController
+2025-12-25T00:29:23.486+01:00  INFO 29160 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📥 Chargement des projets...
+2025-12-25T00:29:23.486+01:00  INFO 29160 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ AuditController initialisé avec succès
+2025-12-25T00:29:23.487+01:00  INFO 29160 --- [Thread-17] c.yourapp.services_UI.ProjectApiService  : 📥 Récupération de tous les projets
+2025-12-25T00:29:23.758+01:00  INFO 29160 --- [Thread-17] c.yourapp.services_UI.ProjectApiService  : ✅ 6 projets récupérés avec succès
+2025-12-25T00:29:23.758+01:00  INFO 29160 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ 6 projets chargés
+2025-12-25T00:29:23.818+01:00 ERROR 29160 --- [Thread-16] c.y.controller.DashboardController       : ❌ Erreur lors du chargement des données
+
+org.hibernate.LazyInitializationException: could not initialize proxy [com.yourapp.model.Audit#71] - no Session
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:165) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:314) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor.intercept(ByteBuddyInterceptor.java:44) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.ProxyConfiguration$InterceptorDispatcher.intercept(ProxyConfiguration.java:102) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at com.yourapp.model.Audit$HibernateProxy$BtLcIK16.getProjectName(Unknown Source) ~[classes/:na]
+	at com.yourapp.services.DashboardService.getRecentActivities(DashboardService.java:146) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:85) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:73) ~[classes/:na]
+	at javafx.graphics@21.0.4/javafx.concurrent.Task$TaskCallable.call(Task.java:1399) ~[javafx-graphics-21.0.4-win.jar:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-12-25T00:32:24.227+01:00  INFO 25540 --- [JavaFX-Launcher] o.s.boot.SpringApplication               : Starting application using Java 21.0.9 with PID 25540 (started by AdMin in C:\Users\AdMin\Desktop\auditDoc-AI-)
+2025-12-25T00:32:24.229+01:00  INFO 25540 --- [JavaFX-Launcher] o.s.boot.SpringApplication               : No active profile set, falling back to 1 default profile: "default"
+2025-12-25T00:32:24.988+01:00  INFO 25540 --- [JavaFX-Launcher] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-25T00:32:25.067+01:00  INFO 25540 --- [JavaFX-Launcher] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 73 ms. Found 8 JPA repository interfaces.
+2025-12-25T00:32:25.710+01:00  INFO 25540 --- [JavaFX-Launcher] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-25T00:32:25.794+01:00  INFO 25540 --- [JavaFX-Launcher] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2025-12-25T00:32:25.825+01:00  INFO 25540 --- [JavaFX-Launcher] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-12-25T00:32:26.161+01:00  INFO 25540 --- [JavaFX-Launcher] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-25T00:32:26.187+01:00  INFO 25540 --- [JavaFX-Launcher] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-12-25T00:32:27.261+01:00  INFO 25540 --- [JavaFX-Launcher] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@16454e35
+2025-12-25T00:32:27.262+01:00  INFO 25540 --- [JavaFX-Launcher] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-12-25T00:32:28.779+01:00  INFO 25540 --- [JavaFX-Launcher] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-25T00:32:28.892+01:00  INFO 25540 --- [JavaFX-Launcher] org.hibernate.orm.connections.access     : HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@7477d67a] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+2025-12-25T00:32:33.081+01:00  INFO 25540 --- [JavaFX-Launcher] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-25T00:32:33.739+01:00  INFO 25540 --- [JavaFX-Launcher] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-12-25T00:32:34.540+01:00  INFO 25540 --- [JavaFX-Launcher] o.s.boot.SpringApplication               : Started application in 10.873 seconds (process running for 11.663)
+2025-12-25T00:32:53.945+01:00  INFO 25540 --- [JavaFX Application Thread] c.y.controller.DashboardController       : 🚀 Initialisation du Dashboard
+2025-12-25T00:32:53.948+01:00  INFO 25540 --- [Thread-5] com.yourapp.services.DashboardService    : Récupération des stats dashboard pour user 6
+2025-12-25T00:32:53.948+01:00  INFO 25540 --- [JavaFX Application Thread] c.y.controller.DashboardController       : ✅ Dashboard initialisé avec succès
+2025-12-25T00:32:54.547+01:00  INFO 25540 --- [Thread-5] com.yourapp.services.DashboardService    : Récupération de la progression des projets
+2025-12-25T00:32:54.799+01:00  INFO 25540 --- [Thread-5] com.yourapp.services.DashboardService    : Récupération des activités récentes
+2025-12-25T00:32:55.222+01:00 ERROR 25540 --- [Thread-5] c.y.controller.DashboardController       : ❌ Erreur lors du chargement des données
+
+org.hibernate.LazyInitializationException: could not initialize proxy [com.yourapp.model.Audit#71] - no Session
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:165) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:314) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor.intercept(ByteBuddyInterceptor.java:44) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.ProxyConfiguration$InterceptorDispatcher.intercept(ProxyConfiguration.java:102) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at com.yourapp.model.Audit$HibernateProxy$hNGc40EA.getProjectName(Unknown Source) ~[classes/:na]
+	at com.yourapp.services.DashboardService.getRecentActivities(DashboardService.java:146) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:85) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:73) ~[classes/:na]
+	at javafx.graphics@21.0.4/javafx.concurrent.Task$TaskCallable.call(Task.java:1399) ~[javafx-graphics-21.0.4-win.jar:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-12-25T00:33:00.219+01:00  INFO 25540 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 🚀 Initialisation du AuditController
+2025-12-25T00:33:00.220+01:00  INFO 25540 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📥 Chargement des projets...
+2025-12-25T00:33:00.221+01:00  INFO 25540 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ AuditController initialisé avec succès
+2025-12-25T00:33:00.221+01:00  INFO 25540 --- [Thread-6] c.yourapp.services_UI.ProjectApiService  : 📥 Récupération de tous les projets
+2025-12-25T00:33:00.495+01:00  INFO 25540 --- [Thread-6] c.yourapp.services_UI.ProjectApiService  : ✅ 6 projets récupérés avec succès
+2025-12-25T00:33:00.497+01:00  INFO 25540 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ 6 projets chargés
+2025-12-25T00:33:22.472+01:00  INFO 25540 --- [JavaFX Application Thread] org.hibernate.orm.jdbc.batch             : HHH100503: On release of batch it still contained JDBC statements
+2025-12-25T00:33:22.473+01:00 ERROR 25540 --- [JavaFX Application Thread] org.hibernate.orm.jdbc.batch             : HHH100501: Exception executing batch [java.sql.BatchUpdateException: Batch entry 0 delete from auditdocument where id=('25'::int8) was aborted: ERROR: update or delete on table "auditdocument" violates foreign key constraint "fkblaxwvpu01p6xtugnb4h2scpb" on table "audit_issue"
+  Detail: Key (id)=(25) is still referenced from table "audit_issue".  Call getNextException to see other errors in the batch.], SQL: delete from auditdocument where id=?
+2025-12-25T00:33:22.474+01:00  WARN 25540 --- [JavaFX Application Thread] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 0, SQLState: 23503
+2025-12-25T00:33:22.474+01:00 ERROR 25540 --- [JavaFX Application Thread] o.h.engine.jdbc.spi.SqlExceptionHelper   : Batch entry 0 delete from auditdocument where id=('25'::int8) was aborted: ERROR: update or delete on table "auditdocument" violates foreign key constraint "fkblaxwvpu01p6xtugnb4h2scpb" on table "audit_issue"
+  Detail: Key (id)=(25) is still referenced from table "audit_issue".  Call getNextException to see other errors in the batch.
+2025-12-25T00:33:22.474+01:00 ERROR 25540 --- [JavaFX Application Thread] o.h.engine.jdbc.spi.SqlExceptionHelper   : ERROR: update or delete on table "auditdocument" violates foreign key constraint "fkblaxwvpu01p6xtugnb4h2scpb" on table "audit_issue"
+  Detail: Key (id)=(25) is still referenced from table "audit_issue".
+2025-12-25T00:34:24.550+01:00  INFO 25540 --- [JavaFX Application Thread] org.hibernate.orm.jdbc.batch             : HHH100503: On release of batch it still contained JDBC statements
+2025-12-25T00:34:24.551+01:00 ERROR 25540 --- [JavaFX Application Thread] org.hibernate.orm.jdbc.batch             : HHH100501: Exception executing batch [java.sql.BatchUpdateException: Batch entry 0 delete from auditdocument where id=('41'::int8) was aborted: ERROR: update or delete on table "auditdocument" violates foreign key constraint "fkblaxwvpu01p6xtugnb4h2scpb" on table "audit_issue"
+  Detail: Key (id)=(41) is still referenced from table "audit_issue".  Call getNextException to see other errors in the batch.], SQL: delete from auditdocument where id=?
+2025-12-25T00:34:24.551+01:00  WARN 25540 --- [JavaFX Application Thread] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 0, SQLState: 23503
+2025-12-25T00:34:24.551+01:00 ERROR 25540 --- [JavaFX Application Thread] o.h.engine.jdbc.spi.SqlExceptionHelper   : Batch entry 0 delete from auditdocument where id=('41'::int8) was aborted: ERROR: update or delete on table "auditdocument" violates foreign key constraint "fkblaxwvpu01p6xtugnb4h2scpb" on table "audit_issue"
+  Detail: Key (id)=(41) is still referenced from table "audit_issue".  Call getNextException to see other errors in the batch.
+2025-12-25T00:34:24.551+01:00 ERROR 25540 --- [JavaFX Application Thread] o.h.engine.jdbc.spi.SqlExceptionHelper   : ERROR: update or delete on table "auditdocument" violates foreign key constraint "fkblaxwvpu01p6xtugnb4h2scpb" on table "audit_issue"
+  Detail: Key (id)=(41) is still referenced from table "audit_issue".
+2025-12-25T00:34:31.060+01:00  INFO 25540 --- [JavaFX Application Thread] org.hibernate.orm.jdbc.batch             : HHH100503: On release of batch it still contained JDBC statements
+2025-12-25T00:34:31.061+01:00 ERROR 25540 --- [JavaFX Application Thread] org.hibernate.orm.jdbc.batch             : HHH100501: Exception executing batch [java.sql.BatchUpdateException: Batch entry 0 delete from auditdocument where id=('44'::int8) was aborted: ERROR: update or delete on table "auditdocument" violates foreign key constraint "fkblaxwvpu01p6xtugnb4h2scpb" on table "audit_issue"
+  Detail: Key (id)=(44) is still referenced from table "audit_issue".  Call getNextException to see other errors in the batch.], SQL: delete from auditdocument where id=?
+2025-12-25T00:34:31.061+01:00  WARN 25540 --- [JavaFX Application Thread] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 0, SQLState: 23503
+2025-12-25T00:34:31.061+01:00 ERROR 25540 --- [JavaFX Application Thread] o.h.engine.jdbc.spi.SqlExceptionHelper   : Batch entry 0 delete from auditdocument where id=('44'::int8) was aborted: ERROR: update or delete on table "auditdocument" violates foreign key constraint "fkblaxwvpu01p6xtugnb4h2scpb" on table "audit_issue"
+  Detail: Key (id)=(44) is still referenced from table "audit_issue".  Call getNextException to see other errors in the batch.
+2025-12-25T00:34:31.061+01:00 ERROR 25540 --- [JavaFX Application Thread] o.h.engine.jdbc.spi.SqlExceptionHelper   : ERROR: update or delete on table "auditdocument" violates foreign key constraint "fkblaxwvpu01p6xtugnb4h2scpb" on table "audit_issue"
+  Detail: Key (id)=(44) is still referenced from table "audit_issue".
+2025-12-25T00:35:31.197+01:00  INFO 25540 --- [JavaFX Application Thread] c.y.controller.DashboardController       : 🚀 Initialisation du Dashboard
+2025-12-25T00:35:31.198+01:00  INFO 25540 --- [JavaFX Application Thread] c.y.controller.DashboardController       : ✅ Dashboard initialisé avec succès
+2025-12-25T00:35:31.198+01:00  INFO 25540 --- [Thread-7] com.yourapp.services.DashboardService    : Récupération des stats dashboard pour user 6
+2025-12-25T00:35:32.022+01:00  INFO 25540 --- [Thread-7] com.yourapp.services.DashboardService    : Récupération de la progression des projets
+2025-12-25T00:35:32.252+01:00  INFO 25540 --- [Thread-7] com.yourapp.services.DashboardService    : Récupération des activités récentes
+2025-12-25T00:35:32.731+01:00 ERROR 25540 --- [Thread-7] c.y.controller.DashboardController       : ❌ Erreur lors du chargement des données
+
+org.hibernate.LazyInitializationException: could not initialize proxy [com.yourapp.model.Audit#71] - no Session
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:165) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:314) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor.intercept(ByteBuddyInterceptor.java:44) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.ProxyConfiguration$InterceptorDispatcher.intercept(ProxyConfiguration.java:102) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at com.yourapp.model.Audit$HibernateProxy$hNGc40EA.getProjectName(Unknown Source) ~[classes/:na]
+	at com.yourapp.services.DashboardService.getRecentActivities(DashboardService.java:146) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:85) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:73) ~[classes/:na]
+	at javafx.graphics@21.0.4/javafx.concurrent.Task$TaskCallable.call(Task.java:1399) ~[javafx-graphics-21.0.4-win.jar:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-12-25T00:37:04.175+01:00  INFO 25540 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 🚀 Initialisation du AuditController
+2025-12-25T00:37:04.175+01:00  INFO 25540 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📥 Chargement des projets...
+2025-12-25T00:37:04.175+01:00  INFO 25540 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ AuditController initialisé avec succès
+2025-12-25T00:37:04.176+01:00  INFO 25540 --- [Thread-8] c.yourapp.services_UI.ProjectApiService  : 📥 Récupération de tous les projets
+2025-12-25T00:37:04.451+01:00  INFO 25540 --- [Thread-8] c.yourapp.services_UI.ProjectApiService  : ✅ 6 projets récupérés avec succès
+2025-12-25T00:37:04.452+01:00  INFO 25540 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ 6 projets chargés
+2025-12-25T00:42:01.908+01:00  INFO 29160 --- [JavaFX Application Thread] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-12-25T00:42:01.912+01:00  INFO 29160 --- [JavaFX Application Thread] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-12-25T00:42:01.915+01:00  INFO 29160 --- [JavaFX Application Thread] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-12-25T00:58:36.867+01:00  WARN 25540 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1m9s285ms666µs800ns).
+2025-12-25T01:02:24.563+01:00  INFO 14396 --- [JavaFX-Launcher] o.s.boot.SpringApplication               : Starting application using Java 21.0.9 with PID 14396 (started by AdMin in C:\Users\AdMin\Desktop\auditDoc-AI-)
+2025-12-25T01:02:24.565+01:00  INFO 14396 --- [JavaFX-Launcher] o.s.boot.SpringApplication               : No active profile set, falling back to 1 default profile: "default"
+2025-12-25T01:02:25.213+01:00  INFO 14396 --- [JavaFX-Launcher] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-25T01:02:25.300+01:00  INFO 14396 --- [JavaFX-Launcher] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 80 ms. Found 8 JPA repository interfaces.
+2025-12-25T01:02:25.945+01:00  INFO 14396 --- [JavaFX-Launcher] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-25T01:02:25.998+01:00  INFO 14396 --- [JavaFX-Launcher] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2025-12-25T01:02:26.026+01:00  INFO 14396 --- [JavaFX-Launcher] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-12-25T01:02:26.377+01:00  INFO 14396 --- [JavaFX-Launcher] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-25T01:02:26.406+01:00  INFO 14396 --- [JavaFX-Launcher] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-12-25T01:02:27.634+01:00  INFO 14396 --- [JavaFX-Launcher] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@39479ee9
+2025-12-25T01:02:27.636+01:00  INFO 14396 --- [JavaFX-Launcher] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-12-25T01:02:29.189+01:00  INFO 14396 --- [JavaFX-Launcher] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-25T01:02:29.294+01:00  INFO 14396 --- [JavaFX-Launcher] org.hibernate.orm.connections.access     : HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@371cc3] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+2025-12-25T01:02:33.454+01:00  INFO 14396 --- [JavaFX-Launcher] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-25T01:02:34.097+01:00  INFO 14396 --- [JavaFX-Launcher] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-12-25T01:02:34.896+01:00  INFO 14396 --- [JavaFX-Launcher] o.s.boot.SpringApplication               : Started application in 10.915 seconds (process running for 11.83)
+2025-12-25T01:02:38.257+01:00  INFO 14396 --- [JavaFX Application Thread] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-12-25T01:02:38.260+01:00  INFO 14396 --- [JavaFX Application Thread] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-12-25T01:02:38.444+01:00  INFO 14396 --- [JavaFX Application Thread] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-12-25T01:05:08.060+01:00  INFO 25540 --- [JavaFX Application Thread] c.y.controller.DashboardController       : 🚀 Initialisation du Dashboard
+2025-12-25T01:05:08.061+01:00  INFO 25540 --- [JavaFX Application Thread] c.y.controller.DashboardController       : ✅ Dashboard initialisé avec succès
+2025-12-25T01:05:08.061+01:00  INFO 25540 --- [Thread-9] com.yourapp.services.DashboardService    : Récupération des stats dashboard pour user 6
+2025-12-25T01:05:08.716+01:00  INFO 25540 --- [Thread-9] com.yourapp.services.DashboardService    : Récupération de la progression des projets
+2025-12-25T01:05:08.906+01:00  INFO 25540 --- [Thread-9] com.yourapp.services.DashboardService    : Récupération des activités récentes
+2025-12-25T01:05:09.325+01:00 ERROR 25540 --- [Thread-9] c.y.controller.DashboardController       : ❌ Erreur lors du chargement des données
+
+org.hibernate.LazyInitializationException: could not initialize proxy [com.yourapp.model.Audit#71] - no Session
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:165) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:314) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor.intercept(ByteBuddyInterceptor.java:44) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.ProxyConfiguration$InterceptorDispatcher.intercept(ProxyConfiguration.java:102) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at com.yourapp.model.Audit$HibernateProxy$hNGc40EA.getProjectName(Unknown Source) ~[classes/:na]
+	at com.yourapp.services.DashboardService.getRecentActivities(DashboardService.java:146) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:85) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:73) ~[classes/:na]
+	at javafx.graphics@21.0.4/javafx.concurrent.Task$TaskCallable.call(Task.java:1399) ~[javafx-graphics-21.0.4-win.jar:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-12-25T01:05:11.974+01:00  INFO 25540 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 🚀 Initialisation du AuditController
+2025-12-25T01:05:11.974+01:00  INFO 25540 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📥 Chargement des projets...
+2025-12-25T01:05:11.974+01:00  INFO 25540 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ AuditController initialisé avec succès
+2025-12-25T01:05:11.975+01:00  INFO 25540 --- [Thread-10] c.yourapp.services_UI.ProjectApiService  : 📥 Récupération de tous les projets
+2025-12-25T01:05:12.256+01:00  INFO 25540 --- [Thread-10] c.yourapp.services_UI.ProjectApiService  : ✅ 6 projets récupérés avec succès
+2025-12-25T01:05:12.256+01:00  INFO 25540 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ 6 projets chargés
+2025-12-25T01:05:43.449+01:00  INFO 25540 --- [JavaFX Application Thread] c.y.controller.DashboardController       : 🚀 Initialisation du Dashboard
+2025-12-25T01:05:43.450+01:00  INFO 25540 --- [JavaFX Application Thread] c.y.controller.DashboardController       : ✅ Dashboard initialisé avec succès
+2025-12-25T01:05:43.450+01:00  INFO 25540 --- [Thread-11] com.yourapp.services.DashboardService    : Récupération des stats dashboard pour user 6
+2025-12-25T01:05:44.115+01:00  INFO 25540 --- [Thread-11] com.yourapp.services.DashboardService    : Récupération de la progression des projets
+2025-12-25T01:05:44.295+01:00  INFO 25540 --- [Thread-11] com.yourapp.services.DashboardService    : Récupération des activités récentes
+2025-12-25T01:05:44.476+01:00  INFO 25540 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 🚀 Initialisation du AuditController
+2025-12-25T01:05:44.476+01:00  INFO 25540 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📥 Chargement des projets...
+2025-12-25T01:05:44.477+01:00  INFO 25540 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ AuditController initialisé avec succès
+2025-12-25T01:05:44.477+01:00  INFO 25540 --- [Thread-12] c.yourapp.services_UI.ProjectApiService  : 📥 Récupération de tous les projets
+2025-12-25T01:05:44.695+01:00 ERROR 25540 --- [Thread-11] c.y.controller.DashboardController       : ❌ Erreur lors du chargement des données
+
+org.hibernate.LazyInitializationException: could not initialize proxy [com.yourapp.model.Audit#71] - no Session
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:165) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:314) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor.intercept(ByteBuddyInterceptor.java:44) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.ProxyConfiguration$InterceptorDispatcher.intercept(ProxyConfiguration.java:102) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at com.yourapp.model.Audit$HibernateProxy$hNGc40EA.getProjectName(Unknown Source) ~[classes/:na]
+	at com.yourapp.services.DashboardService.getRecentActivities(DashboardService.java:146) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:85) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:73) ~[classes/:na]
+	at javafx.graphics@21.0.4/javafx.concurrent.Task$TaskCallable.call(Task.java:1399) ~[javafx-graphics-21.0.4-win.jar:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-12-25T01:05:44.755+01:00  INFO 25540 --- [Thread-12] c.yourapp.services_UI.ProjectApiService  : ✅ 6 projets récupérés avec succès
+2025-12-25T01:05:44.755+01:00  INFO 25540 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ 6 projets chargés
+2025-12-25T01:05:51.771+01:00  INFO 25540 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 🚀 Initialisation du AuditController
+2025-12-25T01:05:51.772+01:00  INFO 25540 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📥 Chargement des projets...
+2025-12-25T01:05:51.772+01:00  INFO 25540 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ AuditController initialisé avec succès
+2025-12-25T01:05:51.772+01:00  INFO 25540 --- [Thread-13] c.yourapp.services_UI.ProjectApiService  : 📥 Récupération de tous les projets
+2025-12-25T01:05:52.057+01:00  INFO 25540 --- [Thread-13] c.yourapp.services_UI.ProjectApiService  : ✅ 6 projets récupérés avec succès
+2025-12-25T01:05:52.058+01:00  INFO 25540 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ 6 projets chargés
+2025-12-25T02:52:23.823+01:00  WARN 25540 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=14m15s498ms98µs400ns).
+2025-12-25T07:16:16.546+01:00  WARN 25540 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=4h23m51s674ms594µs100ns).
+2025-12-25T07:26:05.709+01:00  WARN 25540 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=49s15ms219µs).
+2025-12-25T07:36:30.144+01:00  WARN 25540 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1m54s299ms738µs400ns).
+2025-12-25T14:16:13.954+01:00  INFO 9112 --- [JavaFX-Launcher] o.s.boot.SpringApplication               : Starting application using Java 21.0.9 with PID 9112 (started by AdMin in C:\Users\AdMin\Desktop\auditDoc-AI-)
+2025-12-25T14:16:13.958+01:00  INFO 9112 --- [JavaFX-Launcher] o.s.boot.SpringApplication               : No active profile set, falling back to 1 default profile: "default"
+2025-12-25T14:16:14.763+01:00  INFO 9112 --- [JavaFX-Launcher] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-25T14:16:14.858+01:00  INFO 9112 --- [JavaFX-Launcher] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 87 ms. Found 8 JPA repository interfaces.
+2025-12-25T14:16:15.766+01:00  INFO 9112 --- [JavaFX-Launcher] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-25T14:16:15.863+01:00  INFO 9112 --- [JavaFX-Launcher] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2025-12-25T14:16:15.906+01:00  INFO 9112 --- [JavaFX-Launcher] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-12-25T14:16:16.340+01:00  INFO 9112 --- [JavaFX-Launcher] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-25T14:16:16.381+01:00  INFO 9112 --- [JavaFX-Launcher] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-12-25T14:16:17.914+01:00  INFO 9112 --- [JavaFX-Launcher] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@43cc9ca3
+2025-12-25T14:16:17.915+01:00  INFO 9112 --- [JavaFX-Launcher] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-12-25T14:16:19.646+01:00  INFO 9112 --- [JavaFX-Launcher] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-25T14:16:19.764+01:00  INFO 9112 --- [JavaFX-Launcher] org.hibernate.orm.connections.access     : HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@1819e137] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+2025-12-25T14:16:24.146+01:00  INFO 9112 --- [JavaFX-Launcher] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-25T14:16:24.902+01:00  INFO 9112 --- [JavaFX-Launcher] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-12-25T14:16:25.777+01:00  INFO 9112 --- [JavaFX-Launcher] o.s.boot.SpringApplication               : Started application in 12.503 seconds (process running for 13.762)
+2025-12-25T14:16:47.108+01:00  INFO 9112 --- [JavaFX Application Thread] c.y.controller.DashboardController       : 🚀 Initialisation du Dashboard
+2025-12-25T14:16:47.111+01:00  INFO 9112 --- [Thread-5] com.yourapp.services.DashboardService    : Récupération des stats dashboard pour user 6
+2025-12-25T14:16:47.112+01:00  INFO 9112 --- [JavaFX Application Thread] c.y.controller.DashboardController       : ✅ Dashboard initialisé avec succès
+2025-12-25T14:16:47.833+01:00  INFO 9112 --- [Thread-5] com.yourapp.services.DashboardService    : Récupération de la progression des projets
+2025-12-25T14:16:48.037+01:00  INFO 9112 --- [Thread-5] com.yourapp.services.DashboardService    : Récupération des activités récentes
+2025-12-25T14:16:48.646+01:00 ERROR 9112 --- [Thread-5] c.y.controller.DashboardController       : ❌ Erreur lors du chargement des données
+
+org.hibernate.LazyInitializationException: could not initialize proxy [com.yourapp.model.Audit#76] - no Session
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:165) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:314) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor.intercept(ByteBuddyInterceptor.java:44) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.ProxyConfiguration$InterceptorDispatcher.intercept(ProxyConfiguration.java:102) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at com.yourapp.model.Audit$HibernateProxy$aStMiRZg.getProjectName(Unknown Source) ~[classes/:na]
+	at com.yourapp.services.DashboardService.getRecentActivities(DashboardService.java:146) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:85) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:73) ~[classes/:na]
+	at javafx.graphics@21.0.4/javafx.concurrent.Task$TaskCallable.call(Task.java:1399) ~[javafx-graphics-21.0.4-win.jar:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-12-25T14:17:10.916+01:00  INFO 9112 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 🚀 Initialisation du AuditController
+2025-12-25T14:17:10.917+01:00  INFO 9112 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📥 Chargement des projets...
+2025-12-25T14:17:10.918+01:00  INFO 9112 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ AuditController initialisé avec succès
+2025-12-25T14:17:10.918+01:00  INFO 9112 --- [Thread-6] c.yourapp.services_UI.ProjectApiService  : 📥 Récupération de tous les projets
+2025-12-25T14:17:11.524+01:00  INFO 9112 --- [Thread-6] c.yourapp.services_UI.ProjectApiService  : ✅ 6 projets récupérés avec succès
+2025-12-25T14:17:11.525+01:00  INFO 9112 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ 6 projets chargés
+2025-12-25T14:17:17.377+01:00  INFO 9112 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📌 Projet sélectionné: Audit Énergie 2024
+2025-12-25T14:17:17.378+01:00  INFO 9112 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📥 Chargement des modèles pour le projet ID: 1
+2025-12-25T14:17:17.379+01:00  INFO 9112 --- [Thread-7] com.yourapp.services_UI.ModelService     : 📥 Récupération des templates pour projet ID=1
+2025-12-25T14:17:17.379+01:00  INFO 9112 --- [Thread-7] com.yourapp.services_UI.ModelService     : 📥 Récupération de tous les templates
+2025-12-25T14:17:17.723+01:00  INFO 9112 --- [Thread-7] com.yourapp.services_UI.ModelService     : ✅ 2 templates récupérés
+2025-12-25T14:17:17.723+01:00  INFO 9112 --- [Thread-7] com.yourapp.services_UI.ModelService     : ✅ 2 templates disponibles pour le projet 1
+2025-12-25T14:17:17.724+01:00  INFO 9112 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ 2 modèles chargés
+2025-12-25T14:17:45.733+01:00  INFO 9112 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 🚀 Initialisation du AuditController
+2025-12-25T14:17:45.733+01:00  INFO 9112 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📥 Chargement des projets...
+2025-12-25T14:17:45.734+01:00  INFO 9112 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ AuditController initialisé avec succès
+2025-12-25T14:17:45.734+01:00  INFO 9112 --- [Thread-8] c.yourapp.services_UI.ProjectApiService  : 📥 Récupération de tous les projets
+2025-12-25T14:17:46.024+01:00  INFO 9112 --- [Thread-8] c.yourapp.services_UI.ProjectApiService  : ✅ 6 projets récupérés avec succès
+2025-12-25T14:17:46.024+01:00  INFO 9112 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ 6 projets chargés
+2025-12-25T14:18:04.709+01:00  INFO 9112 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 🚀 Initialisation du AuditController
+2025-12-25T14:18:04.709+01:00  INFO 9112 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📥 Chargement des projets...
+2025-12-25T14:18:04.709+01:00  INFO 9112 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ AuditController initialisé avec succès
+2025-12-25T14:18:04.710+01:00  INFO 9112 --- [Thread-9] c.yourapp.services_UI.ProjectApiService  : 📥 Récupération de tous les projets
+2025-12-25T14:18:08.754+01:00  INFO 9112 --- [Thread-9] c.yourapp.services_UI.ProjectApiService  : ✅ 6 projets récupérés avec succès
+2025-12-25T14:18:08.755+01:00  INFO 9112 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ 6 projets chargés
+2025-12-25T14:18:16.861+01:00  INFO 9112 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 🚀 Initialisation du AuditController
+2025-12-25T14:18:16.861+01:00  INFO 9112 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📥 Chargement des projets...
+2025-12-25T14:18:16.861+01:00  INFO 9112 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ AuditController initialisé avec succès
+2025-12-25T14:18:16.862+01:00  INFO 9112 --- [Thread-10] c.yourapp.services_UI.ProjectApiService  : 📥 Récupération de tous les projets
+2025-12-25T14:18:19.012+01:00  INFO 9112 --- [JavaFX Application Thread] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-12-25T14:18:19.015+01:00  INFO 9112 --- [JavaFX Application Thread] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-12-25T14:18:20.377+01:00 ERROR 9112 --- [Thread-10] c.yourapp.services_UI.ProjectApiService  : ❌ Erreur lors de la récupération des projets
+
+java.lang.IllegalStateException: Session/EntityManager is closed
+	at org.hibernate.internal.AbstractSharedSessionContract.checkOpen(AbstractSharedSessionContract.java:487) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.engine.spi.SharedSessionContractImplementor.checkOpen(SharedSessionContractImplementor.java:187) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.internal.AbstractSharedSessionContract.checkOpenOrWaitingForAutoClose(AbstractSharedSessionContract.java:505) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.internal.SessionImpl.checkOpenOrWaitingForAutoClose(SessionImpl.java:618) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.internal.SessionImpl.instantiate(SessionImpl.java:1477) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.graph.entity.AbstractEntityInitializer.instantiateEntity(AbstractEntityInitializer.java:694) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.graph.entity.AbstractEntityInitializer.resolveEntityInstance(AbstractEntityInitializer.java:687) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.graph.entity.AbstractEntityInitializer.resolveInstance(AbstractEntityInitializer.java:637) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.graph.entity.AbstractEntityInitializer.resolveEntityInstance(AbstractEntityInitializer.java:559) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.graph.entity.AbstractEntityInitializer.resolveInstance(AbstractEntityInitializer.java:458) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.internal.InitializersList.resolveInstances(InitializersList.java:97) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.internal.StandardRowReader.coordinateInitializers(StandardRowReader.java:112) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.internal.StandardRowReader.readRow(StandardRowReader.java:87) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.spi.ListResultsConsumer.consume(ListResultsConsumer.java:205) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.spi.ListResultsConsumer.consume(ListResultsConsumer.java:33) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.exec.internal.JdbcSelectExecutorStandardImpl.doExecuteQuery(JdbcSelectExecutorStandardImpl.java:211) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.exec.internal.JdbcSelectExecutorStandardImpl.executeQuery(JdbcSelectExecutorStandardImpl.java:83) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.exec.spi.JdbcSelectExecutor.list(JdbcSelectExecutor.java:76) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.exec.spi.JdbcSelectExecutor.list(JdbcSelectExecutor.java:65) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.query.sqm.internal.ConcreteSqmSelectQueryPlan.lambda$new$2(ConcreteSqmSelectQueryPlan.java:139) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.query.sqm.internal.ConcreteSqmSelectQueryPlan.withCacheableSqmInterpretation(ConcreteSqmSelectQueryPlan.java:382) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.query.sqm.internal.ConcreteSqmSelectQueryPlan.performList(ConcreteSqmSelectQueryPlan.java:302) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.query.sqm.internal.QuerySqmImpl.doList(QuerySqmImpl.java:526) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.query.spi.AbstractSelectionQuery.list(AbstractSelectionQuery.java:423) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.query.Query.getResultList(Query.java:120) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.springframework.data.jpa.repository.support.SimpleJpaRepository.findAll(SimpleJpaRepository.java:389) ~[spring-data-jpa-3.3.5.jar:3.3.5]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:355) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.data.repository.core.support.RepositoryMethodInvoker$RepositoryFragmentMethodInvoker.lambda$new$0(RepositoryMethodInvoker.java:277) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.data.repository.core.support.RepositoryMethodInvoker.doInvoke(RepositoryMethodInvoker.java:170) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.data.repository.core.support.RepositoryMethodInvoker.invoke(RepositoryMethodInvoker.java:158) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.data.repository.core.support.RepositoryComposition$RepositoryFragments.invoke(RepositoryComposition.java:516) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.data.repository.core.support.RepositoryComposition.invoke(RepositoryComposition.java:285) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.data.repository.core.support.RepositoryFactorySupport$ImplementationMethodExecutionInterceptor.invoke(RepositoryFactorySupport.java:628) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.doInvoke(QueryExecutorMethodInterceptor.java:173) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.invoke(QueryExecutorMethodInterceptor.java:148) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.data.projection.DefaultMethodInvokingMethodInterceptor.invoke(DefaultMethodInvokingMethodInterceptor.java:70) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:379) ~[spring-tx-6.1.14.jar:6.1.14]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119) ~[spring-tx-6.1.14.jar:6.1.14]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:138) ~[spring-tx-6.1.14.jar:6.1.14]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.data.jpa.repository.support.CrudMethodMetadataPostProcessor$CrudMethodMetadataPopulatingMethodInterceptor.invoke(CrudMethodMetadataPostProcessor.java:165) ~[spring-data-jpa-3.3.5.jar:3.3.5]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:223) ~[spring-aop-6.1.14.jar:6.1.14]
+	at jdk.proxy2/jdk.proxy2.$Proxy125.findAll(Unknown Source) ~[na:na]
+	at com.yourapp.services_UI.ProjectApiService.getAllProjects(ProjectApiService.java:29) ~[classes/:na]
+	at com.yourapp.controller.AuditController$3.call(AuditController.java:143) ~[classes/:na]
+	at com.yourapp.controller.AuditController$3.call(AuditController.java:139) ~[classes/:na]
+	at javafx.graphics@21.0.4/javafx.concurrent.Task$TaskCallable.call(Task.java:1399) ~[javafx-graphics-21.0.4-win.jar:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-12-25T14:18:20.378+01:00 ERROR 9112 --- [Thread-10] com.yourapp.controller.AuditController   : ❌ Erreur lors du chargement des projets
+
+java.lang.RuntimeException: Impossible de récupérer les projets: Session/EntityManager is closed
+	at com.yourapp.services_UI.ProjectApiService.getAllProjects(ProjectApiService.java:34) ~[classes/:na]
+	at com.yourapp.controller.AuditController$3.call(AuditController.java:143) ~[classes/:na]
+	at com.yourapp.controller.AuditController$3.call(AuditController.java:139) ~[classes/:na]
+	at javafx.graphics@21.0.4/javafx.concurrent.Task$TaskCallable.call(Task.java:1399) ~[javafx-graphics-21.0.4-win.jar:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+Caused by: java.lang.IllegalStateException: Session/EntityManager is closed
+	at org.hibernate.internal.AbstractSharedSessionContract.checkOpen(AbstractSharedSessionContract.java:487) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.engine.spi.SharedSessionContractImplementor.checkOpen(SharedSessionContractImplementor.java:187) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.internal.AbstractSharedSessionContract.checkOpenOrWaitingForAutoClose(AbstractSharedSessionContract.java:505) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.internal.SessionImpl.checkOpenOrWaitingForAutoClose(SessionImpl.java:618) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.internal.SessionImpl.instantiate(SessionImpl.java:1477) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.graph.entity.AbstractEntityInitializer.instantiateEntity(AbstractEntityInitializer.java:694) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.graph.entity.AbstractEntityInitializer.resolveEntityInstance(AbstractEntityInitializer.java:687) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.graph.entity.AbstractEntityInitializer.resolveInstance(AbstractEntityInitializer.java:637) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.graph.entity.AbstractEntityInitializer.resolveEntityInstance(AbstractEntityInitializer.java:559) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.graph.entity.AbstractEntityInitializer.resolveInstance(AbstractEntityInitializer.java:458) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.internal.InitializersList.resolveInstances(InitializersList.java:97) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.internal.StandardRowReader.coordinateInitializers(StandardRowReader.java:112) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.internal.StandardRowReader.readRow(StandardRowReader.java:87) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.spi.ListResultsConsumer.consume(ListResultsConsumer.java:205) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.spi.ListResultsConsumer.consume(ListResultsConsumer.java:33) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.exec.internal.JdbcSelectExecutorStandardImpl.doExecuteQuery(JdbcSelectExecutorStandardImpl.java:211) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.exec.internal.JdbcSelectExecutorStandardImpl.executeQuery(JdbcSelectExecutorStandardImpl.java:83) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.exec.spi.JdbcSelectExecutor.list(JdbcSelectExecutor.java:76) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.exec.spi.JdbcSelectExecutor.list(JdbcSelectExecutor.java:65) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.query.sqm.internal.ConcreteSqmSelectQueryPlan.lambda$new$2(ConcreteSqmSelectQueryPlan.java:139) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.query.sqm.internal.ConcreteSqmSelectQueryPlan.withCacheableSqmInterpretation(ConcreteSqmSelectQueryPlan.java:382) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.query.sqm.internal.ConcreteSqmSelectQueryPlan.performList(ConcreteSqmSelectQueryPlan.java:302) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.query.sqm.internal.QuerySqmImpl.doList(QuerySqmImpl.java:526) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.query.spi.AbstractSelectionQuery.list(AbstractSelectionQuery.java:423) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.query.Query.getResultList(Query.java:120) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.springframework.data.jpa.repository.support.SimpleJpaRepository.findAll(SimpleJpaRepository.java:389) ~[spring-data-jpa-3.3.5.jar:3.3.5]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:355) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.data.repository.core.support.RepositoryMethodInvoker$RepositoryFragmentMethodInvoker.lambda$new$0(RepositoryMethodInvoker.java:277) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.data.repository.core.support.RepositoryMethodInvoker.doInvoke(RepositoryMethodInvoker.java:170) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.data.repository.core.support.RepositoryMethodInvoker.invoke(RepositoryMethodInvoker.java:158) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.data.repository.core.support.RepositoryComposition$RepositoryFragments.invoke(RepositoryComposition.java:516) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.data.repository.core.support.RepositoryComposition.invoke(RepositoryComposition.java:285) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.data.repository.core.support.RepositoryFactorySupport$ImplementationMethodExecutionInterceptor.invoke(RepositoryFactorySupport.java:628) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.doInvoke(QueryExecutorMethodInterceptor.java:173) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.invoke(QueryExecutorMethodInterceptor.java:148) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.data.projection.DefaultMethodInvokingMethodInterceptor.invoke(DefaultMethodInvokingMethodInterceptor.java:70) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:379) ~[spring-tx-6.1.14.jar:6.1.14]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119) ~[spring-tx-6.1.14.jar:6.1.14]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:138) ~[spring-tx-6.1.14.jar:6.1.14]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.data.jpa.repository.support.CrudMethodMetadataPostProcessor$CrudMethodMetadataPopulatingMethodInterceptor.invoke(CrudMethodMetadataPostProcessor.java:165) ~[spring-data-jpa-3.3.5.jar:3.3.5]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:223) ~[spring-aop-6.1.14.jar:6.1.14]
+	at jdk.proxy2/jdk.proxy2.$Proxy125.findAll(Unknown Source) ~[na:na]
+	at com.yourapp.services_UI.ProjectApiService.getAllProjects(ProjectApiService.java:29) ~[classes/:na]
+	... 5 common frames omitted
+
+2025-12-25T14:18:25.874+01:00  INFO 9112 --- [JavaFX Application Thread] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-12-25T15:30:11.314+01:00  INFO 2140 --- [JavaFX-Launcher] o.s.boot.SpringApplication               : Starting application using Java 21.0.9 with PID 2140 (started by AdMin in C:\Users\AdMin\Desktop\auditDoc-AI-)
+2025-12-25T15:30:11.318+01:00  INFO 2140 --- [JavaFX-Launcher] o.s.boot.SpringApplication               : No active profile set, falling back to 1 default profile: "default"
+2025-12-25T15:30:12.172+01:00  INFO 2140 --- [JavaFX-Launcher] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-25T15:30:12.291+01:00  INFO 2140 --- [JavaFX-Launcher] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 108 ms. Found 9 JPA repository interfaces.
+2025-12-25T15:30:13.088+01:00  INFO 2140 --- [JavaFX-Launcher] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-25T15:30:13.186+01:00  INFO 2140 --- [JavaFX-Launcher] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2025-12-25T15:30:13.241+01:00  INFO 2140 --- [JavaFX-Launcher] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-12-25T15:30:13.707+01:00  INFO 2140 --- [JavaFX-Launcher] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-25T15:30:13.745+01:00  INFO 2140 --- [JavaFX-Launcher] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-12-25T15:30:15.061+01:00  INFO 2140 --- [JavaFX-Launcher] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@44873a48
+2025-12-25T15:30:15.063+01:00  INFO 2140 --- [JavaFX-Launcher] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-12-25T15:30:15.895+01:00 ERROR 2140 --- [JavaFX-Launcher] j.LocalContainerEntityManagerFactoryBean : Failed to initialize JPA EntityManagerFactory: Collection 'com.yourapp.model.User.notifications' is 'mappedBy' a property named 'user' which does not exist in the target entity 'com.yourapp.model.Notification'
+2025-12-25T15:30:15.895+01:00  WARN 2140 --- [JavaFX-Launcher] s.c.a.AnnotationConfigApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Collection 'com.yourapp.model.User.notifications' is 'mappedBy' a property named 'user' which does not exist in the target entity 'com.yourapp.model.Notification'
+2025-12-25T15:30:15.895+01:00  INFO 2140 --- [JavaFX-Launcher] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-12-25T15:30:16.084+01:00  INFO 2140 --- [JavaFX-Launcher] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-12-25T15:30:16.092+01:00  INFO 2140 --- [JavaFX-Launcher] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-12-25T15:30:16.113+01:00 ERROR 2140 --- [JavaFX-Launcher] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Collection 'com.yourapp.model.User.notifications' is 'mappedBy' a property named 'user' which does not exist in the target entity 'com.yourapp.model.Notification'
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1806) ~[spring-beans-6.1.14.jar:6.1.14]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600) ~[spring-beans-6.1.14.jar:6.1.14]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522) ~[spring-beans-6.1.14.jar:6.1.14]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:337) ~[spring-beans-6.1.14.jar:6.1.14]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234) ~[spring-beans-6.1.14.jar:6.1.14]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335) ~[spring-beans-6.1.14.jar:6.1.14]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:205) ~[spring-beans-6.1.14.jar:6.1.14]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:954) ~[spring-context-6.1.14.jar:6.1.14]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:625) ~[spring-context-6.1.14.jar:6.1.14]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754) ~[spring-boot-3.3.5.jar:3.3.5]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456) ~[spring-boot-3.3.5.jar:3.3.5]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:335) ~[spring-boot-3.3.5.jar:3.3.5]
+	at com.yourapp.Main.init(Main.java:34) ~[classes/:na]
+	at javafx.graphics@21.0.4/com.sun.javafx.application.LauncherImpl.launchApplication1(LauncherImpl.java:817) ~[javafx-graphics-21.0.4-win.jar:na]
+	at javafx.graphics@21.0.4/com.sun.javafx.application.LauncherImpl.lambda$launchApplication$2(LauncherImpl.java:196) ~[javafx-graphics-21.0.4-win.jar:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+Caused by: org.hibernate.AnnotationException: Collection 'com.yourapp.model.User.notifications' is 'mappedBy' a property named 'user' which does not exist in the target entity 'com.yourapp.model.Notification'
+	at org.hibernate.boot.model.internal.CollectionBinder.isReversePropertyInJoin(CollectionBinder.java:1639) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.boot.model.internal.CollectionBinder.noAssociationTable(CollectionBinder.java:1653) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.boot.model.internal.CollectionBinder.bindStarToManySecondPass(CollectionBinder.java:1614) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.boot.model.internal.CollectionBinder$1.secondPass(CollectionBinder.java:1605) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.boot.model.internal.CollectionSecondPass.doSecondPass(CollectionSecondPass.java:45) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.boot.internal.InFlightMetadataCollectorImpl.processSecondPasses(InFlightMetadataCollectorImpl.java:1811) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.boot.internal.InFlightMetadataCollectorImpl.processSecondPasses(InFlightMetadataCollectorImpl.java:1770) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.boot.model.process.spi.MetadataBuildingProcess.complete(MetadataBuildingProcess.java:334) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.metadata(EntityManagerFactoryBuilderImpl.java:1431) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1502) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:75) ~[spring-orm-6.1.14.jar:6.1.14]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390) ~[spring-orm-6.1.14.jar:6.1.14]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409) ~[spring-orm-6.1.14.jar:6.1.14]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396) ~[spring-orm-6.1.14.jar:6.1.14]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366) ~[spring-orm-6.1.14.jar:6.1.14]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1853) ~[spring-beans-6.1.14.jar:6.1.14]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1802) ~[spring-beans-6.1.14.jar:6.1.14]
+	... 15 common frames omitted
+
+2025-12-25T15:30:42.710+01:00  INFO 17676 --- [JavaFX-Launcher] o.s.boot.SpringApplication               : Starting application using Java 21.0.9 with PID 17676 (started by AdMin in C:\Users\AdMin\Desktop\auditDoc-AI-)
+2025-12-25T15:30:42.713+01:00  INFO 17676 --- [JavaFX-Launcher] o.s.boot.SpringApplication               : No active profile set, falling back to 1 default profile: "default"
+2025-12-25T15:30:43.583+01:00  INFO 17676 --- [JavaFX-Launcher] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-25T15:30:43.705+01:00  INFO 17676 --- [JavaFX-Launcher] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 111 ms. Found 9 JPA repository interfaces.
+2025-12-25T15:30:44.501+01:00  INFO 17676 --- [JavaFX-Launcher] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-25T15:30:44.589+01:00  INFO 17676 --- [JavaFX-Launcher] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2025-12-25T15:30:44.637+01:00  INFO 17676 --- [JavaFX-Launcher] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-12-25T15:30:45.068+01:00  INFO 17676 --- [JavaFX-Launcher] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-25T15:30:45.108+01:00  INFO 17676 --- [JavaFX-Launcher] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-12-25T15:30:46.364+01:00  INFO 17676 --- [JavaFX-Launcher] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@5a9940c0
+2025-12-25T15:30:46.365+01:00  INFO 17676 --- [JavaFX-Launcher] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-12-25T15:30:47.156+01:00 ERROR 17676 --- [JavaFX-Launcher] j.LocalContainerEntityManagerFactoryBean : Failed to initialize JPA EntityManagerFactory: Collection 'com.yourapp.model.User.notifications' is 'mappedBy' a property named 'user' which does not exist in the target entity 'com.yourapp.model.Notification'
+2025-12-25T15:30:47.157+01:00  WARN 17676 --- [JavaFX-Launcher] s.c.a.AnnotationConfigApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Collection 'com.yourapp.model.User.notifications' is 'mappedBy' a property named 'user' which does not exist in the target entity 'com.yourapp.model.Notification'
+2025-12-25T15:30:47.157+01:00  INFO 17676 --- [JavaFX-Launcher] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-12-25T15:30:47.563+01:00  INFO 17676 --- [JavaFX-Launcher] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-12-25T15:30:47.571+01:00  INFO 17676 --- [JavaFX-Launcher] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-12-25T15:30:47.590+01:00 ERROR 17676 --- [JavaFX-Launcher] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Collection 'com.yourapp.model.User.notifications' is 'mappedBy' a property named 'user' which does not exist in the target entity 'com.yourapp.model.Notification'
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1806) ~[spring-beans-6.1.14.jar:6.1.14]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600) ~[spring-beans-6.1.14.jar:6.1.14]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522) ~[spring-beans-6.1.14.jar:6.1.14]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:337) ~[spring-beans-6.1.14.jar:6.1.14]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234) ~[spring-beans-6.1.14.jar:6.1.14]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335) ~[spring-beans-6.1.14.jar:6.1.14]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:205) ~[spring-beans-6.1.14.jar:6.1.14]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:954) ~[spring-context-6.1.14.jar:6.1.14]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:625) ~[spring-context-6.1.14.jar:6.1.14]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754) ~[spring-boot-3.3.5.jar:3.3.5]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456) ~[spring-boot-3.3.5.jar:3.3.5]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:335) ~[spring-boot-3.3.5.jar:3.3.5]
+	at com.yourapp.Main.init(Main.java:34) ~[classes/:na]
+	at javafx.graphics@21.0.4/com.sun.javafx.application.LauncherImpl.launchApplication1(LauncherImpl.java:817) ~[javafx-graphics-21.0.4-win.jar:na]
+	at javafx.graphics@21.0.4/com.sun.javafx.application.LauncherImpl.lambda$launchApplication$2(LauncherImpl.java:196) ~[javafx-graphics-21.0.4-win.jar:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+Caused by: org.hibernate.AnnotationException: Collection 'com.yourapp.model.User.notifications' is 'mappedBy' a property named 'user' which does not exist in the target entity 'com.yourapp.model.Notification'
+	at org.hibernate.boot.model.internal.CollectionBinder.isReversePropertyInJoin(CollectionBinder.java:1639) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.boot.model.internal.CollectionBinder.noAssociationTable(CollectionBinder.java:1653) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.boot.model.internal.CollectionBinder.bindStarToManySecondPass(CollectionBinder.java:1614) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.boot.model.internal.CollectionBinder$1.secondPass(CollectionBinder.java:1605) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.boot.model.internal.CollectionSecondPass.doSecondPass(CollectionSecondPass.java:45) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.boot.internal.InFlightMetadataCollectorImpl.processSecondPasses(InFlightMetadataCollectorImpl.java:1811) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.boot.internal.InFlightMetadataCollectorImpl.processSecondPasses(InFlightMetadataCollectorImpl.java:1770) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.boot.model.process.spi.MetadataBuildingProcess.complete(MetadataBuildingProcess.java:334) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.metadata(EntityManagerFactoryBuilderImpl.java:1431) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1502) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:75) ~[spring-orm-6.1.14.jar:6.1.14]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390) ~[spring-orm-6.1.14.jar:6.1.14]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409) ~[spring-orm-6.1.14.jar:6.1.14]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396) ~[spring-orm-6.1.14.jar:6.1.14]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366) ~[spring-orm-6.1.14.jar:6.1.14]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1853) ~[spring-beans-6.1.14.jar:6.1.14]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1802) ~[spring-beans-6.1.14.jar:6.1.14]
+	... 15 common frames omitted
+
+2025-12-25T16:35:16.556+01:00  INFO 23576 --- [JavaFX-Launcher] o.s.boot.SpringApplication               : Starting application using Java 21.0.9 with PID 23576 (started by AdMin in C:\Users\AdMin\Desktop\auditDoc-AI-)
+2025-12-25T16:35:16.559+01:00  INFO 23576 --- [JavaFX-Launcher] o.s.boot.SpringApplication               : No active profile set, falling back to 1 default profile: "default"
+2025-12-25T16:35:17.455+01:00  INFO 23576 --- [JavaFX-Launcher] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-25T16:35:17.579+01:00  INFO 23576 --- [JavaFX-Launcher] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 111 ms. Found 9 JPA repository interfaces.
+2025-12-25T16:35:18.385+01:00  INFO 23576 --- [JavaFX-Launcher] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-25T16:35:18.469+01:00  INFO 23576 --- [JavaFX-Launcher] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2025-12-25T16:35:18.518+01:00  INFO 23576 --- [JavaFX-Launcher] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-12-25T16:35:18.956+01:00  INFO 23576 --- [JavaFX-Launcher] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-25T16:35:18.992+01:00  INFO 23576 --- [JavaFX-Launcher] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-12-25T16:35:20.343+01:00  INFO 23576 --- [JavaFX-Launcher] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@783df647
+2025-12-25T16:35:20.344+01:00  INFO 23576 --- [JavaFX-Launcher] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-12-25T16:35:22.041+01:00  INFO 23576 --- [JavaFX-Launcher] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-25T16:35:22.164+01:00  INFO 23576 --- [JavaFX-Launcher] org.hibernate.orm.connections.access     : HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@1819e137] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+2025-12-25T16:35:26.064+01:00  INFO 23576 --- [JavaFX-Launcher] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-25T16:35:26.646+01:00  INFO 23576 --- [JavaFX-Launcher] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-12-25T16:35:27.407+01:00  INFO 23576 --- [JavaFX-Launcher] o.s.boot.SpringApplication               : Started application in 11.717 seconds (process running for 13.132)
+2025-12-25T16:35:47.299+01:00  INFO 23576 --- [JavaFX Application Thread] c.yourapp.controller.TopbarController    : 🚀 Initialisation du TopbarController
+2025-12-25T16:35:47.312+01:00  INFO 23576 --- [JavaFX Application Thread] c.yourapp.controller.TopbarController    : ✅ Topbar loaded for user: intissar
+2025-12-25T16:35:47.316+01:00  INFO 23576 --- [JavaFX Application Thread] c.yourapp.controller.TopbarController    : 🔄 Notification polling started (10s interval)
+2025-12-25T16:35:47.319+01:00  INFO 23576 --- [JavaFX Application Thread] c.yourapp.controller.TopbarController    : ✅ TopbarController initialisé avec succès
+2025-12-25T16:35:47.360+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.controller.DashboardController       : 🚀 Initialisation du Dashboard
+2025-12-25T16:35:47.362+01:00  INFO 23576 --- [Thread-5] com.yourapp.services.DashboardService    : Récupération des stats dashboard pour user 6
+2025-12-25T16:35:47.363+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.controller.DashboardController       : ✅ Dashboard initialisé avec succès
+2025-12-25T16:35:47.741+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:35:48.092+01:00  INFO 23576 --- [Thread-5] com.yourapp.services.DashboardService    : Récupération de la progression des projets
+2025-12-25T16:35:48.296+01:00  INFO 23576 --- [Thread-5] com.yourapp.services.DashboardService    : Récupération des activités récentes
+2025-12-25T16:35:48.933+01:00 ERROR 23576 --- [Thread-5] c.y.controller.DashboardController       : ❌ Erreur lors du chargement des données
+
+org.hibernate.LazyInitializationException: could not initialize proxy [com.yourapp.model.Audit#76] - no Session
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:165) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:314) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor.intercept(ByteBuddyInterceptor.java:44) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.proxy.ProxyConfiguration$InterceptorDispatcher.intercept(ProxyConfiguration.java:102) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at com.yourapp.model.Audit$HibernateProxy$Ey8gnpLd.getProjectName(Unknown Source) ~[classes/:na]
+	at com.yourapp.services.DashboardService.getRecentActivities(DashboardService.java:146) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:85) ~[classes/:na]
+	at com.yourapp.controller.DashboardController$1.call(DashboardController.java:73) ~[classes/:na]
+	at javafx.graphics@21.0.4/javafx.concurrent.Task$TaskCallable.call(Task.java:1399) ~[javafx-graphics-21.0.4-win.jar:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-12-25T16:35:51.641+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 🚀 Initialisation du AuditController
+2025-12-25T16:35:51.642+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📥 Chargement des projets...
+2025-12-25T16:35:51.642+01:00  INFO 23576 --- [Thread-6] c.yourapp.services_UI.ProjectApiService  : 📥 Récupération de tous les projets
+2025-12-25T16:35:51.642+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ AuditController initialisé avec succès
+2025-12-25T16:35:51.942+01:00  INFO 23576 --- [Thread-6] c.yourapp.services_UI.ProjectApiService  : ✅ 6 projets récupérés avec succès
+2025-12-25T16:35:51.943+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ 6 projets chargés
+2025-12-25T16:35:53.250+01:00  INFO 23576 --- [JavaFX Application Thread] c.yourapp.controller.TopbarController    : 📬 Opening notifications popup
+2025-12-25T16:35:53.250+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📥 Fetching notifications for user 6
+2025-12-25T16:35:53.530+01:00  INFO 23576 --- [JavaFX Application Thread] c.yourapp.controller.TopbarController    : 📊 Loaded 0 notifications
+2025-12-25T16:35:57.512+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:35:58.662+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:36:00.364+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📌 Projet sélectionné: Santé Communautaire
+2025-12-25T16:36:00.365+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📥 Chargement des modèles pour le projet ID: 6
+2025-12-25T16:36:00.366+01:00  INFO 23576 --- [Thread-7] com.yourapp.services_UI.ModelService     : 📥 Récupération des templates pour projet ID=6
+2025-12-25T16:36:00.366+01:00  INFO 23576 --- [Thread-7] com.yourapp.services_UI.ModelService     : 📥 Récupération de tous les templates
+2025-12-25T16:36:00.651+01:00  INFO 23576 --- [Thread-7] com.yourapp.services_UI.ModelService     : ✅ 2 templates récupérés
+2025-12-25T16:36:00.652+01:00  INFO 23576 --- [Thread-7] com.yourapp.services_UI.ModelService     : ✅ 2 templates disponibles pour le projet 6
+2025-12-25T16:36:00.652+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ 2 modèles chargés
+2025-12-25T16:36:03.614+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📌 Modèle sélectionné: Template AFD
+2025-12-25T16:36:05.912+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📂 Ouverture du sélecteur de fichiers...
+2025-12-25T16:36:07.522+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:36:14.673+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ 1 fichiers sélectionnés (total: 1)
+2025-12-25T16:36:14.677+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📢 Notification: ✅ Fichiers ajoutés - 1 fichier(s) ajouté(s)
+2025-12-25T16:36:17.035+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 🚀 Démarrage de l'audit...
+2025-12-25T16:36:17.039+01:00  INFO 23576 --- [Thread-8] c.yourapp.services_UI.AuditApiService    : Création d'un audit pour le projet ID: 6
+2025-12-25T16:36:17.039+01:00  INFO 23576 --- [Thread-8] com.yourapp.services.AuditService        : Création d'un nouvel audit pour le projet 6 avec le modèle 1
+2025-12-25T16:36:17.471+01:00  INFO 23576 --- [Thread-8] com.yourapp.services.AuditService        : Audit créé avec succès: 77
+2025-12-25T16:36:17.522+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:36:17.672+01:00  INFO 23576 --- [Thread-8] c.yourapp.services_UI.AuditApiService    : ✅ Audit créé avec succès. ID: 77
+2025-12-25T16:36:17.672+01:00  INFO 23576 --- [Thread-8] com.yourapp.controller.AuditController   : ✅ Audit créé avec ID: 77
+2025-12-25T16:36:17.673+01:00  INFO 23576 --- [Thread-8] c.yourapp.services_UI.FileUploadService  : 📤 Upload de 1 fichiers pour l'audit ID: 77
+2025-12-25T16:36:17.673+01:00  INFO 23576 --- [Thread-8] c.yourapp.services_UI.FileUploadService  : 📤 Upload du fichier: Rapport_Audit_71.pdf pour l'audit ID: 77
+2025-12-25T16:36:17.675+01:00  INFO 23576 --- [Thread-8] c.yourapp.services.AuditDocumentService  : 📤 Upload du document Rapport_Audit_71.pdf pour l'audit 77
+2025-12-25T16:36:17.882+01:00  INFO 23576 --- [Thread-8] c.yourapp.services.AuditDocumentService  : ✅ Document Rapport_Audit_71.pdf uploadé avec succès
+2025-12-25T16:36:17.981+01:00  INFO 23576 --- [Thread-8] c.yourapp.services_UI.FileUploadService  : ✅ Fichier uploadé avec succès: Rapport_Audit_71.pdf
+2025-12-25T16:36:17.981+01:00  INFO 23576 --- [Thread-8] c.yourapp.services_UI.FileUploadService  : ✅ 1 fichiers uploadés sur 1 tentés
+2025-12-25T16:36:17.981+01:00  INFO 23576 --- [Thread-8] com.yourapp.controller.AuditController   : ✅ 1 documents uploadés
+2025-12-25T16:36:17.983+01:00  INFO 23576 --- [Thread-8] c.yourapp.services_UI.AuditApiService    : Démarrage de l'analyse pour l'audit ID: 77
+2025-12-25T16:36:17.983+01:00  INFO 23576 --- [Thread-8] com.yourapp.services.AuditService        : Démarrage de l'analyse pour l'audit 77
+2025-12-25T16:36:18.084+01:00  INFO 23576 --- [Thread-8] com.yourapp.services.AiAuditService      : Démarrage de l'analyse IA pour l'audit 77
+2025-12-25T16:36:18.282+01:00  INFO 23576 --- [Thread-8] com.yourapp.services.AiAuditService      : Analyse du document 56 pour l'audit 77
+2025-12-25T16:36:18.283+01:00  INFO 23576 --- [Thread-8] c.yourapp.services.AuditDocumentService  : 📄 Lecture PDF: 9fd82a82-f62d-49d3-9150-cb9d3381d9d3.pdf
+2025-12-25T16:36:18.284+01:00  INFO 23576 --- [Thread-8] com.yourapp.AI.AiPromptBuilder           : Construction du prompt pour le document: Rapport_Audit_71.pdf
+2025-12-25T16:36:18.284+01:00  INFO 23576 --- [Thread-8] com.yourapp.AI.AiClient                  : 📤 Envoi requête IA | provider=ollama | model=llama3
+2025-12-25T16:36:27.542+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:36:37.562+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:36:47.568+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:36:57.568+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:37:07.569+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:37:17.592+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:37:17.986+01:00  WARN 23576 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.ProxyLeakTask     : Connection leak detection triggered for org.postgresql.jdbc.PgConnection@783df647 on thread Thread-8, stack trace follows
+
+java.lang.Exception: Apparent connection leak detected
+	at com.zaxxer.hikari.HikariDataSource.getConnection(HikariDataSource.java:127) ~[HikariCP-5.1.0.jar:na]
+	at org.hibernate.engine.jdbc.connections.internal.DatasourceConnectionProviderImpl.getConnection(DatasourceConnectionProviderImpl.java:122) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.internal.NonContextualJdbcConnectionAccess.obtainConnection(NonContextualJdbcConnectionAccess.java:46) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.acquireConnectionIfNeeded(LogicalConnectionManagedImpl.java:126) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.getPhysicalConnection(LogicalConnectionManagedImpl.java:156) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.engine.jdbc.internal.StatementPreparerImpl.connection(StatementPreparerImpl.java:54) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.engine.jdbc.internal.StatementPreparerImpl$5.doPrepare(StatementPreparerImpl.java:153) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.engine.jdbc.internal.StatementPreparerImpl$StatementPreparationTemplate.prepareStatement(StatementPreparerImpl.java:183) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.engine.jdbc.internal.StatementPreparerImpl.prepareQueryStatement(StatementPreparerImpl.java:155) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.exec.spi.JdbcSelectExecutor.lambda$list$0(JdbcSelectExecutor.java:85) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.jdbc.internal.DeferredResultSetAccess.executeQuery(DeferredResultSetAccess.java:231) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.jdbc.internal.DeferredResultSetAccess.getResultSet(DeferredResultSetAccess.java:167) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.jdbc.internal.JdbcValuesResultSetImpl.advanceNext(JdbcValuesResultSetImpl.java:265) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.jdbc.internal.JdbcValuesResultSetImpl.processNext(JdbcValuesResultSetImpl.java:145) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.jdbc.internal.AbstractJdbcValues.next(AbstractJdbcValues.java:19) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.internal.RowProcessingStateStandardImpl.next(RowProcessingStateStandardImpl.java:67) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.spi.ListResultsConsumer.consume(ListResultsConsumer.java:182) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.results.spi.ListResultsConsumer.consume(ListResultsConsumer.java:33) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.exec.internal.JdbcSelectExecutorStandardImpl.doExecuteQuery(JdbcSelectExecutorStandardImpl.java:211) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.exec.internal.JdbcSelectExecutorStandardImpl.executeQuery(JdbcSelectExecutorStandardImpl.java:83) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.exec.spi.JdbcSelectExecutor.list(JdbcSelectExecutor.java:76) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.sql.exec.spi.JdbcSelectExecutor.list(JdbcSelectExecutor.java:65) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.loader.ast.internal.SingleIdLoadPlan.load(SingleIdLoadPlan.java:145) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.loader.ast.internal.SingleIdLoadPlan.load(SingleIdLoadPlan.java:117) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.loader.ast.internal.SingleIdEntityLoaderStandardImpl.load(SingleIdEntityLoaderStandardImpl.java:75) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.persister.entity.AbstractEntityPersister.doLoad(AbstractEntityPersister.java:3740) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.persister.entity.AbstractEntityPersister.load(AbstractEntityPersister.java:3729) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.event.internal.DefaultLoadEventListener.loadFromDatasource(DefaultLoadEventListener.java:604) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.event.internal.DefaultLoadEventListener.loadFromCacheOrDatasource(DefaultLoadEventListener.java:590) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.event.internal.DefaultLoadEventListener.load(DefaultLoadEventListener.java:560) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.event.internal.DefaultLoadEventListener.doLoad(DefaultLoadEventListener.java:544) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.event.internal.DefaultLoadEventListener.load(DefaultLoadEventListener.java:207) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.event.internal.DefaultLoadEventListener.loadWithRegularProxy(DefaultLoadEventListener.java:290) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.event.internal.DefaultLoadEventListener.proxyOrLoad(DefaultLoadEventListener.java:242) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.event.internal.DefaultLoadEventListener.doOnLoad(DefaultLoadEventListener.java:111) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.event.internal.DefaultLoadEventListener.onLoad(DefaultLoadEventListener.java:68) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.event.service.internal.EventListenerGroupImpl.fireEventOnEachListener(EventListenerGroupImpl.java:138) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.internal.SessionImpl.fireLoadNoChecks(SessionImpl.java:1225) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.internal.SessionImpl.fireLoad(SessionImpl.java:1213) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.loader.internal.IdentifierLoadAccessImpl.load(IdentifierLoadAccessImpl.java:209) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.loader.internal.IdentifierLoadAccessImpl.doLoad(IdentifierLoadAccessImpl.java:160) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.loader.internal.IdentifierLoadAccessImpl.lambda$load$1(IdentifierLoadAccessImpl.java:149) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.loader.internal.IdentifierLoadAccessImpl.perform(IdentifierLoadAccessImpl.java:112) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.loader.internal.IdentifierLoadAccessImpl.load(IdentifierLoadAccessImpl.java:149) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.internal.SessionImpl.find(SessionImpl.java:2429) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at org.hibernate.internal.SessionImpl.find(SessionImpl.java:2400) ~[hibernate-core-6.5.3.Final.jar:6.5.3.Final]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.orm.jpa.SharedEntityManagerCreator$SharedEntityManagerInvocationHandler.invoke(SharedEntityManagerCreator.java:319) ~[spring-orm-6.1.14.jar:6.1.14]
+	at jdk.proxy2/jdk.proxy2.$Proxy122.find(Unknown Source) ~[na:na]
+	at org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById(SimpleJpaRepository.java:319) ~[spring-data-jpa-3.3.5.jar:3.3.5]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:355) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.data.repository.core.support.RepositoryMethodInvoker$RepositoryFragmentMethodInvoker.lambda$new$0(RepositoryMethodInvoker.java:277) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.data.repository.core.support.RepositoryMethodInvoker.doInvoke(RepositoryMethodInvoker.java:170) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.data.repository.core.support.RepositoryMethodInvoker.invoke(RepositoryMethodInvoker.java:158) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.data.repository.core.support.RepositoryComposition$RepositoryFragments.invoke(RepositoryComposition.java:516) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.data.repository.core.support.RepositoryComposition.invoke(RepositoryComposition.java:285) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.data.repository.core.support.RepositoryFactorySupport$ImplementationMethodExecutionInterceptor.invoke(RepositoryFactorySupport.java:628) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.doInvoke(QueryExecutorMethodInterceptor.java:173) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.invoke(QueryExecutorMethodInterceptor.java:148) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.data.projection.DefaultMethodInvokingMethodInterceptor.invoke(DefaultMethodInvokingMethodInterceptor.java:70) ~[spring-data-commons-3.3.5.jar:3.3.5]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:379) ~[spring-tx-6.1.14.jar:6.1.14]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119) ~[spring-tx-6.1.14.jar:6.1.14]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:138) ~[spring-tx-6.1.14.jar:6.1.14]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.data.jpa.repository.support.CrudMethodMetadataPostProcessor$CrudMethodMetadataPopulatingMethodInterceptor.invoke(CrudMethodMetadataPostProcessor.java:165) ~[spring-data-jpa-3.3.5.jar:3.3.5]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:223) ~[spring-aop-6.1.14.jar:6.1.14]
+	at jdk.proxy2/jdk.proxy2.$Proxy130.findById(Unknown Source) ~[na:na]
+	at com.yourapp.services.AuditService.startAnalysis(AuditService.java:92) ~[classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:355) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:379) ~[spring-tx-6.1.14.jar:6.1.14]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119) ~[spring-tx-6.1.14.jar:6.1.14]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768) ~[spring-aop-6.1.14.jar:6.1.14]
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:720) ~[spring-aop-6.1.14.jar:6.1.14]
+	at com.yourapp.services.AuditService$$SpringCGLIB$$0.startAnalysis(<generated>) ~[classes/:na]
+	at com.yourapp.services_UI.AuditApiService.startAnalysis(AuditApiService.java:51) ~[classes/:na]
+	at com.yourapp.controller.AuditController$5.call(AuditController.java:559) ~[classes/:na]
+	at com.yourapp.controller.AuditController$5.call(AuditController.java:518) ~[classes/:na]
+	at javafx.graphics@21.0.4/javafx.concurrent.Task$TaskCallable.call(Task.java:1399) ~[javafx-graphics-21.0.4-win.jar:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-12-25T16:37:27.619+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:37:37.632+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:37:47.653+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:37:57.633+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:38:07.667+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:38:17.662+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:38:27.680+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:38:37.673+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:38:47.673+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:38:57.683+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:39:05.924+01:00  INFO 23576 --- [Thread-8] com.yourapp.AI.AiClient                  : ✅ Réponse IA reçue avec succès (tentative 1/3)
+2025-12-25T16:39:05.924+01:00  INFO 23576 --- [Thread-8] com.yourapp.AI.AiResponseParser          : Parsing de la réponse IA pour l'audit 77
+2025-12-25T16:39:05.932+01:00  INFO 23576 --- [Thread-8] com.yourapp.AI.AiResponseParser          : 4 problème(s) parsé(s) avec succès
+2025-12-25T16:39:05.933+01:00  INFO 23576 --- [Thread-8] com.yourapp.services.AuditIssueService   : Sauvegarde de 4 problèmes d'audit
+2025-12-25T16:39:06.343+01:00  INFO 23576 --- [Thread-8] com.yourapp.services.AiAuditService      : Document 56 analysé avec succès. 4 problèmes détectés.
+2025-12-25T16:39:06.343+01:00  INFO 23576 --- [Thread-8] com.yourapp.services.AiAuditService      : Analyse IA terminée pour l'audit 77
+2025-12-25T16:39:06.453+01:00  INFO 23576 --- [Thread-8] com.yourapp.services.AuditService        : Analyse terminée pour l'audit 77
+2025-12-25T16:39:06.863+01:00  INFO 23576 --- [Thread-8] com.zaxxer.hikari.pool.ProxyLeakTask     : Previously reported leaked connection org.postgresql.jdbc.PgConnection@783df647 on thread Thread-8 was returned to the pool (unleaked)
+2025-12-25T16:39:06.863+01:00  INFO 23576 --- [Thread-8] c.yourapp.services_UI.AuditApiService    : ✅ Analyse lancée avec succès pour l'audit: 77
+2025-12-25T16:39:06.863+01:00  INFO 23576 --- [Thread-8] com.yourapp.controller.AuditController   : ✅ Analyse lancée
+2025-12-25T16:39:06.864+01:00  INFO 23576 --- [Thread-8] c.yourapp.services_UI.AuditApiService    : 🔍 Polling du statut de l'audit ID: 77 (maxAttempts=30, intervalSeconds=2)
+2025-12-25T16:39:06.864+01:00  INFO 23576 --- [Thread-8] c.yourapp.services_UI.AuditApiService    : Récupération de l'audit ID: 77
+2025-12-25T16:39:07.393+01:00  INFO 23576 --- [Thread-8] c.yourapp.services_UI.AuditApiService    : ✅ Audit récupéré: Status = COMPLETED
+2025-12-25T16:39:07.393+01:00  INFO 23576 --- [Thread-8] c.yourapp.services_UI.AuditApiService    : ✅ Audit 77 terminé avec le statut: COMPLETED
+2025-12-25T16:39:07.393+01:00  INFO 23576 --- [Thread-8] c.yourapp.services_UI.AuditApiService    : 📊 Récupération des issues pour l'audit ID: 77
+2025-12-25T16:39:07.394+01:00  INFO 23576 --- [Thread-8] com.yourapp.services.AuditIssueService   : 📊 Récupération des issues pour l'audit ID: 77
+2025-12-25T16:39:07.683+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:39:07.705+01:00  INFO 23576 --- [Thread-8] com.yourapp.services.AuditIssueService   : ✅ 4 issues récupérées et mappées avec succès
+2025-12-25T16:39:07.803+01:00  INFO 23576 --- [Thread-8] c.yourapp.services_UI.AuditApiService    : ✅ 4 issues récupérées pour l'audit 77
+2025-12-25T16:39:07.803+01:00  INFO 23576 --- [Thread-8] c.yourapp.services_UI.AuditApiService    : 📊 4 issues ajoutées à la réponse
+2025-12-25T16:39:07.808+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📊 Récupération des issues pour l'audit 77
+2025-12-25T16:39:07.808+01:00  INFO 23576 --- [JavaFX Application Thread] c.yourapp.services_UI.AuditApiService    : 📊 Récupération des issues pour l'audit ID: 77
+2025-12-25T16:39:07.808+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.services.AuditIssueService   : 📊 Récupération des issues pour l'audit ID: 77
+2025-12-25T16:39:08.113+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.services.AuditIssueService   : ✅ 4 issues récupérées et mappées avec succès
+2025-12-25T16:39:08.213+01:00  INFO 23576 --- [JavaFX Application Thread] c.yourapp.services_UI.AuditApiService    : ✅ 4 issues récupérées pour l'audit 77
+2025-12-25T16:39:08.213+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ 4 issues récupérées pour affichage
+2025-12-25T16:39:08.323+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 🔔 Audit completion notification created for user 6
+2025-12-25T16:39:08.423+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 🔔 Notification créée pour l'audit terminé
+2025-12-25T16:39:08.428+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📋 Affichage de 4 problèmes
+2025-12-25T16:39:12.723+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📥 Téléchargement du rapport pour l'audit 77
+2025-12-25T16:39:17.682+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 1 unread notifications
+2025-12-25T16:39:19.097+01:00  INFO 23576 --- [Thread-9] com.yourapp.services_UI.ReportService    : 📝 Génération du rapport Word pour l'audit 77
+2025-12-25T16:39:19.580+01:00  INFO 23576 --- [Thread-9] com.yourapp.services_UI.ReportService    : 💾 Sauvegarde du rapport en BDD pour l'audit 77
+2025-12-25T16:39:19.893+01:00  INFO 23576 --- [Thread-9] com.yourapp.services_UI.ReportService    : ✅ Rapport sauvegardé en BDD avec ID: 8
+2025-12-25T16:39:19.893+01:00  INFO 23576 --- [Thread-9] com.yourapp.services_UI.ReportService    : ✅ Rapport Word généré et sauvegardé: C:\Users\AdMin\AppData\Roaming\Microsoft\Windows\Network Shortcuts\Rapport_Audit_77.docx
+2025-12-25T16:39:20.202+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 🔔 Report generation notification created for user 6
+2025-12-25T16:39:20.303+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 🔔 Notification créée pour le rapport généré
+2025-12-25T16:39:23.414+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📢 Notification: 🔄 Réinitialisé - Prêt pour un nouvel audit
+2025-12-25T16:39:23.415+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📢 Notification: ✅ Audit terminé - Les résultats sont disponibles
+2025-12-25T16:39:25.322+01:00  INFO 23576 --- [JavaFX Application Thread] c.yourapp.controller.TopbarController    : 📬 Opening notifications popup
+2025-12-25T16:39:25.324+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📥 Fetching notifications for user 6
+2025-12-25T16:39:25.623+01:00  INFO 23576 --- [JavaFX Application Thread] c.yourapp.controller.TopbarController    : 📊 Loaded 2 notifications
+2025-12-25T16:39:27.705+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 2 unread notifications
+2025-12-25T16:39:34.413+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 2 unread notifications
+2025-12-25T16:39:35.472+01:00  INFO 23576 --- [JavaFX Application Thread] c.yourapp.controller.TopbarController    : 📬 Opening notifications popup
+2025-12-25T16:39:35.472+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📥 Fetching notifications for user 6
+2025-12-25T16:39:35.773+01:00  INFO 23576 --- [JavaFX Application Thread] c.yourapp.controller.TopbarController    : 📊 Loaded 2 notifications
+2025-12-25T16:39:37.476+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : ✅ Notification 2 marked as read
+2025-12-25T16:39:37.675+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services_UI.NotificationUiService    : ✅ Notification 2 marked as read
+2025-12-25T16:39:37.683+01:00  INFO 23576 --- [JavaFX Application Thread] c.yourapp.controller.TopbarController    : 📬 Opening notifications popup
+2025-12-25T16:39:37.683+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📥 Fetching notifications for user 6
+2025-12-25T16:39:37.883+01:00  INFO 23576 --- [JavaFX Application Thread] c.yourapp.controller.TopbarController    : 📊 Loaded 2 notifications
+2025-12-25T16:39:39.424+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : ✅ Notification 1 marked as read
+2025-12-25T16:39:39.633+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services_UI.NotificationUiService    : ✅ Notification 1 marked as read
+2025-12-25T16:39:39.640+01:00  INFO 23576 --- [JavaFX Application Thread] c.yourapp.controller.TopbarController    : 📬 Opening notifications popup
+2025-12-25T16:39:39.641+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📥 Fetching notifications for user 6
+2025-12-25T16:39:39.843+01:00  INFO 23576 --- [JavaFX Application Thread] c.yourapp.controller.TopbarController    : 📊 Loaded 2 notifications
+2025-12-25T16:39:41.641+01:00  INFO 23576 --- [JavaFX Application Thread] c.yourapp.controller.TopbarController    : ✅ Notification 1 marked as read
+2025-12-25T16:39:41.885+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:39:41.988+01:00  INFO 23576 --- [JavaFX Application Thread] c.yourapp.controller.TopbarController    : ✅ Notification 2 marked as read
+2025-12-25T16:39:42.093+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:39:42.303+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:39:42.503+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:39:48.113+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:39:48.250+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📌 Projet sélectionné: Santé Communautaire
+2025-12-25T16:39:48.251+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📥 Chargement des modèles pour le projet ID: 6
+2025-12-25T16:39:48.251+01:00  INFO 23576 --- [Thread-10] com.yourapp.services_UI.ModelService     : 📥 Récupération des templates pour projet ID=6
+2025-12-25T16:39:48.251+01:00  INFO 23576 --- [Thread-10] com.yourapp.services_UI.ModelService     : 📥 Récupération de tous les templates
+2025-12-25T16:39:48.463+01:00  INFO 23576 --- [Thread-10] com.yourapp.services_UI.ModelService     : ✅ 2 templates récupérés
+2025-12-25T16:39:48.463+01:00  INFO 23576 --- [Thread-10] com.yourapp.services_UI.ModelService     : ✅ 2 templates disponibles pour le projet 6
+2025-12-25T16:39:48.464+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ 2 modèles chargés
+2025-12-25T16:39:58.133+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:40:08.143+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:40:18.144+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:40:28.144+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:40:38.154+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:40:48.174+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:40:54.750+01:00  INFO 10708 --- [JavaFX-Launcher] o.s.boot.SpringApplication               : Starting application using Java 21.0.9 with PID 10708 (started by AdMin in C:\Users\AdMin\Desktop\auditDoc-AI-)
+2025-12-25T16:40:54.754+01:00  INFO 10708 --- [JavaFX-Launcher] o.s.boot.SpringApplication               : No active profile set, falling back to 1 default profile: "default"
+2025-12-25T16:40:55.807+01:00  INFO 10708 --- [JavaFX-Launcher] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-25T16:40:55.931+01:00  INFO 10708 --- [JavaFX-Launcher] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 114 ms. Found 9 JPA repository interfaces.
+2025-12-25T16:40:56.880+01:00  INFO 10708 --- [JavaFX-Launcher] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-25T16:40:57.006+01:00  INFO 10708 --- [JavaFX-Launcher] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2025-12-25T16:40:57.066+01:00  INFO 10708 --- [JavaFX-Launcher] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-12-25T16:40:57.544+01:00  INFO 10708 --- [JavaFX-Launcher] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-25T16:40:57.585+01:00  INFO 10708 --- [JavaFX-Launcher] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-12-25T16:40:58.200+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:40:59.320+01:00  INFO 10708 --- [JavaFX-Launcher] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@4c423133
+2025-12-25T16:40:59.328+01:00  INFO 10708 --- [JavaFX-Launcher] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-12-25T16:41:01.258+01:00  INFO 10708 --- [JavaFX-Launcher] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-25T16:41:01.375+01:00  INFO 10708 --- [JavaFX-Launcher] org.hibernate.orm.connections.access     : HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@3620ca6f] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+2025-12-25T16:41:04.775+01:00  INFO 10708 --- [JavaFX-Launcher] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-25T16:41:05.398+01:00  INFO 10708 --- [JavaFX-Launcher] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-12-25T16:41:06.525+01:00  INFO 10708 --- [JavaFX-Launcher] o.s.boot.SpringApplication               : Started application in 12.696 seconds (process running for 14.269)
+2025-12-25T16:41:08.184+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:41:11.724+01:00  INFO 10708 --- [JavaFX Application Thread] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-12-25T16:41:11.726+01:00  INFO 10708 --- [JavaFX Application Thread] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-12-25T16:41:11.914+01:00  INFO 10708 --- [JavaFX Application Thread] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-12-25T16:41:18.204+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:41:28.217+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:41:38.224+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:41:48.244+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:41:58.244+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:42:05.712+01:00  INFO 10364 --- [JavaFX-Launcher] o.s.boot.SpringApplication               : Starting application using Java 21.0.9 with PID 10364 (started by AdMin in C:\Users\AdMin\Desktop\auditDoc-AI-)
+2025-12-25T16:42:05.715+01:00  INFO 10364 --- [JavaFX-Launcher] o.s.boot.SpringApplication               : No active profile set, falling back to 1 default profile: "default"
+2025-12-25T16:42:06.680+01:00  INFO 10364 --- [JavaFX-Launcher] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-25T16:42:06.796+01:00  INFO 10364 --- [JavaFX-Launcher] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 106 ms. Found 9 JPA repository interfaces.
+2025-12-25T16:42:07.998+01:00  INFO 10364 --- [JavaFX-Launcher] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-25T16:42:08.094+01:00  INFO 10364 --- [JavaFX-Launcher] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2025-12-25T16:42:08.152+01:00  INFO 10364 --- [JavaFX-Launcher] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-12-25T16:42:08.234+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:42:08.668+01:00  INFO 10364 --- [JavaFX-Launcher] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-25T16:42:08.709+01:00  INFO 10364 --- [JavaFX-Launcher] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-12-25T16:42:10.235+01:00  INFO 10364 --- [JavaFX-Launcher] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1f3038e9
+2025-12-25T16:42:10.237+01:00  INFO 10364 --- [JavaFX-Launcher] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-12-25T16:42:12.031+01:00  INFO 10364 --- [JavaFX-Launcher] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-25T16:42:12.149+01:00  INFO 10364 --- [JavaFX-Launcher] org.hibernate.orm.connections.access     : HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@69562813] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+2025-12-25T16:42:15.637+01:00  INFO 10364 --- [JavaFX-Launcher] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-25T16:42:16.260+01:00  INFO 10364 --- [JavaFX-Launcher] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-12-25T16:42:17.421+01:00  INFO 10364 --- [JavaFX-Launcher] o.s.boot.SpringApplication               : Started application in 12.612 seconds (process running for 14.186)
+2025-12-25T16:42:18.244+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:42:28.245+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:42:37.539+01:00  INFO 10364 --- [JavaFX Application Thread] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-12-25T16:42:37.542+01:00  INFO 10364 --- [JavaFX Application Thread] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-12-25T16:42:37.734+01:00  INFO 10364 --- [JavaFX Application Thread] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-12-25T16:42:38.274+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:42:45.631+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📌 Modèle sélectionné: Template USAID
+2025-12-25T16:42:48.174+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:42:58.285+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:43:08.305+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:43:18.304+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:43:28.325+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:43:28.430+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 🚀 Initialisation du AuditController
+2025-12-25T16:43:28.430+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📥 Chargement des projets...
+2025-12-25T16:43:28.430+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ AuditController initialisé avec succès
+2025-12-25T16:43:28.432+01:00  INFO 23576 --- [Thread-11] c.yourapp.services_UI.ProjectApiService  : 📥 Récupération de tous les projets
+2025-12-25T16:43:28.625+01:00  INFO 23576 --- [Thread-11] c.yourapp.services_UI.ProjectApiService  : ✅ 7 projets récupérés avec succès
+2025-12-25T16:43:28.626+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ 7 projets chargés
+2025-12-25T16:43:38.334+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:43:48.345+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:43:49.982+01:00  INFO 23576 --- [JavaFX Application Thread] c.yourapp.controller.TopbarController    : 📬 Opening notifications popup
+2025-12-25T16:43:49.982+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📥 Fetching notifications for user 6
+2025-12-25T16:43:50.275+01:00  INFO 23576 --- [JavaFX Application Thread] c.yourapp.controller.TopbarController    : 📊 Loaded 2 notifications
+2025-12-25T16:43:58.387+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:44:08.355+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:44:16.865+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:44:18.356+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:44:28.365+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:44:35.245+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 🚀 Initialisation du AuditController
+2025-12-25T16:44:35.245+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : 📥 Chargement des projets...
+2025-12-25T16:44:35.245+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ AuditController initialisé avec succès
+2025-12-25T16:44:35.245+01:00  INFO 23576 --- [Thread-12] c.yourapp.services_UI.ProjectApiService  : 📥 Récupération de tous les projets
+2025-12-25T16:44:35.541+01:00  INFO 23576 --- [Thread-12] c.yourapp.services_UI.ProjectApiService  : ✅ 7 projets récupérés avec succès
+2025-12-25T16:44:35.541+01:00  INFO 23576 --- [JavaFX Application Thread] com.yourapp.controller.AuditController   : ✅ 7 projets chargés
+2025-12-25T16:44:38.385+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:44:48.396+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:44:58.465+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:45:08.395+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:45:18.406+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:45:28.423+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:45:38.425+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:45:48.436+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:45:58.436+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:46:08.449+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:46:18.456+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:46:28.466+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:46:38.478+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:46:48.476+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:46:58.487+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:47:08.486+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:47:18.497+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications
+2025-12-25T16:47:28.507+01:00  INFO 23576 --- [JavaFX Application Thread] c.y.services.NotificationApiService      : 📊 User 6 has 0 unread notifications

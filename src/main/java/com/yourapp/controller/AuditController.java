@@ -6,10 +6,13 @@ import com.yourapp.dto.AuditResponseDto;
 import com.yourapp.dto.AuditTemplateDTO;
 import com.yourapp.dto.AuditIssueDto;
 import com.yourapp.model.Project;
+import com.yourapp.model.User;
 import com.yourapp.services_UI.AuditApiService;
 import com.yourapp.services_UI.FileUploadService;
 import com.yourapp.services_UI.ModelService;
 import com.yourapp.services_UI.ProjectApiService;
+import com.yourapp.services.NotificationApiService; // AJOUT IMPORT MANQUANT
+import com.yourapp.utils.SessionManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -58,6 +61,7 @@ public class AuditController {
     @Autowired private AuditApiService auditApiService;
     @Autowired private FileUploadService fileUploadService;
     @Autowired private ReportService reportService;
+    @Autowired private NotificationApiService notificationApiService; // AJOUT SERVICE MANQUANT
 
     // ============ Variables d'état ============
     private VBox notificationBox;
@@ -77,7 +81,63 @@ public class AuditController {
         setupComboBoxes();
         loadProjects();
 
+        // Configuration de la dropzone pour le drag-and-drop
+        setupDropZone();
+
         log.info("✅ AuditController initialisé avec succès");
+    }
+
+    /**
+     * Configurer la zone de dépôt pour le drag-and-drop
+     */
+    private void setupDropZone() {
+        dropzone.setOnDragOver(event -> {
+            if (event.getDragboard().hasFiles()) {
+                event.acceptTransferModes(javafx.scene.input.TransferMode.COPY);
+            }
+            event.consume();
+        });
+
+        dropzone.setOnDragDropped(event -> {
+            javafx.scene.input.Dragboard db = event.getDragboard();
+            boolean success = false;
+            if (db.hasFiles()) {
+                handleDroppedFiles(db.getFiles());
+                success = true;
+            }
+            event.setDropCompleted(success);
+            event.consume();
+        });
+    }
+
+    /**
+     * Gérer les fichiers déposés
+     */
+    private void handleDroppedFiles(List<java.io.File> files) {
+        log.info("📂 {} fichiers déposés via drag-and-drop", files.size());
+
+        List<File> validFiles = fileUploadService.validateFiles(files);
+
+        if (validFiles.isEmpty()) {
+            showNotification("❌ Fichiers invalides",
+                    "Les fichiers déposés ne sont pas valides");
+            return;
+        }
+
+        filesList.getChildren().clear();
+        selectedFiles.clear();
+
+        for (File file : validFiles) {
+            selectedFiles.add(file);
+            filesList.getChildren().add(createFileItem(file));
+        }
+
+        filesContainer.setVisible(true);
+        filesContainer.setManaged(true);
+        updateFileCount();
+
+        showNotification("✅ Fichiers ajoutés",
+                String.format("%d fichier(s) ajouté(s) avec succès", validFiles.size()));
     }
 
     /**
@@ -164,6 +224,7 @@ public class AuditController {
 
         task.setOnFailed(e -> {
             Platform.runLater(() -> {
+                log.error("❌ Échec du chargement des projets", task.getException());
                 showNotification("❌ Erreur", "Impossible de charger les projets");
             });
         });
@@ -207,6 +268,7 @@ public class AuditController {
 
         task.setOnFailed(e -> {
             Platform.runLater(() -> {
+                log.error("❌ Échec du chargement des modèles", task.getException());
                 showNotification("❌ Erreur", "Impossible de charger les modèles");
             });
         });
@@ -235,6 +297,13 @@ public class AuditController {
             return;
         }
 
+        handleSelectedFiles(files);
+    }
+
+    /**
+     * Gérer les fichiers sélectionnés
+     */
+    private void handleSelectedFiles(List<File> files) {
         List<File> validFiles = fileUploadService.validateFiles(files);
 
         if (validFiles.isEmpty()) {
@@ -243,19 +312,21 @@ public class AuditController {
             return;
         }
 
-        filesList.getChildren().clear();
-        selectedFiles.clear();
-
+        // Ajouter aux fichiers existants (ne pas effacer)
         for (File file : validFiles) {
-            selectedFiles.add(file);
-            filesList.getChildren().add(createFileItem(file));
+            if (!selectedFiles.contains(file)) {
+                selectedFiles.add(file);
+                filesList.getChildren().add(createFileItem(file));
+            }
         }
 
         filesContainer.setVisible(true);
         filesContainer.setManaged(true);
         updateFileCount();
 
-        log.info("✅ {} fichiers sélectionnés", validFiles.size());
+        log.info("✅ {} fichiers sélectionnés (total: {})", validFiles.size(), selectedFiles.size());
+        showNotification("✅ Fichiers ajoutés",
+                String.format("%d fichier(s) ajouté(s)", validFiles.size()));
     }
 
     /**
@@ -299,6 +370,8 @@ public class AuditController {
                 filesContainer.setVisible(false);
                 filesContainer.setManaged(false);
             }
+
+            showNotification("🗑️ Fichier supprimé", "Le fichier a été retiré de la liste");
         });
 
         return fileItem;
@@ -384,20 +457,53 @@ public class AuditController {
             progressDialog.close();
             AuditResponseDto audit = auditTask.getValue();
 
-            // 🔥 FIX: Récupérer les issues depuis le service
-            log.info("📊 Récupération des issues pour l'audit {}", audit.getId());
-            List<AuditIssueDto> issues = auditApiService.getIssuesByAudit(audit.getId());
-            audit.setIssues(issues);
+            try {
+                // 🔥 FIX: Récupérer les issues depuis le service
+                log.info("📊 Récupération des issues pour l'audit {}", audit.getId());
+                List<AuditIssueDto> issues = auditApiService.getIssuesByAudit(audit.getId());
+                audit.setIssues(issues);
 
-            log.info("✅ {} issues récupérées pour affichage", issues.size());
-            showAuditResultsDialog(audit);
-            showSuccessNotification();
+                log.info("✅ {} issues récupérées pour affichage", issues.size());
+
+                // ✨ Créer notification
+                try {
+                    User currentUser = SessionManager.getInstance().getCurrentUser();
+                    if (currentUser != null) {
+                        notificationApiService.notifyAuditCompleted(currentUser, audit);
+                        log.info("🔔 Notification créée pour l'audit terminé");
+                    }
+                } catch (Exception ex) {
+                    log.error("❌ Erreur lors de la création de la notification", ex);
+                }
+
+                showAuditResultsDialog(audit);
+                showSuccessNotification();
+
+            } catch (Exception ex) {
+                log.error("❌ Erreur lors de la récupération des issues", ex);
+                showNotification("⚠️ Analyse partielle",
+                        "L'analyse est terminée mais certains détails sont indisponibles");
+            }
         });
 
         auditTask.setOnFailed(e -> {
             progressDialog.close();
             Throwable exception = auditTask.getException();
             log.error("❌ Erreur lors de l'audit", exception);
+
+            // ✨ Créer notification d'échec
+            try {
+                User currentUser = SessionManager.getInstance().getCurrentUser();
+                if (currentUser != null && currentAuditId != null) {
+                    notificationApiService.notifyAuditFailed(currentUser,
+                            auditApiService.getAuditById(currentAuditId),
+                            exception.getMessage());
+                    log.info("🔔 Notification créée pour l'audit échoué");
+                }
+            } catch (Exception ex) {
+                log.error("❌ Erreur lors de la création de la notification", ex);
+            }
+
             showErrorNotification();
         });
 
@@ -454,14 +560,14 @@ public class AuditController {
 
                     log.info("✅ Analyse lancée");
 
-                    // Étape 4: Polling du statut - OPTIMISÉ avec timeout réduit
+                    // Étape 4: Polling du statut
                     Platform.runLater(() -> {
                         statusLabel.setText("Analyse en cours...");
                         percentLabel.setText("80%");
                         progressBar.setProgress(0.8);
                     });
 
-                    // Polling avec timeout de 30 secondes max (au lieu de 60)
+                    // Polling avec timeout de 30 secondes max
                     AuditResponseDto finalAudit = auditApiService.pollAuditStatus(
                             currentAuditId, 30, 2
                     );
@@ -611,7 +717,6 @@ public class AuditController {
         resultsDialog.setTitle("Analyse terminée");
         resultsDialog.setHeaderText(null);
 
-        // FIX: Ajuster la taille de la fenêtre pour qu'elle tienne dans l'écran
         resultsDialog.setResizable(true);
         resultsDialog.getDialogPane().setMinSize(700, 600);
         resultsDialog.getDialogPane().setPrefSize(800, 650);
@@ -782,6 +887,13 @@ public class AuditController {
             card.getChildren().add(locationLabel);
         }
 
+        // Gravité
+        if (issue.getSeverity() != null) {
+            Label severityLabel = new Label("⚠️ Gravité: " + issue.getSeverity());
+            severityLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #dc2626; -fx-font-weight: 600;");
+            card.getChildren().add(severityLabel);
+        }
+
         return card;
     }
 
@@ -834,7 +946,6 @@ public class AuditController {
         formatDialog.setHeaderText("Choisissez le format du rapport");
         formatDialog.setContentText("Quel format préférez-vous ?");
 
-        // MODIFICATION: Supprimer TXT/HTML, ajouter Word/PDF
         ButtonType pdfButton = new ButtonType("📕 PDF (.pdf)");
         ButtonType wordButton = new ButtonType("📝 Word (.docx)");
         ButtonType cancelButton = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
@@ -854,7 +965,6 @@ public class AuditController {
      * Télécharger le rapport dans le format spécifié
      */
     private void downloadReportAs(AuditResponseDto audit, String format) {
-
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Enregistrer le Rapport");
 
@@ -892,6 +1002,17 @@ public class AuditController {
             success.setHeaderText("Le rapport a été généré avec succès !");
             success.setContentText("Voulez-vous ouvrir le fichier ?");
 
+            // ✨ Créer notification de rapport généré
+            try {
+                User currentUser = SessionManager.getInstance().getCurrentUser();
+                if (currentUser != null) {
+                    notificationApiService.notifyReportGenerated(currentUser, audit);
+                    log.info("🔔 Notification créée pour le rapport généré");
+                }
+            } catch (Exception ex) {
+                log.error("❌ Erreur lors de la création de la notification", ex);
+            }
+
             success.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
                     try {
@@ -921,5 +1042,14 @@ public class AuditController {
         thread.start();
     }
 
-
+    /**
+     * Nettoyer les ressources
+     */
+    public void cleanup() {
+        selectedFiles.clear();
+        currentAuditId = null;
+        selectedProject = null;
+        selectedModel = null;
+        log.info("🧹 AuditController nettoyé");
+    }
 }

@@ -11,28 +11,42 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id")
-    private Project project;
+    @Column(name = "user_name")
+    private String userName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "audit_id")
-    private Audit audit;
+    @Column(name = "project_id")
+    private Long projectId;
+
+    @Column(name = "audit_id")
+    private Long auditId;
 
     @Column(name = "notification_type")
-    private String type; // "UPCOMING_AUDIT", "MISSED_AUDIT", "FAILED_AUDIT"
+    private String type; // "AUDIT_COMPLETED", "AUDIT_FAILED", "REPORT_GENERATED"
 
+    @Column(nullable = false, length = 500)
     private String message;
 
     @Column(name = "is_read")
-    private boolean read;
+    private boolean read = false;
 
     @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    // ⚠️ SUPPRIMER les relations ManyToOne - elles causent l'erreur
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "user_id", nullable = false)
+    // private User user;
+    //
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "project_id")
+    // private Project project;
+    //
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "audit_id")
+    // private Audit audit;
 
     // Constructeurs
     public Notification() {}
@@ -43,8 +57,8 @@ public class Notification {
         this.createdAt = LocalDateTime.now();
     }
 
-    public Notification(User user, String message, String type) {
-        this.user = user;
+    public Notification(Long userId, String message, String type) {
+        this.userId = userId;
         this.message = message;
         this.type = type;
         this.read = false;
@@ -60,28 +74,36 @@ public class Notification {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public Project getProject() {
-        return project;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setProject(Project project) {
-        this.project = project;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public Audit getAudit() {
-        return audit;
+    public Long getProjectId() {
+        return projectId;
     }
 
-    public void setAudit(Audit audit) {
-        this.audit = audit;
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
+    }
+
+    public Long getAuditId() {
+        return auditId;
+    }
+
+    public void setAuditId(Long auditId) {
+        this.auditId = auditId;
     }
 
     public String getType() {
@@ -119,4 +141,12 @@ public class Notification {
     public void markAsRead() {
         this.read = true;
     }
+
+    // ⚠️ SUPPRIMER ces getters et setters
+    // public User getUser() { return user; }
+    // public void setUser(User user) { this.user = user; }
+    // public Project getProject() { return project; }
+    // public void setProject(Project project) { this.project = project; }
+    // public Audit getAudit() { return audit; }
+    // public void setAudit(Audit audit) { this.audit = audit; }
 }
