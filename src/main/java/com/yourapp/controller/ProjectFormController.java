@@ -1,14 +1,18 @@
 package com.yourapp.controller;
 
+import com.yourapp.model.AuditTemplate;
 import com.yourapp.model.Project;
 import com.yourapp.services.ProjectService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.List;
+
 @Component
 public class ProjectFormController {
 
@@ -16,9 +20,9 @@ public class ProjectFormController {
     @FXML private TextArea txtDescription;
     @FXML private DatePicker dpStart;
     @FXML private DatePicker dpEnd;
-    @FXML private ComboBox<String> cbPartner;
+    @FXML private ComboBox<AuditTemplate> cbPartner;
     @FXML private ComboBox<String> cbStatus;
-    @FXML private ComboBox<String> cbAuditStandards;
+    @FXML private ComboBox<AuditTemplate> cbAuditStandards;
     @FXML private DatePicker dpAudit;
     @Autowired
     private ProjectService projectService;
@@ -26,12 +30,29 @@ public class ProjectFormController {
 
     @FXML
     public void initialize() {
-        // Initialisation des listes déroulantes
-        cbPartner.getItems().addAll("USAID", "UNICEF", "Banque Mondiale", "Agence Française");
-        cbStatus.getItems().addAll("Actif", "Clôturé", "En Attente");
-        cbAuditStandards.getItems().addAll("ISO 9001", "Interne", "Réglementaire", "Spécifique Bailleur");
+        // 1. Charger les vraies données de la base
+        List<AuditTemplate> templates = projectService.getAllTemplates();
 
-        // Valeurs par défaut
+        // 2. Remplir les ComboBox
+        cbPartner.getItems().setAll(templates);
+        cbAuditStandards.getItems().setAll(templates);
+
+        // 3. Configurer l'affichage (Converter) pour éviter les adresses mémoires @...
+        StringConverter<AuditTemplate> partnerConverter = new StringConverter<>() {
+            @Override public String toString(AuditTemplate t) { return t != null ? t.getOrganization() : ""; }
+            @Override public AuditTemplate fromString(String s) { return null; }
+        };
+
+        StringConverter<AuditTemplate> standardConverter = new StringConverter<>() {
+            @Override public String toString(AuditTemplate t) { return t != null ? t.getName() : ""; }
+            @Override public AuditTemplate fromString(String s) { return null; }
+        };
+
+        cbPartner.setConverter(partnerConverter);
+        cbAuditStandards.setConverter(standardConverter);
+
+        // Status reste en String
+        cbStatus.getItems().addAll("Actif", "Clôturé", "En Attente");
         cbStatus.setValue("Actif");
     }
 
@@ -48,61 +69,43 @@ public class ProjectFormController {
             txtDescription.setText(project.getDescription());
             dpStart.setValue(project.getStartDate());
             dpEnd.setValue(project.getEndDate());
-            cbPartner.setValue(project.getPartner());
             cbStatus.setValue(project.getStatus());
+            if (project.getProchainAuditDate() != null) dpAudit.setValue(project.getProchainAuditDate());
 
-            if (project.getProchainAuditDate() != null) {
-                dpAudit.setValue(project.getProchainAuditDate());
+            // --- Sélection automatique des objets lors de la modification ---
+            if (project.getPartner() != null) {
+                cbPartner.getItems().stream()
+                        .filter(t -> t.getOrganization().equals(project.getPartner()))
+                        .findFirst().ifPresent(cbPartner::setValue);
             }
-
         }
     }
 
     @FXML
     private void handleSave() {
-        // 1. VALIDATION COMPLÈTE (Champs vides + Logique dates)
-        if (!validateForm()) {
-            showAlert("Formulaire invalide", "Veuillez corriger les champs en rouge.");
-            return; // On arrête tout si ce n'est pas valide
-        }
+        if (!validateForm()) return;
 
-        // 2. CRÉATION OU MISE À JOUR
+        // On extrait les Strings des objets sélectionnés
+        String selectedPartner = cbPartner.getValue() != null ? cbPartner.getValue().getOrganization() : "";
+
         if (currentProject == null) {
-            // --- MODE CRÉATION ---
-            currentProject = new Project(
-                    txtName.getText().trim(),
-                    txtDescription.getText().trim(),
-                    dpStart.getValue(),
-                    dpEnd.getValue(),
-                    cbPartner.getValue(),
-                    cbStatus.getValue(),
-                    0, // Progrès 0%
-                    dpAudit.getValue() // Date audit par défaut
-            );
-        } else {
-            // --- MODE MODIFICATION ---
-            currentProject.setName(txtName.getText().trim());
-            currentProject.setDescription(txtDescription.getText().trim());
-            currentProject.setStartDate(dpStart.getValue());
-            currentProject.setEndDate(dpEnd.getValue());
-            currentProject.setPartner(cbPartner.getValue());
-            currentProject.setStatus(cbStatus.getValue());
-            currentProject.setProchainAuditDate(dpAudit.getValue());
+            currentProject = new Project();
+            currentProject.setProgress(0);
         }
 
-        // 3. SAUVEGARDE VIA LE SERVICE
+        currentProject.setName(txtName.getText().trim());
+        currentProject.setDescription(txtDescription.getText().trim());
+        currentProject.setStartDate(dpStart.getValue());
+        currentProject.setEndDate(dpEnd.getValue());
+        currentProject.setPartner(selectedPartner); // On passe bien un String
+        currentProject.setStatus(cbStatus.getValue());
+        currentProject.setProchainAuditDate(dpAudit.getValue());
+
         try {
-            if (projectService != null) {
-                projectService.saveProject(currentProject);
-                System.out.println("Projet enregistré avec succès !");
-                closeWindow();
-            } else {
-                System.err.println("Erreur critique : ProjectService est null");
-                showAlert("Erreur Technique", "Le service de base de données est indisponible.");
-            }
+            projectService.saveProject(currentProject);
+            closeWindow();
         } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Erreur de sauvegarde", "Impossible de contacter la base de données : " + e.getMessage());
+            showAlert("Erreur", "Sauvegarde impossible : " + e.getMessage());
         }
     }
 

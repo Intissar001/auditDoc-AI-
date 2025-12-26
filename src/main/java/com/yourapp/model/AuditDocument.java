@@ -1,5 +1,6 @@
 package com.yourapp.model;
 
+import java.util.List;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -35,6 +36,9 @@ public class AuditDocument {
 
     @Column(name = "issues_count")
     private Integer issuesCount;
+
+    @Column(name = "project_id")
+    private Long projectId;
 
 
     @PrePersist
@@ -97,5 +101,9 @@ public class AuditDocument {
     public Integer getIssuesCount() { return issuesCount; }
 
     public void setIssuesCount(Integer issuesCount) { this.issuesCount = issuesCount; }
+
+    public Long getProjectId() { return projectId; }
+
+    public void setProjectId(Long projectId) { this.projectId = projectId; }
 }
 

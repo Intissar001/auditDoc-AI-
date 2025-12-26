@@ -13,6 +13,8 @@ import java.util.Optional;
 public interface AuditDocumentRepository
         extends JpaRepository<AuditDocument, Long>,
         JpaSpecificationExecutor<AuditDocument> {
+
+    List<AuditDocument> findByProjectId(Long projectId);
     List<AuditDocument> findByAudit(Audit audit);
 
     List<AuditDocument> findByAuditId(Long auditId);

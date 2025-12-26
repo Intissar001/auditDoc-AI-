@@ -146,11 +146,11 @@ public class SignUpController {
             // CHANGER uniquement le contenu (Root) de la scène actuelle
             stage.getScene().setRoot(root);
 
-            // S'assurer que la fenêtre reste bien dimensionnée
-            stage.sizeToScene();
-            stage.centerOnScreen();
+            // **MODIFICATION CLÉ : Assurer que la fenêtre reste maximisée**
+            // Supprimer sizeToScene() et centerOnScreen()
+            stage.setMaximized(true);
 
-            System.out.println("✅ Redirection vers Login réussie dans la même fenêtre.");
+            System.out.println("✅ Redirection vers Login réussie dans la même fenêtre et maximisée.");
         } catch (Exception e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger la page de connexion.");

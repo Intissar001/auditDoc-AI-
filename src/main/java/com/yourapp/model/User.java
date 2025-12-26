@@ -37,9 +37,9 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    // Notifications
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Notification> notifications = new ArrayList<>();
+    // ⚠️ SUPPRIMER cette relation - elle n'existe plus dans Notification
+    // @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    // private List<Notification> notifications = new ArrayList<>();
 
     // Password reset tokens
     @OneToMany(
@@ -115,10 +115,11 @@ public class User {
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
 
-    public List<Notification> getNotifications() { return notifications; }
-    public void setNotifications(List<Notification> notifications) {
-        this.notifications = notifications;
-    }
+    // ⚠️ SUPPRIMER ces méthodes
+    // public List<Notification> getNotifications() { return notifications; }
+    // public void setNotifications(List<Notification> notifications) {
+    //     this.notifications = notifications;
+    // }
 
     public List<PasswordResetToken> getPasswordResetTokens() {
         return passwordResetTokens;

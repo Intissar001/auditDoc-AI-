@@ -38,7 +38,8 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         System.out.println("🎨 Chargement de l'interface JavaFX...");
 
-        FXMLLoader loader = new FXMLLoader(Main.class.getResource("/views/fxml/signup.fxml"));
+        // **MODIFICATION CLÉ : Démarrer avec login.fxml**
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("/views/fxml/login.fxml"));
 
         // Link JavaFX to Spring context
         loader.setControllerFactory(springContext::getBean);
@@ -47,8 +48,11 @@ public class Main extends Application {
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setTitle("AuditDoc AI - Sign Up");
+        stage.setTitle("AuditDoc AI - Connexion");
+
+        // **MODIFICATION CLÉ : Maximiser la fenêtre au démarrage**
         stage.setMaximized(true);
+
         stage.show();
     }
 

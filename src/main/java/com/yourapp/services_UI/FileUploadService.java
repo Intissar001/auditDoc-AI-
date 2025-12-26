@@ -33,20 +33,17 @@ public class FileUploadService {
     /**
      * Upload un seul fichier pour un audit avec extraction du contenu
      */
-    public AuditDocumentDto uploadFile(File file, Long auditId) {
-        log.info("📤 Upload du fichier: {} pour l'audit ID: {}", file.getName(), auditId);
+    public AuditDocumentDto uploadFile(File file, Long auditId, Long projectId) {
+        log.info("📤 Upload du fichier: {} pour l'audit ID: {} et Projet ID: {}", file.getName(), auditId, projectId);
 
         if (!validateFile(file)) {
             throw new RuntimeException("Fichier invalide: " + file.getName());
         }
 
         try {
-            // Convertir File en MultipartFile
-            MultipartFile multipartFile = convertFileToMultipartFile(file);
-
-            AuditDocumentDto document = documentService.uploadDocument(multipartFile, auditId);
-            log.info("✅ Fichier uploadé avec succès: {}", file.getName());
-            return document;
+            org.springframework.web.multipart.MultipartFile multipartFile = convertFileToMultipartFile(file);
+            // On ajoute projectId à l'appel
+            return documentService.uploadDocument(multipartFile, auditId, projectId);
         } catch (Exception e) {
             log.error("❌ Erreur lors de l'upload du fichier: {}", file.getName(), e);
             throw new RuntimeException("Impossible d'uploader le fichier: " + e.getMessage(), e);
@@ -56,21 +53,17 @@ public class FileUploadService {
     /**
      * Upload multiple fichiers pour un audit
      */
-    public List<AuditDocumentDto> uploadMultipleFiles(List<File> files, Long auditId) {
-        log.info("📤 Upload de {} fichiers pour l'audit ID: {}", files.size(), auditId);
-
+    public List<AuditDocumentDto> uploadMultipleFiles(List<File> files, Long auditId, Long projectId) {
         List<AuditDocumentDto> uploadedDocuments = new ArrayList<>();
-
         for (File file : files) {
             try {
-                AuditDocumentDto document = uploadFile(file, auditId);
+                // On passe le projectId ici
+                AuditDocumentDto document = uploadFile(file, auditId, projectId);
                 uploadedDocuments.add(document);
             } catch (Exception e) {
                 log.error("❌ Échec de l'upload du fichier: {}", file.getName(), e);
             }
         }
-
-        log.info("✅ {} fichiers uploadés sur {} tentés", uploadedDocuments.size(), files.size());
         return uploadedDocuments;
     }
 

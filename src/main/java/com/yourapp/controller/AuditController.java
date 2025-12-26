@@ -6,10 +6,13 @@ import com.yourapp.dto.AuditResponseDto;
 import com.yourapp.dto.AuditTemplateDTO;
 import com.yourapp.dto.AuditIssueDto;
 import com.yourapp.model.Project;
+import com.yourapp.model.User;
 import com.yourapp.services_UI.AuditApiService;
 import com.yourapp.services_UI.FileUploadService;
 import com.yourapp.services_UI.ModelService;
 import com.yourapp.services_UI.ProjectApiService;
+import com.yourapp.services.NotificationApiService; // AJOUT IMPORT MANQUANT
+import com.yourapp.utils.SessionManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -58,6 +61,7 @@ public class AuditController {
     @Autowired private AuditApiService auditApiService;
     @Autowired private FileUploadService fileUploadService;
     @Autowired private ReportService reportService;
+    @Autowired private NotificationApiService notificationApiService; // AJOUT SERVICE MANQUANT
 
     // ============ Variables d'état ============
     private VBox notificationBox;
@@ -77,7 +81,63 @@ public class AuditController {
         setupComboBoxes();
         loadProjects();
 
+        // Configuration de la dropzone pour le drag-and-drop
+        setupDropZone();
+
         log.info("✅ AuditController initialisé avec succès");
+    }
+
+    /**
+     * Configurer la zone de dépôt pour le drag-and-drop
+     */
+    private void setupDropZone() {
+        dropzone.setOnDragOver(event -> {
+            if (event.getDragboard().hasFiles()) {
+                event.acceptTransferModes(javafx.scene.input.TransferMode.COPY);
+            }
+            event.consume();
+        });
+
+        dropzone.setOnDragDropped(event -> {
+            javafx.scene.input.Dragboard db = event.getDragboard();
+            boolean success = false;
+            if (db.hasFiles()) {
+                handleDroppedFiles(db.getFiles());
+                success = true;
+            }
+            event.setDropCompleted(success);
+            event.consume();
+        });
+    }
+
+    /**
+     * Gérer les fichiers déposés
+     */
+    private void handleDroppedFiles(List<java.io.File> files) {
+        log.info("📂 {} fichiers déposés via drag-and-drop", files.size());
+
+        List<File> validFiles = fileUploadService.validateFiles(files);
+
+        if (validFiles.isEmpty()) {
+            showNotification("❌ Fichiers invalides",
+                    "Les fichiers déposés ne sont pas valides");
+            return;
+        }
+
+        filesList.getChildren().clear();
+        selectedFiles.clear();
+
+        for (File file : validFiles) {
+            selectedFiles.add(file);
+            filesList.getChildren().add(createFileItem(file));
+        }
+
+        filesContainer.setVisible(true);
+        filesContainer.setManaged(true);
+        updateFileCount();
+
+        showNotification("✅ Fichiers ajoutés",
+                String.format("%d fichier(s) ajouté(s) avec succès", validFiles.size()));
     }
 
     /**
@@ -164,6 +224,7 @@ public class AuditController {
 
         task.setOnFailed(e -> {
             Platform.runLater(() -> {
+                log.error("❌ Échec du chargement des projets", task.getException());
                 showNotification("❌ Erreur", "Impossible de charger les projets");
             });
         });
@@ -207,6 +268,7 @@ public class AuditController {
 
         task.setOnFailed(e -> {
             Platform.runLater(() -> {
+                log.error("❌ Échec du chargement des modèles", task.getException());
                 showNotification("❌ Erreur", "Impossible de charger les modèles");
             });
         });
@@ -235,6 +297,13 @@ public class AuditController {
             return;
         }
 
+        handleSelectedFiles(files);
+    }
+
+    /**
+     * Gérer les fichiers sélectionnés
+     */
+    private void handleSelectedFiles(List<File> files) {
         List<File> validFiles = fileUploadService.validateFiles(files);
 
         if (validFiles.isEmpty()) {
@@ -243,43 +312,69 @@ public class AuditController {
             return;
         }
 
-        filesList.getChildren().clear();
-        selectedFiles.clear();
-
+        // Ajouter aux fichiers existants (ne pas effacer)
         for (File file : validFiles) {
-            selectedFiles.add(file);
-            filesList.getChildren().add(createFileItem(file));
+            if (!selectedFiles.contains(file)) {
+                selectedFiles.add(file);
+                filesList.getChildren().add(createFileItem(file));
+            }
         }
 
         filesContainer.setVisible(true);
         filesContainer.setManaged(true);
         updateFileCount();
 
-        log.info("✅ {} fichiers sélectionnés", validFiles.size());
+        log.info("✅ {} fichiers sélectionnés (total: {})", validFiles.size(), selectedFiles.size());
+        showNotification("✅ Fichiers ajoutés",
+                String.format("%d fichier(s) ajouté(s)", validFiles.size()));
     }
 
     /**
      * Créer un élément visuel pour un fichier
      */
+    /**
+     * Créer un élément visuel pour un fichier (Version sans bouton supprimer)
+     */
     private HBox createFileItem(File file) {
+        // --- INFOS DU FICHIER ---
         Label fileName = new Label(file.getName());
-        fileName.setStyle("-fx-font-weight: 600;");
+        fileName.setStyle("-fx-font-weight: 600; -fx-text-fill: #1f2937;");
 
         Label fileSize = new Label(String.format("%.2f KB", file.length() / 1024.0));
         fileSize.setStyle("-fx-text-fill: #667085; -fx-font-size: 12px;");
 
         VBox fileInfo = new VBox(fileName, fileSize);
         fileInfo.setSpacing(3);
+        HBox.setHgrow(fileInfo, Priority.ALWAYS); // Permet aux infos de prendre l'espace
 
-        Button removeBtn = new Button("✕");
-        removeBtn.setStyle("""
-            -fx-background-color: transparent;
-            -fx-text-fill: #667085;
-            -fx-font-size: 14px;
+        // --- BOUTON OEIL (Visualiser) ---
+        Button viewBtn = new Button("👁"); // Icône oeil
+        viewBtn.setStyle("""
+            -fx-background-color: #f3f4f6;
+            -fx-text-fill: #1E88E5;
+            -fx-font-size: 16px;
+            -fx-padding: 5 10;
+            -fx-background-radius: 5;
             -fx-cursor: hand;
         """);
 
-        HBox fileItem = new HBox(fileInfo, removeBtn);
+        // Action pour l'oeil (Ouvrir le fichier localement pour vérification)
+        viewBtn.setOnAction(e -> {
+            try {
+                java.awt.Desktop.getDesktop().open(file);
+            } catch (Exception ex) {
+                log.error("Impossible d'ouvrir le fichier : {}", ex.getMessage());
+            }
+        });
+
+        /* // --- BOUTON CORBEILLE SUPPRIMÉ ---
+        Button removeBtn = new Button("✕");
+        removeBtn.setStyle("-fx-background-color: transparent; ...");
+        removeBtn.setOnAction(e -> { ... });
+        */
+
+        // --- ASSEMBLAGE ---
+        HBox fileItem = new HBox(fileInfo, viewBtn); // On ne met QUE fileInfo et viewBtn
         fileItem.setAlignment(Pos.CENTER_LEFT);
         fileItem.setSpacing(15);
         fileItem.setStyle("""
@@ -299,6 +394,8 @@ public class AuditController {
                 filesContainer.setVisible(false);
                 filesContainer.setManaged(false);
             }
+
+            showNotification("🗑️ Fichier supprimé", "Le fichier a été retiré de la liste");
         });
 
         return fileItem;
@@ -384,20 +481,53 @@ public class AuditController {
             progressDialog.close();
             AuditResponseDto audit = auditTask.getValue();
 
-            // 🔥 FIX: Récupérer les issues depuis le service
-            log.info("📊 Récupération des issues pour l'audit {}", audit.getId());
-            List<AuditIssueDto> issues = auditApiService.getIssuesByAudit(audit.getId());
-            audit.setIssues(issues);
+            try {
+                // 🔥 FIX: Récupérer les issues depuis le service
+                log.info("📊 Récupération des issues pour l'audit {}", audit.getId());
+                List<AuditIssueDto> issues = auditApiService.getIssuesByAudit(audit.getId());
+                audit.setIssues(issues);
 
-            log.info("✅ {} issues récupérées pour affichage", issues.size());
-            showAuditResultsDialog(audit);
-            showSuccessNotification();
+                log.info("✅ {} issues récupérées pour affichage", issues.size());
+
+                // ✨ Créer notification
+                try {
+                    User currentUser = SessionManager.getInstance().getCurrentUser();
+                    if (currentUser != null) {
+                        notificationApiService.notifyAuditCompleted(currentUser, audit);
+                        log.info("🔔 Notification créée pour l'audit terminé");
+                    }
+                } catch (Exception ex) {
+                    log.error("❌ Erreur lors de la création de la notification", ex);
+                }
+
+                showAuditResultsDialog(audit);
+                showSuccessNotification();
+
+            } catch (Exception ex) {
+                log.error("❌ Erreur lors de la récupération des issues", ex);
+                showNotification("⚠️ Analyse partielle",
+                        "L'analyse est terminée mais certains détails sont indisponibles");
+            }
         });
 
         auditTask.setOnFailed(e -> {
             progressDialog.close();
             Throwable exception = auditTask.getException();
             log.error("❌ Erreur lors de l'audit", exception);
+
+            // ✨ Créer notification d'échec
+            try {
+                User currentUser = SessionManager.getInstance().getCurrentUser();
+                if (currentUser != null && currentAuditId != null) {
+                    notificationApiService.notifyAuditFailed(currentUser,
+                            auditApiService.getAuditById(currentAuditId),
+                            exception.getMessage());
+                    log.info("🔔 Notification créée pour l'audit échoué");
+                }
+            } catch (Exception ex) {
+                log.error("❌ Erreur lors de la création de la notification", ex);
+            }
+
             showErrorNotification();
         });
 
@@ -430,18 +560,21 @@ public class AuditController {
 
                     log.info("✅ Audit créé avec ID: {}", currentAuditId);
 
-                    // Étape 2: Upload des documents
+                    // Étape 2: Upload des documents (Dans AuditController.java)
                     Platform.runLater(() -> {
                         statusLabel.setText("Upload des documents...");
                         percentLabel.setText("40%");
                         progressBar.setProgress(0.4);
                     });
 
+// 🔥 MODIFICATION ICI : On ajoute selectedProject.getId()
                     List<AuditDocumentDto> uploadedDocs = fileUploadService.uploadMultipleFiles(
-                            selectedFiles, currentAuditId
+                            selectedFiles,
+                            currentAuditId,
+                            selectedProject.getId()
                     );
 
-                    log.info("✅ {} documents uploadés", uploadedDocs.size());
+                    log.info("✅ {} documents liés au projet {}", uploadedDocs.size(), selectedProject.getName());
 
                     // Étape 3: Lancer l'analyse
                     Platform.runLater(() -> {
@@ -454,14 +587,14 @@ public class AuditController {
 
                     log.info("✅ Analyse lancée");
 
-                    // Étape 4: Polling du statut - OPTIMISÉ avec timeout réduit
+                    // Étape 4: Polling du statut
                     Platform.runLater(() -> {
                         statusLabel.setText("Analyse en cours...");
                         percentLabel.setText("80%");
                         progressBar.setProgress(0.8);
                     });
 
-                    // Polling avec timeout de 30 secondes max (au lieu de 60)
+                    // Polling avec timeout de 30 secondes max
                     AuditResponseDto finalAudit = auditApiService.pollAuditStatus(
                             currentAuditId, 30, 2
                     );
@@ -611,7 +744,6 @@ public class AuditController {
         resultsDialog.setTitle("Analyse terminée");
         resultsDialog.setHeaderText(null);
 
-        // FIX: Ajuster la taille de la fenêtre pour qu'elle tienne dans l'écran
         resultsDialog.setResizable(true);
         resultsDialog.getDialogPane().setMinSize(700, 600);
         resultsDialog.getDialogPane().setPrefSize(800, 650);
@@ -782,6 +914,13 @@ public class AuditController {
             card.getChildren().add(locationLabel);
         }
 
+        // Gravité
+        if (issue.getSeverity() != null) {
+            Label severityLabel = new Label("⚠️ Gravité: " + issue.getSeverity());
+            severityLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #dc2626; -fx-font-weight: 600;");
+            card.getChildren().add(severityLabel);
+        }
+
         return card;
     }
 
@@ -834,7 +973,6 @@ public class AuditController {
         formatDialog.setHeaderText("Choisissez le format du rapport");
         formatDialog.setContentText("Quel format préférez-vous ?");
 
-        // MODIFICATION: Supprimer TXT/HTML, ajouter Word/PDF
         ButtonType pdfButton = new ButtonType("📕 PDF (.pdf)");
         ButtonType wordButton = new ButtonType("📝 Word (.docx)");
         ButtonType cancelButton = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
@@ -857,99 +995,88 @@ public class AuditController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Enregistrer le Rapport");
 
-        // MODIFICATION: Changer le nom par défaut selon le format
-        String defaultFileName = String.format("Rapport_Audit_%d.%s",
-                audit.getId(),
-                format.equals("pdf") ? "pdf" : "docx");
-        fileChooser.setInitialFileName(defaultFileName);
+        String fileName = "Rapport_Audit_" + audit.getId() +
+                ("pdf".equals(format) ? ".pdf" : ".docx");
+        fileChooser.setInitialFileName(fileName);
 
         if ("pdf".equals(format)) {
             fileChooser.getExtensionFilters().add(
-                    new FileChooser.ExtensionFilter("Fichier PDF", "*.pdf"));
+                    new FileChooser.ExtensionFilter("PDF (*.pdf)", "*.pdf"));
         } else {
             fileChooser.getExtensionFilters().add(
-                    new FileChooser.ExtensionFilter("Document Word", "*.docx"));
+                    new FileChooser.ExtensionFilter("Word (*.docx)", "*.docx"));
         }
 
         File file = fileChooser.showSaveDialog(dropzone.getScene().getWindow());
+        if (file == null) return;
 
-        if (file != null) {
-            // Afficher un dialogue de progression
-            Dialog<Void> progressDialog = new Dialog<>();
-            progressDialog.setTitle("Génération du rapport");
-            progressDialog.setHeaderText("Génération du rapport en cours...");
+        // 🔹 Génération EN ARRIÈRE-PLAN (sans UI)
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                if ("pdf".equals(format)) {
+                    reportService.generateAndSavePdfReport(audit, file);
+                } else {
+                    reportService.generateAndSaveWordReport(audit, file);
+                }
+                return null;
+            }
+        };
 
-            ProgressIndicator progressIndicator = new ProgressIndicator();
-            progressIndicator.setPrefSize(60, 60);
+        task.setOnSucceeded(e -> {
+            Alert success = new Alert(Alert.AlertType.CONFIRMATION);
+            success.setTitle("Rapport généré");
+            success.setHeaderText("Le rapport a été généré avec succès !");
+            success.setContentText("Voulez-vous ouvrir le fichier ?");
 
-            VBox progressContent = new VBox(20, progressIndicator,
-                    new Label("Veuillez patienter..."));
-            progressContent.setAlignment(Pos.CENTER);
-            progressContent.setPadding(new Insets(30));
+            // ✨ Créer notification de rapport généré
+            try {
+                User currentUser = SessionManager.getInstance().getCurrentUser();
+                if (currentUser != null) {
+                    notificationApiService.notifyReportGenerated(currentUser, audit);
+                    log.info("🔔 Notification créée pour le rapport généré");
+                }
+            } catch (Exception ex) {
+                log.error("❌ Erreur lors de la création de la notification", ex);
+            }
 
-            progressDialog.getDialogPane().setContent(progressContent);
-            progressDialog.show();
-
-            Task<Void> exportTask = new Task<>() {
-                @Override
-                protected Void call() throws Exception {
+            success.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
                     try {
-                        // MODIFICATION: Appeler les méthodes appropriées pour PDF/Word
-                        if ("pdf".equals(format)) {
-                            reportService.generateAndSavePdfReport(audit, file);
-                        } else {
-                            reportService.generateAndSaveWordReport(audit, file);
+                        if (java.awt.Desktop.isDesktopSupported()) {
+                            java.awt.Desktop.getDesktop().open(file);
                         }
-                        return null;
-                    } catch (Exception e) {
-                        log.error("❌ Erreur lors de la génération du rapport", e);
-                        throw e;
+                    } catch (Exception ex) {
+                        log.error("Impossible d'ouvrir le fichier", ex);
                     }
                 }
-            };
-
-            exportTask.setOnSucceeded(e -> {
-                progressDialog.close();
-                showNotification("✅ Rapport enregistré",
-                        "Le rapport a été enregistré avec succès");
-                log.info("✅ Rapport {} enregistré: {}", format.toUpperCase(), file.getAbsolutePath());
-
-                // Proposer d'ouvrir le fichier - MODIFICATION: Gérer l'exception Headless
-                Alert openDialog = new Alert(Alert.AlertType.CONFIRMATION);
-                openDialog.setTitle("Rapport enregistré");
-                openDialog.setHeaderText("Le rapport a été enregistré avec succès !");
-                openDialog.setContentText("Voulez-vous ouvrir le fichier ?");
-
-                openDialog.showAndWait().ifPresent(response -> {
-                    if (response == ButtonType.OK) {
-                        try {
-                            // Vérifier si Desktop est supporté
-                            if (java.awt.Desktop.isDesktopSupported()) {
-                                java.awt.Desktop.getDesktop().open(file);
-                            } else {
-                                log.warn("Desktop n'est pas supporté");
-                                showNotification("ℹ️ Info",
-                                        "Le fichier a été enregistré mais ne peut pas être ouvert automatiquement.");
-                            }
-                        } catch (Exception ex) {
-                            log.error("Impossible d'ouvrir le fichier", ex);
-                            showNotification("⚠️ Attention",
-                                    "Le fichier a été enregistré mais n'a pas pu être ouvert automatiquement.");
-                        }
-                    }
-                });
             });
+        });
 
-            exportTask.setOnFailed(e -> {
-                progressDialog.close();
-                Throwable exception = exportTask.getException();
-                log.error("❌ Erreur lors de l'enregistrement du rapport", exception);
-                showNotification("❌ Erreur",
-                        "Impossible d'enregistrer le rapport: " +
-                                (exception.getMessage() != null ? exception.getMessage() : "Erreur inconnue"));
-            });
+        task.setOnFailed(e -> {
+            Throwable ex = task.getException();
+            log.error("Erreur génération rapport", ex);
 
-            new Thread(exportTask).start();
-        }
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Erreur");
+            error.setHeaderText("Erreur lors de la génération du rapport");
+            error.setContentText(ex.getMessage());
+            error.show();
+        });
+
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+    /**
+     * Nettoyer les ressources
+     */
+    public void cleanup() {
+        selectedFiles.clear();
+        currentAuditId = null;
+        selectedProject = null;
+        selectedModel = null;
+        log.info("🧹 AuditController nettoyé");
     }
 }

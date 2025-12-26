@@ -126,12 +126,14 @@ public class LoginController {
             // Best way: On change le contenu (root) au lieu de recréer la Scene
             // Cela évite tout clignotement ou changement de taille
             stage.getScene().setRoot(root);
+            // **Le MainLayout doit être maximisé**
             stage.setMaximized(true);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     @FXML
     private void handleCreerCompte() {
         try {
@@ -143,8 +145,11 @@ public class LoginController {
             Stage stage = (Stage) creerCompteLink.getScene().getWindow();
             stage.getScene().setRoot(root);
 
-            stage.sizeToScene();
-            stage.centerOnScreen();
+            // **MODIFICATION CLÉ : Assurer que la fenêtre reste maximisée**
+            // Nous n'appelons plus sizeToScene() ni centerOnScreen() si on veut maximiser
+            stage.setMaximized(true);
+
+            System.out.println("✅ Redirection vers SignUp réussie dans la même fenêtre et maximisée.");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -160,10 +165,12 @@ public class LoginController {
             Parent root = loader.load();
 
             Stage stage = (Stage) motDePasseOublieLink.getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
+
+            // **MODIFICATION CLÉ : Changer le root et maximiser, au lieu de recréer une Scene**
+            // Pour réutiliser la même fenêtre et le même état maximisé.
+            stage.getScene().setRoot(root);
             stage.setTitle("Audit Doc AI - Mot de passe oublié");
-            stage.show();
+            stage.setMaximized(true);
 
             System.out.println("Redirection vers la page de récupération de mot de passe...");
         } catch (Exception e) {
