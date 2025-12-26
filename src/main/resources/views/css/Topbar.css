@@ -154,3 +154,10 @@
 #notificationBadge {
     -fx-effect: dropshadow(gaussian, rgba(255, 77, 77, 0.4), 4, 0, 0, 1);
 }
+.avatar-text {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}

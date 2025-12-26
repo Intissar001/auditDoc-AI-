@@ -16,17 +16,17 @@
     <HBox alignment="CENTER_LEFT" spacing="8">
         <children>
             <ImageView fx:id="topLogo" fitHeight="32.0" fitWidth="32.0" preserveRatio="true" />
-            <Label fx:id="topAppName" styleClass="top-app-name" text="AuditDoc AI" />
+            <Label fx:id="topAppName" prefHeight="23.0" prefWidth="124.0" styleClass="top-app-name" text="AuditDoc AI" />
         </children>
     </HBox>
 
     <Region HBox.hgrow="ALWAYS" />
 
     <!-- SEARCH BAR -->
-    <HBox alignment="CENTER" maxHeight="40.0" prefHeight="40.0" prefWidth="431.0" styleClass="search-bar">
+    <HBox alignment="CENTER" maxHeight="41.0" prefHeight="41.0" prefWidth="413.0" styleClass="search-bar">
         <children>
             <Label styleClass="search-icon" text="🔍" />
-            <TextField fx:id="searchField" prefHeight="25.0" prefWidth="381.0" promptText="Search audit, document, or dossier..." styleClass="search-field" HBox.hgrow="ALWAYS" />
+            <TextField fx:id="searchField" prefHeight="30.0" prefWidth="329.0" promptText="Search audit, document, or dossier..." styleClass="search-field" HBox.hgrow="ALWAYS" />
         </children>
     </HBox>
 
@@ -38,21 +38,23 @@
         <!-- NOTIFICATION -->
         <StackPane fx:id="notificationWrapper" alignment="CENTER">
             <Button fx:id="btnNotifications" prefHeight="38" prefWidth="38" styleClass="icon-btn" text="🔔" />
-            <!-- BADGE - positioned at top right -->
             <Circle fx:id="notificationBadge" fill="#ff4d4d" radius="4" translateX="-6" translateY="6" visible="true" StackPane.alignment="TOP_RIGHT" />
         </StackPane>
 
         <Button fx:id="btnLanguage" prefHeight="38" prefWidth="38" styleClass="icon-btn" text="🌐" />
         <Button fx:id="btnTheme" prefHeight="38" prefWidth="38" styleClass="icon-btn" text="☀" />
 
-        <!-- USER MENU -->
-        <HBox fx:id="userMenu" alignment="CENTER" spacing="8" styleClass="user-menu">
+        <!-- USER MENU - FIXED WIDTH -->
+        <HBox fx:id="userMenu" alignment="CENTER" maxWidth="180" minWidth="180" prefWidth="180" spacing="12" styleClass="user-menu">
             <children>
-                <Circle fx:id="avatarCircle" fill="#007bff" radius="12" />
-                <VBox alignment="CENTER_LEFT" spacing="1">
+                <StackPane alignment="CENTER">
+                    <Circle fx:id="avatarCircle" fill="#007bff" radius="16" />
+                    <Label fx:id="avatarText" styleClass="avatar-text" text="I" />
+                </StackPane>
+                <VBox alignment="CENTER_LEFT" spacing="2" HBox.hgrow="ALWAYS">
                     <children>
-                        <Label fx:id="userName" styleClass="user-name" text="Intissar AIT HSSAIN" />
-                        <Label fx:id="userRole" styleClass="user-role" text="Administrateur" />
+                        <Label fx:id="userName" maxWidth="140" styleClass="user-name" text="Intissar AIT HSSAIN" />
+                        <Label fx:id="userRole" maxWidth="140" styleClass="user-role" text="USER" />
                     </children>
                 </VBox>
             </children>

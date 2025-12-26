@@ -38,7 +38,7 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: validate  # CHANGED from 'update' to 'validate'
+      ddl-auto: update  # CHANGED from 'update' to 'validate'
     show-sql: true
     properties:
       hibernate:
