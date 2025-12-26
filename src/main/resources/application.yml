@@ -9,6 +9,25 @@ spring:
     lazy-initialization: false
 
   # ================================
+  # 📧 EMAIL CONFIGURATION
+  # ================================
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: aichaelkhddar03@gmail.com # to change after to support_auditdocai@gmail.com (the association should create it, or if they already have their own email they can use it, or Intissar's email ; as she's the IT committee chef)
+    password: ftvdiawbiywcoikl  # it's a password app given by google (u should enable 2-Step Verification first)
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+  # ================================
   # 📊 DATABASE CONFIGURATION
   # ================================
   datasource:
@@ -103,6 +122,7 @@ logging:
 app:
   name: AuditDoc AI
   version: 1.0.0
+  base-url: http://localhost:8080
 
   upload:
     max-files: 10
@@ -120,3 +140,4 @@ app:
 server:
   port: 8080
   shutdown: graceful
+

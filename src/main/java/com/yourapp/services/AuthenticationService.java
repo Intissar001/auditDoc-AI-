@@ -1,11 +1,15 @@
 package com.yourapp.services;
 
+import lombok.extern.slf4j.Slf4j;
 import com.yourapp.DAO.PasswordResetTokenRepository;
 import com.yourapp.DAO.UserRepository;
 import com.yourapp.dto.*;
 import com.yourapp.model.PasswordResetToken;
 import com.yourapp.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @Transactional
 public class AuthenticationService {
@@ -21,14 +26,24 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final PasswordResetTokenRepository tokenRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final JavaMailSender mailSender;
+
+    @Value("${app.base-url:http://localhost:8080}")
+    private String baseUrl;
+
+    @Value("${spring.mail.username}")
+    private String fromEmail;
 
     @Autowired
     public AuthenticationService(
             UserRepository userRepository,
-            PasswordResetTokenRepository tokenRepository) {
+            PasswordResetTokenRepository tokenRepository,
+            JavaMailSender mailSender,
+            BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.tokenRepository = tokenRepository;
-        this.passwordEncoder = new BCryptPasswordEncoder();
+        this.mailSender = mailSender;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -130,10 +145,18 @@ public class AuthenticationService {
             PasswordResetToken resetToken = new PasswordResetToken(token, user);
             tokenRepository.save(resetToken);
 
-            // TODO: Send email with reset link
-            // For now, we'll just log it
             System.out.println("🔑 Password reset token for " + user.getEmail() + ": " + token);
-            System.out.println("📧 Reset link: http://localhost:8080/reset-password?token=" + token);
+            System.out.println("📧 Reset link: " + baseUrl + "/reset-password?token=" + token);
+
+            // 🔥 NEW: Actually send the email
+            try {
+                sendPasswordResetEmail(user.getEmail(), token, user.getFullName());
+                System.out.println("✅ Password reset email sent successfully to: " + user.getEmail());
+            } catch (Exception emailEx) {
+                System.err.println("❌ Failed to send email: " + emailEx.getMessage());
+                emailEx.printStackTrace();
+                // Still return success for security, but log the error
+            }
 
             return AuthResponseDto.success(
                     "Un lien de réinitialisation a été envoyé à votre email",
@@ -145,6 +168,32 @@ public class AuthenticationService {
             e.printStackTrace();
             return AuthResponseDto.failure("Erreur lors de la demande de réinitialisation");
         }
+    }
+
+    /**
+     * Send password reset email
+     */
+    private void sendPasswordResetEmail(String toEmail, String token, String fullName) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(fromEmail);
+        message.setTo(toEmail);
+        message.setSubject("Audit Doc AI - Réinitialisation de mot de passe");
+
+        String emailContent = String.format(
+                "Bonjour %s,\n\n" +
+                        "Vous avez demandé la réinitialisation de votre mot de passe pour Audit Doc AI.\n\n" +
+                        "Votre code de réinitialisation est :\n" +
+                        "%s\n\n" +
+                        "Ce code expire dans 24 heures.\n\n" +
+                        "Si vous n'avez pas demandé cette réinitialisation, veuillez ignorer ce message.\n\n" +
+                        "Cordialement,\n" +
+                        "L'équipe Audit Doc AI",
+                fullName,
+                token
+        );
+
+        message.setText(emailContent);
+        mailSender.send(message);
     }
 
     /**
