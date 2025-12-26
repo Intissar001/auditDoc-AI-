@@ -261,25 +261,49 @@ public class AuditController {
     /**
      * Créer un élément visuel pour un fichier
      */
+    /**
+     * Créer un élément visuel pour un fichier (Version sans bouton supprimer)
+     */
     private HBox createFileItem(File file) {
+        // --- INFOS DU FICHIER ---
         Label fileName = new Label(file.getName());
-        fileName.setStyle("-fx-font-weight: 600;");
+        fileName.setStyle("-fx-font-weight: 600; -fx-text-fill: #1f2937;");
 
         Label fileSize = new Label(String.format("%.2f KB", file.length() / 1024.0));
         fileSize.setStyle("-fx-text-fill: #667085; -fx-font-size: 12px;");
 
         VBox fileInfo = new VBox(fileName, fileSize);
         fileInfo.setSpacing(3);
+        HBox.setHgrow(fileInfo, Priority.ALWAYS); // Permet aux infos de prendre l'espace
 
-        Button removeBtn = new Button("✕");
-        removeBtn.setStyle("""
-            -fx-background-color: transparent;
-            -fx-text-fill: #667085;
-            -fx-font-size: 14px;
+        // --- BOUTON OEIL (Visualiser) ---
+        Button viewBtn = new Button("👁"); // Icône oeil
+        viewBtn.setStyle("""
+            -fx-background-color: #f3f4f6;
+            -fx-text-fill: #1E88E5;
+            -fx-font-size: 16px;
+            -fx-padding: 5 10;
+            -fx-background-radius: 5;
             -fx-cursor: hand;
         """);
 
-        HBox fileItem = new HBox(fileInfo, removeBtn);
+        // Action pour l'oeil (Ouvrir le fichier localement pour vérification)
+        viewBtn.setOnAction(e -> {
+            try {
+                java.awt.Desktop.getDesktop().open(file);
+            } catch (Exception ex) {
+                log.error("Impossible d'ouvrir le fichier : {}", ex.getMessage());
+            }
+        });
+
+        /* // --- BOUTON CORBEILLE SUPPRIMÉ ---
+        Button removeBtn = new Button("✕");
+        removeBtn.setStyle("-fx-background-color: transparent; ...");
+        removeBtn.setOnAction(e -> { ... });
+        */
+
+        // --- ASSEMBLAGE ---
+        HBox fileItem = new HBox(fileInfo, viewBtn); // On ne met QUE fileInfo et viewBtn
         fileItem.setAlignment(Pos.CENTER_LEFT);
         fileItem.setSpacing(15);
         fileItem.setStyle("""
@@ -289,17 +313,6 @@ public class AuditController {
             -fx-background-radius: 10;
             -fx-background-color: #ffffff;
         """);
-
-        removeBtn.setOnAction(e -> {
-            filesList.getChildren().remove(fileItem);
-            selectedFiles.remove(file);
-            updateFileCount();
-
-            if (filesList.getChildren().isEmpty()) {
-                filesContainer.setVisible(false);
-                filesContainer.setManaged(false);
-            }
-        });
 
         return fileItem;
     }
@@ -430,18 +443,21 @@ public class AuditController {
 
                     log.info("✅ Audit créé avec ID: {}", currentAuditId);
 
-                    // Étape 2: Upload des documents
+                    // Étape 2: Upload des documents (Dans AuditController.java)
                     Platform.runLater(() -> {
                         statusLabel.setText("Upload des documents...");
                         percentLabel.setText("40%");
                         progressBar.setProgress(0.4);
                     });
 
+// 🔥 MODIFICATION ICI : On ajoute selectedProject.getId()
                     List<AuditDocumentDto> uploadedDocs = fileUploadService.uploadMultipleFiles(
-                            selectedFiles, currentAuditId
+                            selectedFiles,
+                            currentAuditId,
+                            selectedProject.getId()
                     );
 
-                    log.info("✅ {} documents uploadés", uploadedDocs.size());
+                    log.info("✅ {} documents liés au projet {}", uploadedDocs.size(), selectedProject.getName());
 
                     // Étape 3: Lancer l'analyse
                     Platform.runLater(() -> {

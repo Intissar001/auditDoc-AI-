@@ -1,5 +1,6 @@
 package com.yourapp.services;
 
+import com.yourapp.DAO.AuditIssueRepository;
 import com.yourapp.dto.AuditDocumentDto;
 import com.yourapp.model.AuditDocument;
 import com.yourapp.model.Audit;
@@ -27,10 +28,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-/**
- * Service responsable de la gestion des documents d'audit
- * Supporte tous les types de documents avec extraction de contenu
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -38,263 +35,197 @@ public class AuditDocumentService {
 
     private final AuditDocumentRepository documentRepository;
     private final AuditRepository auditRepository;
+    private final AuditIssueRepository auditIssueRepository;
 
     private final String uploadDir = "uploads/audit-documents/";
 
     /**
-     * Uploader un document pour un audit
+     * Uploader un document pour un audit et un projet spécifique
      */
     @Transactional
-    public AuditDocumentDto uploadDocument(MultipartFile file, Long auditId) {
-        log.info("📤 Upload du document {} pour l'audit {}", file.getOriginalFilename(), auditId);
+    public AuditDocumentDto uploadDocument(MultipartFile file, Long auditId, Long projectId) {
+        // 1. Sauvegarde du fichier physique
+        String path = storeFile(file);
 
+        // 2. Récupération de l'audit parent
         Audit audit = auditRepository.findById(auditId)
                 .orElseThrow(() -> new RuntimeException("Audit introuvable avec l'ID: " + auditId));
 
-        if (file.isEmpty()) {
-            throw new RuntimeException("Le fichier est vide");
-        }
+        // 3. Création de l'entité Document avec liaison Projet
+        AuditDocument doc = new AuditDocument();
+        doc.setDocumentName(file.getOriginalFilename());
+        doc.setDocumentPath(path);
+        doc.setAudit(audit);
+        doc.setStatus("UPLOADED");
+        doc.setProjectId(projectId); // Liaison Supabase
 
+        // 4. Enregistrement
+        AuditDocument savedDoc = documentRepository.save(doc);
+
+        log.info("✅ Document '{}' enregistré et lié au projet ID: {}", file.getOriginalFilename(), projectId);
+        return mapToDto(savedDoc);
+    }
+
+    /**
+     * Méthode interne pour sauvegarder le fichier sur le disque
+     */
+    private String storeFile(MultipartFile file) {
         try {
-            Path uploadPath = Paths.get(uploadDir);
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
+            Path root = Paths.get(uploadDir);
+            if (!Files.exists(root)) {
+                Files.createDirectories(root);
             }
 
-            String originalFilename = file.getOriginalFilename();
-            String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
-            String uniqueFilename = UUID.randomUUID().toString() + fileExtension;
+            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+            Path targetPath = root.resolve(fileName);
+            Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
 
-            Path filePath = uploadPath.resolve(uniqueFilename);
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-            AuditDocument document = new AuditDocument();
-            document.setAudit(audit);
-            document.setDocumentName(originalFilename);
-            document.setDocumentPath(filePath.toString());
-            document.setStatus("UPLOADED");
-
-            document = documentRepository.save(document);
-
-            log.info("✅ Document {} uploadé avec succès", originalFilename);
-            return mapToDto(document);
-
+            return targetPath.toString();
         } catch (IOException e) {
-            log.error("❌ Erreur lors de l'upload du document", e);
-            throw new RuntimeException("Erreur lors de l'upload du document: " + e.getMessage());
+            throw new RuntimeException("Erreur lors du stockage du fichier: " + e.getMessage());
         }
     }
 
     /**
-     * Uploader plusieurs documents pour un audit
+     * Uploader plusieurs documents (Corrigé pour inclure projectId)
      */
     @Transactional
-    public List<AuditDocumentDto> uploadMultipleDocuments(List<MultipartFile> files, Long auditId) {
-        log.info("📤 Upload de {} documents pour l'audit {}", files.size(), auditId);
+    public List<AuditDocumentDto> uploadMultipleDocuments(List<MultipartFile> files, Long auditId, Long projectId) {
+        log.info("📤 Upload de {} documents pour l'audit {} et projet {}", files.size(), auditId, projectId);
 
         return files.stream()
-                .map(file -> uploadDocument(file, auditId))
+                .map(file -> uploadDocument(file, auditId, projectId))
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Récupérer un document par son ID
-     */
     public AuditDocumentDto getDocumentById(Long documentId) {
         AuditDocument document = documentRepository.findById(documentId)
-                .orElseThrow(() -> new RuntimeException("Document introuvable avec l'ID: " + documentId));
+                .orElseThrow(() -> new RuntimeException("Document introuvable: " + documentId));
         return mapToDto(document);
     }
 
-    /**
-     * Récupérer tous les documents d'un audit
-     */
     public List<AuditDocumentDto> getDocumentsByAudit(Long auditId) {
-        List<AuditDocument> documents = documentRepository.findByAuditId(auditId);
-        return documents.stream()
+        return documentRepository.findByAuditId(auditId).stream()
                 .map(this::mapToDto)
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Télécharger un document
-     */
     public Resource downloadDocument(Long documentId) {
-        log.info("⬇️ Téléchargement du document {}", documentId);
-
         AuditDocument document = documentRepository.findById(documentId)
-                .orElseThrow(() -> new RuntimeException("Document introuvable avec l'ID: " + documentId));
+                .orElseThrow(() -> new RuntimeException("Document introuvable"));
 
         try {
             Path filePath = Paths.get(document.getDocumentPath());
             Resource resource = new UrlResource(filePath.toUri());
-
-            if (resource.exists() && resource.isReadable()) {
-                return resource;
-            } else {
-                throw new RuntimeException("Impossible de lire le fichier: " + document.getDocumentName());
-            }
+            if (resource.exists() || resource.isReadable()) return resource;
+            else throw new RuntimeException("Fichier non lisible");
         } catch (Exception e) {
-            log.error("❌ Erreur lors du téléchargement du document {}", documentId, e);
-            throw new RuntimeException("Erreur lors du téléchargement du document: " + e.getMessage());
+            throw new RuntimeException("Erreur téléchargement: " + e.getMessage());
         }
     }
 
-    /**
-     * Mettre à jour le statut d'un document
-     */
     @Transactional
     public AuditDocumentDto updateStatus(Long documentId, String status) {
         AuditDocument document = documentRepository.findById(documentId)
-                .orElseThrow(() -> new RuntimeException("Document introuvable avec l'ID: " + documentId));
-
+                .orElseThrow(() -> new RuntimeException("Document introuvable"));
         document.setStatus(status);
-
         if ("ANALYZED".equals(status)) {
             document.setAnalyzedAt(LocalDateTime.now());
         }
-
-        document = documentRepository.save(document);
-        return mapToDto(document);
+        return mapToDto(documentRepository.save(document));
     }
 
-    /**
-     * Lire le contenu d'un document selon son type
-     */
     public String readDocumentContent(Long documentId) {
         AuditDocument document = documentRepository.findById(documentId)
-                .orElseThrow(() -> new RuntimeException("Document introuvable avec l'ID: " + documentId));
+                .orElseThrow(() -> new RuntimeException("Document introuvable"));
 
         try {
             Path filePath = Paths.get(document.getDocumentPath());
             String fileName = document.getDocumentName().toLowerCase();
 
-            if (fileName.endsWith(".txt")) {
-                return readTextFile(filePath);
-            } else if (fileName.endsWith(".docx")) {
-                return readDocxFile(filePath);
-            } else if (fileName.endsWith(".xlsx") || fileName.endsWith(".xls")) {
-                return readExcelFile(filePath);
-            } else if (fileName.endsWith(".pdf")) {
-                return readPdfFile(filePath);
-            } else {
-                log.warn("⚠️ Type de fichier non supporté pour lecture: {}", fileName);
-                return "";
-            }
+            if (fileName.endsWith(".txt")) return readTextFile(filePath);
+            if (fileName.endsWith(".docx")) return readDocxFile(filePath);
+            if (fileName.endsWith(".xlsx") || fileName.endsWith(".xls")) return readExcelFile(filePath);
+            // Pour le PDF, utilisez votre méthode existante ou Apache PDFBox
+            return "[Contenu non extrait pour ce format]";
         } catch (Exception e) {
-            log.error("❌ Erreur lors de la lecture du document {}", documentId, e);
-            throw new RuntimeException("Erreur lors de la lecture du document: " + e.getMessage());
+            throw new RuntimeException("Erreur lecture: " + e.getMessage());
         }
     }
 
-    /**
-     * Lire un fichier texte
-     */
     private String readTextFile(Path filePath) throws IOException {
         return Files.readString(filePath);
     }
 
-    /**
-     * Lire un fichier DOCX
-     */
     private String readDocxFile(Path filePath) throws IOException {
         try (InputStream fis = Files.newInputStream(filePath);
              XWPFDocument document = new XWPFDocument(fis);
              XWPFWordExtractor extractor = new XWPFWordExtractor(document)) {
-
             return extractor.getText();
         }
     }
 
-    /**
-     * Lire un fichier Excel
-     */
     private String readExcelFile(Path filePath) throws IOException {
         StringBuilder content = new StringBuilder();
-
         try (InputStream fis = Files.newInputStream(filePath);
              Workbook workbook = WorkbookFactory.create(fis)) {
-
-            for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
-                Sheet sheet = workbook.getSheetAt(i);
-                content.append("=== Feuille: ").append(sheet.getSheetName()).append(" ===\n\n");
-
+            for (Sheet sheet : workbook) {
                 for (Row row : sheet) {
                     for (Cell cell : row) {
-                        String cellValue = getCellValueAsString(cell);
-                        if (!cellValue.isEmpty()) {
-                            content.append(cellValue).append("\t");
-                        }
+                        content.append(getCellValueAsString(cell)).append("\t");
                     }
                     content.append("\n");
                 }
-                content.append("\n");
             }
         }
-
         return content.toString();
     }
 
-    /**
-     * Obtenir la valeur d'une cellule Excel
-     */
     private String getCellValueAsString(Cell cell) {
-        if (cell == null) {
-            return "";
-        }
-
-        switch (cell.getCellType()) {
-            case STRING:
-                return cell.getStringCellValue();
-            case NUMERIC:
-                if (DateUtil.isCellDateFormatted(cell)) {
-                    return cell.getDateCellValue().toString();
-                }
-                return String.valueOf(cell.getNumericCellValue());
-            case BOOLEAN:
-                return String.valueOf(cell.getBooleanCellValue());
-            case FORMULA:
-                return cell.getCellFormula();
-            default:
-                return "";
-        }
+        if (cell == null) return "";
+        return switch (cell.getCellType()) {
+            case STRING -> cell.getStringCellValue();
+            case NUMERIC -> DateUtil.isCellDateFormatted(cell) ? cell.getDateCellValue().toString() : String.valueOf(cell.getNumericCellValue());
+            case BOOLEAN -> String.valueOf(cell.getBooleanCellValue());
+            case FORMULA -> cell.getCellFormula();
+            default -> "";
+        };
     }
 
     /**
-     * Lire un fichier PDF (placeholder - nécessite Apache PDFBox)
-     */
-    private String readPdfFile(Path filePath) throws IOException {
-        log.info("📄 Lecture PDF: {}", filePath.getFileName());
-        // Nécessite l'ajout de Apache PDFBox dans les dépendances
-        return "[Contenu PDF - Ajoutez Apache PDFBox pour extraction complète]";
-    }
-
-    /**
-     * Supprimer un document
+     * Supprimer un document et toutes les dépendances (Issues)
      */
     @Transactional
     public void deleteDocument(Long documentId) {
-        log.info("🗑️ Suppression du document {}", documentId);
+        log.info("🗑️ Tentative de suppression du document ID: {}", documentId);
 
+        // 1. Récupérer le document pour vérifier s'il existe et avoir son chemin de fichier
         AuditDocument document = documentRepository.findById(documentId)
                 .orElseThrow(() -> new RuntimeException("Document introuvable avec l'ID: " + documentId));
 
         try {
+            // 2. Supprimer d'abord les "issues" liées dans la table audit_issue
+            // Cette méthode doit être définie dans votre AuditIssueRepository
+            auditIssueRepository.deleteByDocumentId(documentId);
+            log.info("✅ Issues liées au document {} supprimées", documentId);
+
+            // 3. Supprimer le fichier physique sur le disque
             Path filePath = Paths.get(document.getDocumentPath());
             Files.deleteIfExists(filePath);
 
-            documentRepository.deleteById(documentId);
+            // 4. Supprimer l'entrée dans la table auditdocument
+            documentRepository.delete(document);
 
-            log.info("✅ Document {} supprimé avec succès", documentId);
+            log.info("✅ Document et enregistrements associés supprimés avec succès");
         } catch (IOException e) {
-            log.error("❌ Erreur lors de la suppression du document {}", documentId, e);
-            throw new RuntimeException("Erreur lors de la suppression du document: " + e.getMessage());
+            log.error("❌ Erreur lors de la suppression du fichier physique", e);
+            throw new RuntimeException("Erreur lors de la suppression du fichier : " + e.getMessage());
+        } catch (Exception e) {
+            log.error("❌ Erreur lors de la suppression en base de données", e);
+            throw new RuntimeException("Erreur SQL : " + e.getMessage());
         }
     }
 
-    /**
-     * Mapper une entité AuditDocument vers AuditDocumentDto
-     */
     private AuditDocumentDto mapToDto(AuditDocument document) {
         return AuditDocumentDto.builder()
                 .id(document.getId())
@@ -306,6 +237,8 @@ public class AuditDocumentService {
                 .analyzedAt(document.getAnalyzedAt())
                 .errorMessage(document.getErrorMessage())
                 .issuesCount(document.getIssuesCount())
+                // Ajoutez ceci dans votre AuditDocumentDto si ce n'est pas déjà fait
+                // .projectId(document.getProjectId())
                 .build();
     }
 }

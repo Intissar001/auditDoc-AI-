@@ -1,5 +1,6 @@
 package com.yourapp.model;
 
+import java.util.List;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
