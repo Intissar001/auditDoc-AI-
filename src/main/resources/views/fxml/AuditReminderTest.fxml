@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.yourapp.controller.TestAuditReminderController"
+      spacing="20" style="-fx-background-color: #f9fafb; -fx-padding: 30;">
+
+    <!-- Header -->
+    <VBox spacing="8">
+        <Label text="🔔 Système de Rappels d'Audit"
+               style="-fx-font-size: 24px; -fx-font-weight: 700; -fx-text-fill: #111827;"/>
+        <Label text="Test et surveillance des notifications automatiques"
+               style="-fx-font-size: 14px; -fx-text-fill: #6b7280;"/>
+    </VBox>
+
+    <Separator/>
+
+    <!-- Configuration des Seuils -->
+    <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: #e5e7eb; -fx-border-width: 1;">
+        <Label text="⚙️ Seuils de Notification"
+               style="-fx-font-size: 16px; -fx-font-weight: 600; -fx-text-fill: #374151;"/>
+
+        <GridPane hgap="20" vgap="12">
+            <padding>
+                <Insets top="10"/>
+            </padding>
+
+            <!-- Critique -->
+            <HBox spacing="10" GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="CENTER_LEFT">
+                <Label text="🔴" style="-fx-font-size: 20px;"/>
+                <VBox>
+                    <Label text="Critique" style="-fx-font-weight: 600; -fx-text-fill: #ef4444;"/>
+                    <Label text="3 jours ou moins" style="-fx-font-size: 12px; -fx-text-fill: #6b7280;"/>
+                </VBox>
+            </HBox>
+
+            <!-- Avertissement -->
+            <HBox spacing="10" GridPane.rowIndex="0" GridPane.columnIndex="1" alignment="CENTER_LEFT">
+                <Label text="⚠️" style="-fx-font-size: 20px;"/>
+                <VBox>
+                    <Label text="Avertissement" style="-fx-font-weight: 600; -fx-text-fill: #f59e0b;"/>
+                    <Label text="7 jours ou moins" style="-fx-font-size: 12px; -fx-text-fill: #6b7280;"/>
+                </VBox>
+            </HBox>
+
+            <!-- À venir -->
+            <HBox spacing="10" GridPane.rowIndex="1" GridPane.columnIndex="0" alignment="CENTER_LEFT">
+                <Label text="📅" style="-fx-font-size: 20px;"/>
+                <VBox>
+                    <Label text="À venir" style="-fx-font-weight: 600; -fx-text-fill: #3b82f6;"/>
+                    <Label text="14 jours ou moins" style="-fx-font-size: 12px; -fx-text-fill: #6b7280;"/>
+                </VBox>
+            </HBox>
+
+            <!-- Information -->
+            <HBox spacing="10" GridPane.rowIndex="1" GridPane.columnIndex="1" alignment="CENTER_LEFT">
+                <Label text="ℹ️" style="-fx-font-size: 20px;"/>
+                <VBox>
+                    <Label text="Information" style="-fx-font-weight: 600; -fx-text-fill: #6b7280;"/>
+                    <Label text="30 jours ou moins" style="-fx-font-size: 12px; -fx-text-fill: #6b7280;"/>
+                </VBox>
+            </HBox>
+        </GridPane>
+    </VBox>
+
+    <!-- Fonctionnement -->
+    <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: #e5e7eb; -fx-border-width: 1;">
+        <Label text="🔄 Fonctionnement Automatique"
+               style="-fx-font-size: 16px; -fx-font-weight: 600; -fx-text-fill: #374151;"/>
+
+        <VBox spacing="10">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="•" style="-fx-font-size: 18px; -fx-text-fill: #3b82f6;"/>
+                <Label text="Vérification automatique tous les jours à 9h00"
+                       style="-fx-font-size: 13px; -fx-text-fill: #374151;" wrapText="true" maxWidth="600"/>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="•" style="-fx-font-size: 18px; -fx-text-fill: #3b82f6;"/>
+                <Label text="Notifications envoyées uniquement aux utilisateurs ayant activé les rappels"
+                       style="-fx-font-size: 13px; -fx-text-fill: #374151;" wrapText="true" maxWidth="600"/>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="•" style="-fx-font-size: 18px; -fx-text-fill: #3b82f6;"/>
+                <Label text="Évite les doublons (pas de spam - une seule notification par jour et par projet)"
+                       style="-fx-font-size: 13px; -fx-text-fill: #374151;" wrapText="true" maxWidth="600"/>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="•" style="-fx-font-size: 18px; -fx-text-fill: #3b82f6;"/>
+                <Label text="Détection des audits en retard (jusqu'à 7 jours après la date prévue)"
+                       style="-fx-font-size: 13px; -fx-text-fill: #374151;" wrapText="true" maxWidth="600"/>
+            </HBox>
+        </VBox>
+    </VBox>
+
+    <!-- Action de Test -->
+    <VBox spacing="15" style="-fx-background-color: #eff6ff; -fx-padding: 20; -fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: #bfdbfe; -fx-border-width: 2;">
+        <Label text="🧪 Test Manuel"
+               style="-fx-font-size: 16px; -fx-font-weight: 600; -fx-text-fill: #1e40af;"/>
+
+        <Label text="Déclenchez manuellement la vérification pour tester le système sans attendre 9h00"
+               style="-fx-font-size: 13px; -fx-text-fill: #1e3a8a;" wrapText="true"/>
+
+        <Button fx:id="btnTestReminders"
+                text="🚀 Lancer la Vérification Maintenant"
+                onAction="#handleTestReminders"
+                style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-font-weight: 600; -fx-font-size: 14px; -fx-padding: 12 24; -fx-background-radius: 8; -fx-cursor: hand;"
+                maxWidth="300"/>
+    </VBox>
+
+    <!-- Information Badge Visuel -->
+    <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: #e5e7eb; -fx-border-width: 1;">
+        <Label text="🎨 Badges Visuels sur les Cartes Projet"
+               style="-fx-font-size: 16px; -fx-font-weight: 600; -fx-text-fill: #374151;"/>
+
+        <Label text="Les cartes projet affichent maintenant un badge coloré indiquant le temps restant avant l'audit :"
+               style="-fx-font-size: 13px; -fx-text-fill: #6b7280;" wrapText="true"/>
+
+        <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 10 0 0 0;">
+            <Label text="⛔ Retard"
+                   style="-fx-background-color: #fef2f2; -fx-text-fill: #ef4444; -fx-padding: 4 10; -fx-background-radius: 12; -fx-font-size: 11px; -fx-font-weight: 700;"/>
+
+            <Label text="🔴 3 jours"
+                   style="-fx-background-color: #fef2f2; -fx-text-fill: #ef4444; -fx-padding: 4 10; -fx-background-radius: 12; -fx-font-size: 11px; -fx-font-weight: 700;"/>
+
+            <Label text="⚠️ 7 jours"
+                   style="-fx-background-color: #fef3c7; -fx-text-fill: #f59e0b; -fx-padding: 4 10; -fx-background-radius: 12; -fx-font-size: 11px; -fx-font-weight: 600;"/>
+
+            <Label text="📅 14 jours"
+                   style="-fx-background-color: #dbeafe; -fx-text-fill: #3b82f6; -fx-padding: 4 10; -fx-background-radius: 12; -fx-font-size: 11px; -fx-font-weight: 600;"/>
+
+            <Label text="ℹ️ 30 jours"
+                   style="-fx-background-color: #f3f4f6; -fx-text-fill: #6b7280; -fx-padding: 4 10; -fx-background-radius: 12; -fx-font-size: 11px; -fx-font-weight: 600;"/>
+        </HBox>
+    </VBox>
+
+</VBox>

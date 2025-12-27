@@ -1,21 +1,14 @@
-# ========================================
-# 🚀 SPRING BOOT CONFIGURATION
-# ========================================
-
 spring:
   main:
     web-application-type: NONE
     banner-mode: console
     lazy-initialization: false
 
-  # ================================
-  # 📧 EMAIL CONFIGURATION
-  # ================================
   mail:
     host: smtp.gmail.com
     port: 587
-    username: aichaelkhddar03@gmail.com # to change after to support_auditdocai@gmail.com (the association should create it, or if they already have their own email they can use it, or Intissar's email ; as she's the IT committee chef)
-    password: ftvdiawbiywcoikl  # it's a password app given by google (u should enable 2-Step Verification first)
+    username: aichaelkhddar03@gmail.com
+    password: ftvdiawbiywcoikl
     properties:
       mail:
         smtp:
@@ -27,53 +20,52 @@ spring:
           timeout: 5000
           writetimeout: 5000
 
-  # ================================
-  # 📊 DATABASE CONFIGURATION
-  # ================================
   datasource:
-    url: jdbc:postgresql://aws-1-eu-west-1.pooler.supabase.com:6543/postgres?pgbouncer=true
+    # Option A: Supabase avec failsafe
+    url: jdbc:postgresql://aws-1-eu-west-1.pooler.supabase.com:5432/postgres?sslmode=require&connectTimeout=60&socketTimeout=60&loginTimeout=60
+    # Option B: Base de données locale (décommentez pour développement)
+    # url: jdbc:postgresql://localhost:5432/auditdoc_db
+
     username: postgres.ziyevqgoffoejasscxyg
     password: WcDmGFscwNTZL6pY
+    driver-class-name: org.postgresql.Driver
 
     hikari:
-      auto-commit: false  # CRITICAL FIX
-      maximum-pool-size: 10
-      minimum-idle: 2
+      auto-commit: false
+      maximum-pool-size: 3
+      minimum-idle: 0
       idle-timeout: 30000
-      max-lifetime: 120000
-      connection-timeout: 30000
-      validation-timeout: 5000
+      max-lifetime: 600000
+      connection-timeout: 60000
+      validation-timeout: 10000
       leak-detection-threshold: 60000
+      initialization-fail-timeout: -1  # Ne pas échouer au démarrage
       connection-test-query: SELECT 1
       data-source-properties:
-        socketTimeout: 30000
-        connectTimeout: 10000
+        socketTimeout: 60000
+        connectTimeout: 60000
+        loginTimeout: 60
         tcpKeepAlive: true
-        prepareThreshold: 0
 
-  # ================================
-  # 🗄️ JPA/HIBERNATE CONFIGURATION
-  # ================================
   jpa:
+    database: POSTGRESQL
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: false
     hibernate:
-      ddl-auto: update  # CHANGED from 'update' to 'validate'
-    show-sql: true
+      ddl-auto: validate
+    show-sql: false
     properties:
       hibernate:
-        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
         jdbc:
           batch_size: 20
           fetch_size: 50
+          lob:
+            non_contextual_creation: true
         connection:
           provider_disables_autocommit: true
-        transaction:
-          jta:
-            platform: org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform
 
-  # ================================
-  # 📁 FILE UPLOAD CONFIGURATION
-  # ================================
   servlet:
     multipart:
       max-file-size: 10MB
@@ -83,31 +75,21 @@ spring:
     init:
       mode: never
 
-# ========================================
-# 🤖 AI CONFIGURATION
-# ========================================
-
 ai:
   ollama:
     base-url: http://localhost:11434
     model: llama3
     timeout: 300000
-
   provider: ollama
   max-tokens: 2000
   temperature: 0.7
 
-# ========================================
-# 📝 LOGGING CONFIGURATION
-# ========================================
-
 logging:
   level:
     com.yourapp: INFO
-    org.springframework: INFO
-    org.hibernate.SQL: WARN  # CHANGED from DEBUG to WARN
-    org.hibernate.type: WARN
-    com.zaxxer.hikari: INFO  # CHANGED from DEBUG to INFO
+    org.springframework: WARN
+    org.hibernate.SQL: WARN
+    com.zaxxer.hikari: DEBUG  # Pour voir les détails de connexion
 
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
@@ -115,29 +97,18 @@ logging:
   file:
     name: logs/auditdoc-ai.log
 
-# ========================================
-# ⚙️ APPLICATION CONFIGURATION
-# ========================================
-
 app:
   name: AuditDoc AI
   version: 1.0.0
   base-url: http://localhost:8080
-
   upload:
     max-files: 10
     allowed-extensions: .pdf,.doc,.docx,.xls,.xlsx
     temp-dir: temp/uploads/
-
   audit:
     max-concurrent-audits: 3
     timeout-minutes: 5
 
-# ========================================
-# 🔧 SERVER CONFIGURATION (optional)
-# ========================================
-
 server:
   port: 8080
   shutdown: graceful
-

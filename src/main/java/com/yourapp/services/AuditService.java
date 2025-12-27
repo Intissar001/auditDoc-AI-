@@ -11,8 +11,10 @@ import com.yourapp.DAO.AuditRepository;
 import com.yourapp.DAO.ProjectRepository;
 import com.yourapp.DAO.AuditTemplateRepository;
 import com.yourapp.DAO.AuditDocumentRepository;
+import com.yourapp.utils.DashboardRefreshEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -37,6 +39,7 @@ public class AuditService {
     private final AuditDocumentRepository auditDocumentRepository;
     private final AiAuditService aiAuditService;
     private final AuditIssueService auditIssueService;
+    private final ApplicationEventPublisher eventPublisher; // ✅ AJOUTÉ
 
     /**
      * Créer un nouvel audit
@@ -64,6 +67,7 @@ public class AuditService {
         audit.setAuditDate(LocalDate.now());
         audit.setStatus("PENDING");
         audit.setProblemsCount(0);
+        audit.setScore(0); // ✅ Initialiser le score
 
         audit = auditRepository.save(audit);
 
@@ -77,6 +81,11 @@ public class AuditService {
                 auditDocumentRepository.save(document);
             });
         }
+
+        // ✅ PUBLIER L'ÉVÉNEMENT pour rafraîchir le dashboard
+        eventPublisher.publishEvent(
+                new DashboardRefreshEvent(this, "Nouvel audit créé pour: " + project.getName())
+        );
 
         log.info("Audit créé avec succès: {}", audit.getId());
         return mapToResponseDto(audit);
@@ -101,6 +110,11 @@ public class AuditService {
         audit.setStatus("IN_PROGRESS");
         audit = auditRepository.save(audit);
 
+        // ✅ PUBLIER L'ÉVÉNEMENT pour le statut IN_PROGRESS
+        eventPublisher.publishEvent(
+                new DashboardRefreshEvent(this, "Analyse démarrée pour: " + audit.getProjectName())
+        );
+
         // Lancer l'analyse IA de manière asynchrone
         try {
             aiAuditService.analyzeAudit(audit);
@@ -111,6 +125,12 @@ public class AuditService {
             int problemsCount = auditIssueService.countByAudit(audit);
             audit.setProblemsCount(problemsCount);
 
+            // ✅ CALCULER LE SCORE basé sur les problèmes
+            int score = calculateAuditScore(problemsCount);
+            audit.setScore(score);
+
+            log.info("Analyse terminée: {} problèmes détectés, score: {}%", problemsCount, score);
+
         } catch (Exception e) {
             log.error("Erreur lors de l'analyse de l'audit {}", auditId, e);
             audit.setStatus("FAILED");
@@ -118,7 +138,46 @@ public class AuditService {
 
         audit = auditRepository.save(audit);
 
+        // ✅ PUBLIER L'ÉVÉNEMENT pour la complétion
+        if ("COMPLETED".equals(audit.getStatus())) {
+            String conformeStatus = audit.getProblemsCount() < 5 ? "conforme" : "non conforme";
+            eventPublisher.publishEvent(
+                    new DashboardRefreshEvent(this,
+                            "Audit complété (" + conformeStatus + "): " + audit.getProjectName())
+            );
+        }
+
         log.info("Analyse terminée pour l'audit {}", auditId);
+        return mapToResponseDto(audit);
+    }
+
+    /**
+     * ✅ NOUVELLE MÉTHODE: Compléter manuellement un audit avec score et problèmes
+     * Utile pour les tests ou les audits manuels
+     */
+    @Transactional
+    public AuditResponseDto completeAudit(Long auditId, Integer score, Integer problemsCount, String comments) {
+        log.info("Complétion manuelle de l'audit {} avec score: {}, problèmes: {}",
+                auditId, score, problemsCount);
+
+        Audit audit = auditRepository.findById(auditId)
+                .orElseThrow(() -> new RuntimeException("Audit introuvable avec l'ID: " + auditId));
+
+        audit.setStatus("COMPLETED");
+        audit.setScore(score);
+        audit.setProblemsCount(problemsCount);
+        audit.setComments(comments);
+
+        audit = auditRepository.save(audit);
+
+        // ✅ PUBLIER L'ÉVÉNEMENT
+        String conformeStatus = problemsCount < 5 ? "conforme" : "non conforme";
+        eventPublisher.publishEvent(
+                new DashboardRefreshEvent(this,
+                        "Audit complété (" + conformeStatus + "): " + audit.getProjectName())
+        );
+
+        log.info("Audit {} complété manuellement", auditId);
         return mapToResponseDto(audit);
     }
 
@@ -150,6 +209,15 @@ public class AuditService {
     }
 
     /**
+     * ✅ NOUVELLE MÉTHODE: Récupérer tous les audits (sans pagination)
+     */
+    public List<AuditResponseDto> getAllAudits() {
+        return auditRepository.findAll().stream()
+                .map(this::mapToResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    /**
      * Mettre à jour le statut d'un audit
      */
     @Transactional
@@ -157,9 +225,18 @@ public class AuditService {
         Audit audit = auditRepository.findById(auditId)
                 .orElseThrow(() -> new RuntimeException("Audit introuvable avec l'ID: " + auditId));
 
+        String oldStatus = audit.getStatus();
         audit.setStatus(status);
 
         audit = auditRepository.save(audit);
+
+        // ✅ PUBLIER L'ÉVÉNEMENT si le statut change vers COMPLETED
+        if ("COMPLETED".equals(status) && !"COMPLETED".equals(oldStatus)) {
+            eventPublisher.publishEvent(
+                    new DashboardRefreshEvent(this, "Audit complété: " + audit.getProjectName())
+            );
+        }
+
         return mapToResponseDto(audit);
     }
 
@@ -175,9 +252,16 @@ public class AuditService {
         }
 
         Audit audit = auditRepository.findById(auditId).orElseThrow();
+        String projectName = audit.getProjectName();
 
         // Supprimer les documents, issues et rapports associés (cascade)
         auditRepository.deleteById(auditId);
+
+        // ✅ PUBLIER L'ÉVÉNEMENT
+        eventPublisher.publishEvent(
+                new DashboardRefreshEvent(this, "Audit supprimé pour: " + projectName)
+        );
+
         log.info("Audit {} supprimé avec succès", auditId);
     }
 
@@ -199,6 +283,26 @@ public class AuditService {
                 "auditDate", audit.getAuditDate(),
                 "score", audit.getScore() != null ? audit.getScore() : 0
         );
+    }
+
+    /**
+     * ✅ NOUVELLE MÉTHODE: Calculer le score d'un audit basé sur le nombre de problèmes
+     * Score de 0 à 100
+     */
+    private int calculateAuditScore(int problemsCount) {
+        if (problemsCount == 0) {
+            return 100; // Parfait
+        } else if (problemsCount <= 2) {
+            return 90; // Excellent
+        } else if (problemsCount <= 5) {
+            return 75; // Bon
+        } else if (problemsCount <= 10) {
+            return 55; // Moyen
+        } else if (problemsCount <= 15) {
+            return 35; // Insuffisant
+        } else {
+            return 20; // Très insuffisant
+        }
     }
 
     /**
