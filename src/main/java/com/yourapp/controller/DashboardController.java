@@ -1,10 +1,22 @@
 package com.yourapp.controller;
 
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import com.yourapp.services.GeminiService;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.control.TextField;
 import com.yourapp.dto.DashboardStatsDto;
 import com.yourapp.dto.ProjectProgressDto;
 import com.yourapp.dto.RecentActivityDto;
 import com.yourapp.services.DashboardService;
-import com.yourapp.services.ChatbotService;
+import com.yourapp.services.GeminiService;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -38,13 +50,15 @@ public class DashboardController {
     @FXML private VBox projectProgressContainer;
     @FXML private VBox complianceCard;
     @FXML private ImageView complianceStatusIcon;
+    @FXML private VBox aiChatContainer;
+    @FXML private TextField chatInput;
     @FXML private VBox chatMessagesContainer;
     @FXML private TextField chatInputField;
     @FXML private Button chatSendButton;
     @FXML private Button refreshButton;
 
     @Autowired private DashboardService dashboardService;
-    @Autowired private ChatbotService chatbotService;
+    @Autowired private GeminiService chatbotService;
     @Autowired private com.yourapp.utils.DashboardEventListener eventListener;
 
     @FXML
@@ -328,87 +342,94 @@ public class DashboardController {
         };
     }
 
-    // =============== CHATBOT ===============
+    // =============== CHATBOT LOGIC ===============
 
+    /**
+     * Initializes the chatbot by clearing the placeholder and adding a welcome message.
+     */
     private void initializeChatbot() {
-        addChatMessage("Bonjour ! Je suis votre assistant IA. " +
-                "Comment puis-je vous aider aujourd'hui ?", false);
-
-        chatSendButton.setOnAction(e -> sendChatMessage());
-        chatInputField.setOnAction(e -> sendChatMessage());
+        // Matches fx:id="aiChatContainer" in Dashboard.fxml
+        if (aiChatContainer != null) {
+            aiChatContainer.getChildren().clear();
+            addMessageToChat("Bonjour ! Je suis votre assistant IA. Comment puis-je vous aider aujourd'hui ?", false);
+        }
     }
 
     @FXML
-    private void sendChatMessage() {
-        String message = chatInputField.getText().trim();
+    private void handleSendMessage() {
+        // Matches fx:id="chatInput" in Dashboard.fxml
+        String message = chatInput.getText().trim();
         if (message.isEmpty()) return;
 
-        addChatMessage(message, true);
-        chatInputField.clear();
+        // 1. Add User Message (Blue bubble, right side)
+        addMessageToChat(message, true);
+        chatInput.clear();
 
-        Label loadingLabel = new Label("⏳ En cours...");
-        loadingLabel.setStyle("-fx-text-fill: #64748b; -fx-font-style: italic;");
-        chatMessagesContainer.getChildren().add(loadingLabel);
-
+        // 2. Run Gemini API call in background using Spring-managed service
         Task<String> task = new Task<>() {
             @Override
-            protected String call() {
-                return chatbotService.sendMessage(message);
+            protected String call() throws Exception {
+                // Updated to use 'chatbotService' field and 'askGemini' method
+                return chatbotService.askGemini(message);
             }
         };
 
         task.setOnSucceeded(e -> {
-            String response = task.getValue();
-            Platform.runLater(() -> {
-                chatMessagesContainer.getChildren().remove(loadingLabel);
-                addChatMessage(response, false);
-            });
+            // 3. Add AI Response (Grey bubble, left side)
+            Platform.runLater(() -> addMessageToChat(task.getValue(), false));
         });
 
-        task.setOnFailed(e -> Platform.runLater(() -> {
-            chatMessagesContainer.getChildren().remove(loadingLabel);
-            addChatMessage("Désolé, une erreur s'est produite.", false);
-        }));
+        task.setOnFailed(e -> {
+            log.error("Gemini API Error", task.getException());
+            Platform.runLater(() -> addMessageToChat("Désolé, je rencontre un problème de connexion.", false));
+        });
 
         new Thread(task).start();
     }
 
-    private void addChatMessage(String text, boolean isUser) {
-        VBox messageBox = new VBox(5);
-        messageBox.setPadding(new Insets(10));
-        messageBox.setMaxWidth(300);
-
-        Label messageLabel = new Label(text);
-        messageLabel.setWrapText(true);
-        messageLabel.setStyle("-fx-font-size: 13px; -fx-padding: 10;");
+    private void addMessageToChat(String text, boolean isUser) {
+        HBox row = new HBox();
+        row.setAlignment(isUser ? Pos.CENTER_RIGHT : Pos.CENTER_LEFT);
+        row.setPadding(new Insets(5));
 
         if (isUser) {
-            messageBox.setAlignment(Pos.CENTER_RIGHT);
-            messageLabel.setStyle(messageLabel.getStyle() +
-                    "-fx-background-color: #3b82f6;" +
-                    "-fx-text-fill: white;" +
-                    "-fx-background-radius: 12 12 0 12;");
+            Label textLbl = new Label(text);
+            textLbl.setWrapText(true);
+            textLbl.setMaxWidth(250);
+            textLbl.setStyle("-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-background-radius: 15; -fx-padding: 8 12;");
+            row.getChildren().add(textLbl);
         } else {
-            messageBox.setAlignment(Pos.CENTER_LEFT);
-            messageLabel.setStyle(messageLabel.getStyle() +
-                    "-fx-background-color: #f1f5f9;" +
-                    "-fx-text-fill: #1e293b;" +
-                    "-fx-background-radius: 12 12 12 0;");
+            TextFlow textFlow = new TextFlow();
+            textFlow.setMaxWidth(250);
+            textFlow.setStyle("-fx-background-color: #f1f3f4; -fx-background-radius: 15; -fx-padding: 8 12;");
+
+            // Split the text by "**" markers for bold formatting
+            String[] parts = text.split("\\*\\*");
+            for (int i = 0; i < parts.length; i++) {
+                Text t = new Text(parts[i]);
+                if (i % 2 == 1) {
+                    t.setFont(Font.font("System", FontWeight.BOLD, 12));
+                } else {
+                    t.setFont(Font.font("System", FontWeight.NORMAL, 12));
+                }
+                t.setStyle("-fx-fill: black;");
+                textFlow.getChildren().add(t);
+            }
+            row.getChildren().add(textFlow);
         }
 
-        messageBox.getChildren().add(messageLabel);
-        chatMessagesContainer.getChildren().add(messageBox);
-
-        if (chatMessagesContainer.getParent() instanceof ScrollPane scrollPane) {
-            scrollPane.setVvalue(1.0);
-        }
+        aiChatContainer.getChildren().add(row);
     }
-
+    /**
+     * Helper method to show error alerts to the user.
+     */
     private void showError(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Erreur");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.showAndWait();
+        });
     }
 }

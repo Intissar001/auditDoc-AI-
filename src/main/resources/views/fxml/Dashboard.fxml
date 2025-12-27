@@ -44,9 +44,9 @@
                                 </StackPane>
                             </HBox>
                             <Label styleClass="stat-label" text="Nombre d'Audits">
-                        <font>
-                           <Font name="System Bold" size="12.0" />
-                        </font></Label>
+                                <font>
+                                    <Font name="System Bold" size="12.0" />
+                                </font></Label>
                             <Label fx:id="totalAuditsLabel" styleClass="stat-value" text="0" />
                             <Label fx:id="auditsThisMonthLabel" styleClass="stat-badge" text="+0 ce mois" />
                         </VBox>
@@ -92,9 +92,9 @@
                             <Label fx:id="nonConformeLabel" styleClass="stat-value" text="0" />
                             <Label styleClass="stat-badge-action" text="Action requise" />
                         </VBox>
-                  <rowConstraints>
-                     <RowConstraints />
-                  </rowConstraints>
+                        <rowConstraints>
+                            <RowConstraints />
+                        </rowConstraints>
                     </GridPane>
 
                     <!-- PROGRESSION DES AUDITS -->
@@ -148,8 +148,7 @@
 
                 <!-- RIGHT SECTION - CHATBOT AI -->
                 <VBox prefWidth="350.0" spacing="20.0">
-                    <VBox prefHeight="600.0" prefWidth="350.0" spacing="15.0" styleClass="ai-sidebar-card">
-                        <!-- HEADER -->
+                    <VBox prefHeight="522.0" prefWidth="350.0" spacing="15.0" styleClass="ai-sidebar-card">
                         <HBox alignment="CENTER_LEFT" spacing="15.0">
                             <StackPane prefHeight="46.0" prefWidth="46.0" styleClass="ai-icon-bg">
                                 <ImageView fitHeight="25.0" fitWidth="25.0" preserveRatio="true">
@@ -158,12 +157,11 @@
                             </StackPane>
                             <VBox>
                                 <Label styleClass="ai-title" text="Assistant IA" />
-                                <Label styleClass="ai-subtitle" text="Posez vos questions" />
+                                <Label styleClass="ai-subtitle" text="Assistant intelligent" />
                             </VBox>
                         </HBox>
 
                         <Separator prefWidth="280.0" />
-
 
                         <VBox prefHeight="113.0" prefWidth="280.0" spacing="20.0">
                             <HBox spacing="10.0" styleClass="sidebar-item">
@@ -172,7 +170,7 @@
                                 </ImageView>
                                 <VBox>
                                     <Label styleClass="sidebar-item-title" text="Recommandations" />
-                                    <Label styleClass="sidebar-item-sub" text="Suggestions pour améliorer" wrapText="true" />
+                                    <Label styleClass="sidebar-item-sub" text="3 suggestions pour améliorer" wrapText="true" />
                                 </VBox>
                             </HBox>
                             <HBox spacing="10.0" styleClass="sidebar-item">
@@ -181,7 +179,7 @@
                                 </ImageView>
                                 <VBox>
                                     <Label styleClass="sidebar-item-title" text="Tendances" />
-                                    <Label styleClass="sidebar-item-sub" text="Analyse des derniers mois" wrapText="true" />
+                                    <Label styleClass="sidebar-item-sub" text="Analyse des 3 derniers mois" wrapText="true" />
                                 </VBox>
                             </HBox>
                             <HBox spacing="10.0" styleClass="sidebar-item">
@@ -190,21 +188,25 @@
                                 </ImageView>
                                 <VBox>
                                     <Label styleClass="sidebar-item-title" text="Alertes" />
-                                    <Label styleClass="sidebar-item-sub" text="Problèmes récurrents détectés " wrapText="true" />
+                                    <Label styleClass="sidebar-item-sub" text="2 problèmes récurrents détectés " wrapText="true" />
                                 </VBox>
                             </HBox>
                         </VBox>
 
-                        <!-- CHAT MESSAGES -->
-                        <ScrollPane fitToWidth="true" prefHeight="346.0" prefWidth="310.0" style="-fx-background-color: transparent; -fx-border-width: 0;" VBox.vgrow="ALWAYS">
-                            <VBox fx:id="chatMessagesContainer" spacing="10" style="-fx-background-color: transparent;" />
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="167.0" prefWidth="310.0" style="-fx-background-color: transparent; -fx-background: transparent;" VBox.vgrow="ALWAYS">
+                            <content>
+                                <VBox fx:id="aiChatContainer" spacing="10.0" style="-fx-padding: 5;">
+                                    <VBox prefHeight="0.0" prefWidth="286.0" styleClass="ai-chat-bubble">
+                                        <Label text="Bonjour! Je suis votre assistant IA. Comment puis-je vous aider aujourd'hui?" wrapText="true" />
+                                    </VBox>
+                                </VBox>
+                            </content>
                         </ScrollPane>
 
+                        <HBox spacing="5.0" styleClass="chat-input-container">
+                            <TextField fx:id="chatInput" onAction="#handleSendMessage" promptText="Posez une question..." styleClass="chat-field" HBox.hgrow="ALWAYS" />
 
-                        <!-- INPUT CHAT -->
-                        <HBox prefHeight="48.0" prefWidth="310.0" spacing="8" styleClass="chat-input-container">
-                            <TextField fx:id="chatInputField" promptText="Posez une question..." styleClass="chat-field" HBox.hgrow="ALWAYS" />
-                            <Button fx:id="chatSendButton" styleClass="chat-send-btn">
+                            <Button onAction="#handleSendMessage" styleClass="chat-send-btn">
                                 <graphic>
                                     <ImageView fitHeight="18.0" fitWidth="18.0" preserveRatio="true">
                                         <Image url="@../icons/send.png" />
