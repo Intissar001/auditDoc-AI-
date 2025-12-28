@@ -6,7 +6,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import com.yourapp.services.GeminiService;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.scene.text.Font;
@@ -32,6 +31,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -370,7 +370,13 @@ public class DashboardController {
             @Override
             protected String call() throws Exception {
                 // Updated to use 'chatbotService' field and 'askGemini' method
-                return chatbotService.askGemini(message);
+                com.yourapp.model.User currentUser = com.yourapp.utils.SessionManager.getInstance().getCurrentUser();
+                if (currentUser == null) {
+                    return "Impossible de récupérer vos informations utilisateur pour contextualiser la réponse.";
+                }
+
+                String context = buildDashboardContext(currentUser.getId());
+                return chatbotService.askGemini(message, context);
             }
         };
 
@@ -419,6 +425,42 @@ public class DashboardController {
         }
 
         aiChatContainer.getChildren().add(row);
+    }
+    private String buildDashboardContext(Long userId) {
+        DashboardStatsDto stats = dashboardService.getDashboardStats(userId);
+        List<ProjectProgressDto> projectsProgress = dashboardService.getProjectsProgress();
+        List<RecentActivityDto> activities = dashboardService.getRecentActivities();
+
+        String projectsSummary = projectsProgress.stream()
+                .map(project -> String.format("- %s : %.0f%% (%s)",
+                        project.getProjectName(),
+                        project.getProgress() * 100,
+                        project.getStatus()))
+                .collect(Collectors.joining("\\n"));
+
+        String activitiesSummary = activities.stream()
+                .map(activity -> String.format("- [%s] %s (%s)",
+                        activity.getType(),
+                        activity.getTitle(),
+                        activity.getTime()))
+                .collect(Collectors.joining("\\n"));
+
+        return "--- STATISTIQUES ---\n" +
+                String.format("Audits: total=%d, ce_mois=%d, conformes=%d, non_conformes=%d\n",
+                        stats.getTotalAudits(),
+                        stats.getAuditsThisMonth(),
+                        stats.getAuditsConforme(),
+                        stats.getAuditsNonConforme()) +
+                String.format("Projets: total=%d, nouveaux_cette_semaine=%d\n",
+                        stats.getTotalProjects(),
+                        stats.getProjectsThisWeek()) +
+                String.format("Score global: %d%% (%s)\n",
+                        stats.getGlobalScore(),
+                        stats.getComplianceStatus()) +
+                "--- PROJETS (Top) ---\n" +
+                (projectsSummary.isBlank() ? "Aucun projet listé." : projectsSummary) + "\n" +
+                "--- ACTIVITÉS RÉCENTES ---\n" +
+                (activitiesSummary.isBlank() ? "Aucune activité récente." : activitiesSummary);
     }
     /**
      * Helper method to show error alerts to the user.

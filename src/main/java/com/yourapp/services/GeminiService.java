@@ -16,7 +16,7 @@ public class GeminiService {
 
     // 🔴 PASTE YOUR *NEW* API KEY HERE
     private static final String MODEL_NAME = "models/gemini-2.5-flash";
-    private static final String API_KEY = "AIzaSyDtWpz2Fpok9PEm8MftsryvYeHMBMRe5Q0";
+    private static final String API_KEY = "api key"; // add ur api here
     // Uses the MODEL_NAME constant you defined above
     private static final String API_URL =
             "https://generativelanguage.googleapis.com/v1beta/" + MODEL_NAME + ":generateContent?key=" + API_KEY;
@@ -30,11 +30,13 @@ public class GeminiService {
                 .build();
     }
 
-    public String askGemini(String userMessage) {
+    public String askGemini(String userMessage, String context) {
         try {
+            String prompt = buildPrompt(userMessage, context);
+
             // 1. Construct the JSON Payload
             JSONObject textPart = new JSONObject();
-            textPart.put("text", userMessage);
+            textPart.put("text", prompt);
 
             JSONArray parts = new JSONArray();
             parts.put(textPart);
@@ -93,10 +95,20 @@ public class GeminiService {
         String question = "Hello Gemini! I am building a JavaFX app called AuditDoc AI. Can you verify you are receiving this?";
 
         System.out.println("Sending: " + question);
-        String response = service.askGemini(question);
+        String response = service.askGemini(question, "Contexte de test minimal");
 
         System.out.println("\n--- GEMINI REPLY ---");
         System.out.println(response);
         System.out.println("--------------------");
+    }
+
+    private String buildPrompt(String userMessage, String context) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Tu es l'assistant AuditDoc AI. Réponds en français en t'appuyant uniquement sur le contexte fourni.\\n");
+        builder.append("Contexte disponible :\\n");
+        builder.append(context == null || context.isBlank() ? "Aucun contexte fourni." : context);
+        builder.append("\\n\\nQuestion utilisateur : ").append(userMessage).append("\\n");
+        builder.append("Si une information manque dans le contexte, précise-le au lieu de l'inventer.");
+        return builder.toString();
     }
 }
